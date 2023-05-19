@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -42,9 +44,39 @@ namespace DemoWebApplication.Controllers
             {
                 return HttpNotFound();
             }
-            TempData["ItemCode"] = i;
+            TempData["ItemCode"] = id;
             TempData.Keep();
             return View(i);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ItemMaster i)
+        {
+            NumberFormatInfo formatProvider = new NumberFormatInfo();
+            formatProvider.NumberDecimalSeparator = ", ";
+            formatProvider.NumberGroupSeparator = ".";
+            formatProvider.NumberGroupSizes = new int[] { 2 };
+            Double itemcode = Convert.ToDouble(TempData["ItemCode"],formatProvider);
+            var im = dbcon.ItemMasters.Where(x => x.ItemCode == itemcode).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                if (im !=null)
+                {
+                    im.ItemName = i.ItemName;
+                    im.ItemType = i.ItemType;
+                    im.HSNCODE = i.HSNCODE;
+                    im.GstPer = i.GstPer;
+                    dbcon.Entry(im).State = EntityState.Modified;
+                    dbcon.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                    return RedirectToAction("Edit");
+            }
+            else
+                return RedirectToAction("Edit");
+
+        }
+
     }
 }

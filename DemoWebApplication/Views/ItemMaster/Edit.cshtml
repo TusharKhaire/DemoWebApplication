@@ -1,7 +1,8 @@
 ﻿@model DemoWebApplication.ItemMaster
-    <h4>Edit Item</h4>
-<hr/>
-@using (Html.BeginForm()) {
+<h4>Edit Item</h4>
+<hr />
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -14,11 +15,29 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(x => x.ItemType, htmlAttributes: new {@class= "control-lebel col-md-2"})
+            @Html.LabelFor(x => x.ItemType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(x => x.ItemType, new { htmlAttributes = new {@class="form-conotrol"}})
-                @Html.ValidationMessageFor(x=>x.ItemType,"",new { htmlAttributes = new {@class="text-danger"}})
-
+                @Html.EditorFor(x => x.ItemType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(x => x.ItemType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.HSNCODE, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(x => x.HSNCODE, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(x => x.HSNCODE, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x=>x.GstPer,"Gst %",htmlAttributes: new {@class="control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(x => x.GstPer, new { htmlAttributes = new { @class ="form-control"} })
+                @Html.ValidationMessageFor(x => x.GstPer, "", new { @class="text-danger"})
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Modify" class="btn btn-default "/>
             </div>
         </div>
     </div>

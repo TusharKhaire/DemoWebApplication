@@ -1,0 +1,45 @@
+﻿@model DemoWebApplication.AccountMaster
+   <h3>Delete</h3>
+<h4>Are you sure to delete this record ?</h4>
+<hr />
+<h4>Customer Details</h4>
+<div class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.AccountName)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.AccountName)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Address)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Address)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.MobileNo)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.MobileNo)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Email)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Email)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.DateofBirth)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.DateofBirth)
+    </dd>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default"  /> |
+            @Html.ActionLink("Back To List", "Index")
+        </div>
+    }
+</div>

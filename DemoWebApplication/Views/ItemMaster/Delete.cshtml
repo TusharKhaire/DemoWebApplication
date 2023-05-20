@@ -1,0 +1,29 @@
+﻿@model DemoWebApplication.ItemMaster
+    <h3>Delete Item</h3>
+<h4>Are u sure to delete this record</h4>
+<hr />
+<h4> Item Details</h4>
+<div class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(x=>x.ItemName)
+    </dt>
+    <dd>
+        @Html.DisplayFor(x=>x.ItemName)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(x=>x.ItemType)
+    </dt>
+    <dd>@Html.DisplayFor(x=>x.ItemType)</dd>
+    <dt>@Html.DisplayNameFor(x=>x.HSNCODE)</dt>
+    <dd>@Html.DisplayFor(x=>x.HSNCODE)</dd>
+    <dt>@Html.DisplayNameFor(x=>x.GstPer)</dt>
+    <dd>@Html.DisplayFor(x=>x.GstPer)</dd>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken();
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" />
+            @Html.ActionLink("Back to List","Index")
+        </div>
+    }
+</div>

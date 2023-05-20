@@ -223,6 +223,7 @@
     <Content Include="Views\ItemMaster\Index.cshtml" />
     <Content Include="Views\ItemMaster\AddItem.cshtml" />
     <Content Include="Views\ItemMaster\Edit.cshtml" />
+    <Content Include="Views\ItemMaster\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -20,7 +20,7 @@ namespace DemoWebApplication.Controllers
 
             return View(dbconn.AccountMasters.ToList());
         }
-       //[HttpPost]
+        //[HttpPost]
         //[ValidateAntiForgeryToken]
         public ActionResult addCustomer([Bind] AccountMaster am)
         {
@@ -41,12 +41,12 @@ namespace DemoWebApplication.Controllers
 
         public ActionResult Edit(long? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AccountMaster ac = dbconn.AccountMasters.Find(id);
-            if (ac==null)
+            if (ac == null)
             {
                 return HttpNotFound();
             }
@@ -56,27 +56,27 @@ namespace DemoWebApplication.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( AccountMaster ac)
+        public ActionResult Edit(AccountMaster ac)
         {
             if (ModelState.IsValid)
-            { 
-                NumberFormatInfo formatProvider = new NumberFormatInfo();
-            formatProvider.NumberDecimalSeparator = ", ";
-            formatProvider.NumberGroupSeparator = ".";
-            formatProvider.NumberGroupSizes = new int[] { 2 };
-            Double  AcCode = Convert.ToDouble(TempData["AccountCode"],formatProvider);
-            var CustomerData = dbconn.AccountMasters.Where(x => x.AccountCode  == AcCode).FirstOrDefault();
-            if (CustomerData != null)
             {
-                CustomerData.AccountName  = ac .AccountName ;
-                CustomerData.Address = ac.Address ;
-                CustomerData.MobileNo = ac.MobileNo;
-                CustomerData.Email = ac.Email;
-                CustomerData.DateofBirth = ac.DateofBirth ;
-                dbconn .Entry(CustomerData).State = EntityState.Modified;
-                dbconn.SaveChanges();   
-            }
-            return RedirectToAction("Index");
+                NumberFormatInfo formatProvider = new NumberFormatInfo();
+                formatProvider.NumberDecimalSeparator = ", ";
+                formatProvider.NumberGroupSeparator = ".";
+                formatProvider.NumberGroupSizes = new int[] { 2 };
+                Double AcCode = Convert.ToDouble(TempData["AccountCode"], formatProvider);
+                var CustomerData = dbconn.AccountMasters.Where(x => x.AccountCode == AcCode).FirstOrDefault();
+                if (CustomerData != null)
+                {
+                    CustomerData.AccountName = ac.AccountName;
+                    CustomerData.Address = ac.Address;
+                    CustomerData.MobileNo = ac.MobileNo;
+                    CustomerData.Email = ac.Email;
+                    CustomerData.DateofBirth = ac.DateofBirth;
+                    dbconn.Entry(CustomerData).State = EntityState.Modified;
+                    dbconn.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
             else
             {
@@ -86,12 +86,12 @@ namespace DemoWebApplication.Controllers
 
         public ActionResult Delete(long? id)
         {
-            if (id==null)
-                {
+            if (id == null)
+            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AccountMaster ac = dbconn.AccountMasters.Find(id);
-            if (ac==null)
+            if (ac == null)
             {
                 return HttpNotFound();
             }

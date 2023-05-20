@@ -18,7 +18,12 @@ namespace DemoWebApplication.Controllers
         {
             return View(dbcon.ItemMasters.ToList());
         }
-        //[HttpPost]
+        public ActionResult AddItem()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddItem([Bind] ItemMaster i)
         {
             if (ModelState.IsValid)
@@ -75,8 +80,29 @@ namespace DemoWebApplication.Controllers
             }
             else
                 return RedirectToAction("Edit");
-
         }
 
+        public ActionResult Delete (long? id)
+        {
+            if(id==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ItemMaster im = dbcon.ItemMasters.Find(id);
+            if(im==null)
+            {
+                return HttpNotFound();
+            }
+            return View(im);
+        }
+        [HttpPost,ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(long id)
+        {
+            ItemMaster im = dbcon.ItemMasters.Find(id);
+            dbcon.ItemMasters.Remove(im);
+            dbcon.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

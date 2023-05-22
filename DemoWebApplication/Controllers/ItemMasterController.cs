@@ -18,22 +18,29 @@ namespace DemoWebApplication.Controllers
         {
             return View(dbcon.ItemMasters.ToList());
         }
-        public ActionResult AddItem()
-        {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddItem([Bind] ItemMaster i)
         {
+            ViewBag.Message = string.Format("");
             if (ModelState.IsValid)
             {
-                dbcon.ItemMasters.Add(i);
-                dbcon.SaveChanges();
-                return View();
+                var im = dbcon.ItemMasters.Where(x => x.ItemName == i.ItemName && x.ItemType == i.ItemType).FirstOrDefault();
+                if (im == null)
+                {
+                    dbcon.ItemMasters.Add(i);
+                    dbcon.SaveChanges();
+                    ViewBag.Message = String.Format("Item Name " + i.ItemName + " save succesfully");
+                    return View();
+                }
+                else
+                {
+                    ViewBag.Message = String.Format("Item Name "+ i.ItemName +" With Item type "+ i.ItemType + "already exist");
+                    return View(i);
+                }
+               
             }
             else
             {
+                ViewBag.Message = String.Format("Please Enter Valid Details");
                 return View(i);
             }
         }
@@ -45,7 +52,7 @@ namespace DemoWebApplication.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ItemMaster i = dbcon.ItemMasters.Find(id);
-            if(i==null)
+            if (i == null)
             {
                 return HttpNotFound();
             }
@@ -61,11 +68,11 @@ namespace DemoWebApplication.Controllers
             formatProvider.NumberDecimalSeparator = ", ";
             formatProvider.NumberGroupSeparator = ".";
             formatProvider.NumberGroupSizes = new int[] { 2 };
-            Double itemcode = Convert.ToDouble(TempData["ItemCode"],formatProvider);
+            Double itemcode = Convert.ToDouble(TempData["ItemCode"], formatProvider);
             var im = dbcon.ItemMasters.Where(x => x.ItemCode == itemcode).FirstOrDefault();
             if (ModelState.IsValid)
             {
-                if (im !=null)
+                if (im != null)
                 {
                     im.ItemName = i.ItemName;
                     im.ItemType = i.ItemType;
@@ -82,20 +89,20 @@ namespace DemoWebApplication.Controllers
                 return RedirectToAction("Edit");
         }
 
-        public ActionResult Delete (long? id)
+        public ActionResult Delete(long? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ItemMaster im = dbcon.ItemMasters.Find(id);
-            if(im==null)
+            if (im == null)
             {
                 return HttpNotFound();
             }
             return View(im);
         }
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirm(long id)
         {

@@ -15,7 +15,10 @@ namespace DemoWebApplication.Services
             switch (obj)
             {
                 case Alert.Success:
-                    alertDiv = "<div class='alert alert-success alert-dismissable' id='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong> Success!</ strong > " + message + "</a>.</div>";
+                    alertDiv = "<div class='alert alert-success alert-dismissable' id='alert'>" +
+                        "<button type='button' class='close' data-dismiss='alert'>×</button>" +
+                        "<strong> Success!</ strong > " + message + "</a>.</div>";
+
                     break;
                 case Alert.Danger:
                     alertDiv = "<div class='alert alert-danger alert-dismissible' id='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong> Error!</ strong > " + message + "</a>.</div>";

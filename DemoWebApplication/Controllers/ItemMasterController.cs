@@ -6,7 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-
+using DemoWebApplication.Services;
+using DemoWebApplication.Enums;
 namespace DemoWebApplication.Controllers
 {
     public class ItemMasterController : Controller
@@ -28,19 +29,22 @@ namespace DemoWebApplication.Controllers
                 {
                     dbcon.ItemMasters.Add(i);
                     dbcon.SaveChanges();
-                    ViewBag.Message = String.Format("Item Name " + i.ItemName + " save succesfully");
+                   // ViewBag.Message = String.Format("Item Name " + i.ItemName + " save succesfully");
+                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Success, "Item Name " + i.ItemName + " save succesfully");  //String.Format("Item Name " + i.ItemName + " save succesfully");
                     return View();
                 }
                 else
                 {
-                    ViewBag.Message = String.Format("Item Name "+ i.ItemName +" With Item type "+ i.ItemType + "already exist");
+                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Warning, "Item Name " + i.ItemName + " With Item type " + i.ItemType + "already exist");
+                   // ViewBag.Message = String.Format("Item Name "+ i.ItemName +" With Item type "+ i.ItemType + "already exist");
                     return View(i);
                 }
                
             }
             else
             {
-                ViewBag.Message = String.Format("Please Enter Valid Details");
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Danger, "Please Enter Valid Details");
+                //ViewBag.Message = String.Format("Please Enter Valid Details");
                 return View(i);
             }
         }

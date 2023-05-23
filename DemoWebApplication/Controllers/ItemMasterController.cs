@@ -31,11 +31,11 @@ namespace DemoWebApplication.Controllers
                     dbcon.SaveChanges();
                    // ViewBag.Message = String.Format("Item Name " + i.ItemName + " save succesfully");
                     ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Success, "Item Name " + i.ItemName + " save succesfully");  //String.Format("Item Name " + i.ItemName + " save succesfully");
-                    return View();
+                    return RedirectToAction("AddItem");
                 }
                 else
                 {
-                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Warning, "Item Name " + i.ItemName + " With Item type " + i.ItemType + "already exist");
+                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Warning, "Item Name " + i.ItemName + " With Item type " + i.ItemType + " already exist");
                    // ViewBag.Message = String.Format("Item Name "+ i.ItemName +" With Item type "+ i.ItemType + "already exist");
                     return View(i);
                 }

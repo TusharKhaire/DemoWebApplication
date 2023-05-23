@@ -25,6 +25,7 @@ namespace DemoWebApplication.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult addCustomer([Bind] AccountMaster am)
         {
+            TempData["msg"] = "";
             if (ModelState.IsValid)
             {
                 //string resp = dbconn.AccountMasters.Add(am);
@@ -36,7 +37,7 @@ namespace DemoWebApplication.Controllers
             else
             {
                 TempData["msg"] = "Plz Enter valid Details";
-                return View(am);
+                return View();
             }
         }
 

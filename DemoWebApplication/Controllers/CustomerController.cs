@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace DemoWebApplication.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomerController : Controller  
     {
         DemoDbEntities dbconn = new DemoDbEntities();
 
@@ -32,7 +32,7 @@ namespace DemoWebApplication.Controllers
                 dbconn.AccountMasters.Add(am);
                 dbconn.SaveChanges();
                 TempData["msg"] = "Customer Add Succesfully";
-                return RedirectToAction("addCustomer");
+                return View("addCustomer");
             }
             else
             {

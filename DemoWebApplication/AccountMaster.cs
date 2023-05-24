@@ -15,14 +15,15 @@ namespace DemoWebApplication
 
     public partial class AccountMaster
     {
-        [Key]
         public int AccountCode { get; set; }
         [Required]
         public string AccountName { get; set; }
         public string Address { get; set; }
         public string MobileNo { get; set; }
         public string Email { get; set; }
-        public Nullable<System.DateTime> DateofBirth { get; set; }
+        [Required]
+        public DateTime? DateofBirth { get; set; }
         public string UserType { get; set; }
+       
     }
 }

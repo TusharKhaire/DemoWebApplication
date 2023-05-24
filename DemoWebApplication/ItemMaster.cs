@@ -15,14 +15,14 @@ namespace DemoWebApplication
 
     public partial class ItemMaster
     {
-        [Key]
+        [Required]
         public int ItemCode { get; set; }
-        [Required(AllowEmptyStrings =false,ErrorMessage ="Please Enter item Name")]
+        [Required]
         public string ItemName { get; set; }
-        [Required(AllowEmptyStrings =false,ErrorMessage ="Please Enter item Name")]
+        [Required]
         public string ItemType { get; set; }
         public string HSNCODE { get; set; }
-        [Range(0,100,ErrorMessage ="Please Enter Valid Gst")]
+        [Range(1,100,ErrorMessage ="Please Enter Valid Gst")]
         public string GstPer { get; set; }
     }
 }

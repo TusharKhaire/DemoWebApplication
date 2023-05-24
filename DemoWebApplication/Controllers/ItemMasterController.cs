@@ -31,7 +31,7 @@ namespace DemoWebApplication.Controllers
                     dbcon.SaveChanges();
                    // ViewBag.Message = String.Format("Item Name " + i.ItemName + " save succesfully");
                     ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Success, "Item Name " + i.ItemName + " save succesfully");  //String.Format("Item Name " + i.ItemName + " save succesfully");
-                    return RedirectToAction("AddItem");
+                    return View();
                 }
                 else
                 {

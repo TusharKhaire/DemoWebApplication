@@ -132,12 +132,16 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemMasterController.cs" />
+    <Compile Include="Controllers\ItemTypeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Enums\Alerts.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ItemMaster.cs">
+      <DependentUpon>SimpleDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemType.cs">
       <DependentUpon>SimpleDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -226,6 +230,8 @@
     <Content Include="Views\ItemMaster\AddItem.cshtml" />
     <Content Include="Views\ItemMaster\Edit.cshtml" />
     <Content Include="Views\ItemMaster\Delete.cshtml" />
+    <Content Include="Views\ItemType\Index.cshtml" />
+    <Content Include="Views\ItemType\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

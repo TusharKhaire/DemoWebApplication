@@ -13,16 +13,12 @@ namespace DemoWebApplication
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public partial class ItemMaster
+    public partial class ItemType
     {
         [Key]
-        public int ItemCode { get; set; }
+        public int TypeId { get; set; }
         [Required]
-        public string ItemName { get; set; }
-        [Required]
-        public string ItemType { get; set; }
-        public string HSNCODE { get; set; }
-        [Range(1,100,ErrorMessage ="Please Enter Valid Gst %")]
-        public string GstPer { get; set; }
+        public string TypeName { get; set; }
+        public string Details { get; set; }
     }
 }

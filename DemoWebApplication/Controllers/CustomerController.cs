@@ -21,24 +21,40 @@ namespace DemoWebApplication.Controllers
 
             return View(dbconn.AccountMasters.ToList());
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        [HttpGet]
+        public ActionResult addCustomer()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult addCustomer([Bind] AccountMaster am)
         {
             TempData["msg"] = "";
-            if (ModelState.IsValid)
+            if (String.IsNullOrEmpty(am.AccountName))
+            {
+                ModelState.AddModelError("Name","Plz Enter Name");
+                return View("");
+            }
+            else if(String.IsNullOrEmpty(am.Address)){
+                ModelState.AddModelError("Address","Please Enter Address");
+                return View();
+            }
+            else if(am.DateofBirth==DateTime.Now)
+            {
+                ModelState.AddModelError("Date of Birth", " Please Select date of Birth");
+                return View();
+            }
+            else
             {
                 //string resp = dbconn.AccountMasters.Add(am);
                 dbconn.AccountMasters.Add(am);
                 dbconn.SaveChanges();
                 TempData["msg"] = "Customer Add Succesfully";
-                return View("addCustomer");
+                ModelState.Clear();
+                return View("");
             }
-            else
-            {
-                TempData["msg"] = "Plz Enter valid Details";
-                return View();
-            }
+           
         }
 
         public ActionResult Edit(long? id)

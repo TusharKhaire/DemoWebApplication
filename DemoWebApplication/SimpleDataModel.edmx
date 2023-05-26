@@ -27,6 +27,14 @@
           <Property Name="HSNCODE" Type="nvarchar" MaxLength="250" />
           <Property Name="GstPer" Type="nvarchar" MaxLength="250" />
         </EntityType>
+        <EntityType Name="ItemType">
+          <Key>
+            <PropertyRef Name="TypeId" />
+          </Key>
+          <Property Name="TypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar(max)" />
+          <Property Name="Details" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="UserProfile">
           <Key>
             <PropertyRef Name="UserId" />
@@ -39,6 +47,7 @@
         <EntityContainer Name="DemoDbModelStoreContainer">
           <EntitySet Name="AccountMaster" EntityType="Self.AccountMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemMaster" EntityType="Self.ItemMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemType" EntityType="Self.ItemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -58,6 +67,7 @@
           <EntitySet Name="UserProfiles" EntityType="Self.UserProfile" />
           <EntitySet Name="AccountMasters" EntityType="DemoDbModel.AccountMaster" />
           <EntitySet Name="ItemMasters" EntityType="DemoDbModel.ItemMaster" />
+          <EntitySet Name="ItemTypes" EntityType="DemoDbModel.ItemType" />
           </EntityContainer>
         <EntityType Name="AccountMaster">
           <Key>
@@ -80,6 +90,14 @@
           <Property Name="ItemType" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="HSNCODE" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="GstPer" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ItemType">
+          <Key>
+            <PropertyRef Name="TypeId" />
+          </Key>
+          <Property Name="TypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -118,6 +136,15 @@
                 <ScalarProperty Name="ItemType" ColumnName="ItemType" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemTypes">
+            <EntityTypeMapping TypeName="DemoDbModel.ItemType">
+              <MappingFragment StoreEntitySet="ItemType">
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

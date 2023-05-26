@@ -19,6 +19,13 @@ namespace DemoWebApplication.Controllers
         {
             return View(dbcon.ItemMasters.ToList());
         }
+        [HttpGet]
+        public ActionResult AddItem()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddItem([Bind] ItemMaster i)
         {
             ViewBag.Message = string.Format("");

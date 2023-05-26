@@ -28,5 +28,6 @@ namespace DemoWebApplication
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<AccountMaster> AccountMasters { get; set; }
         public DbSet<ItemMaster> ItemMasters { get; set; }
+        public DbSet<ItemType> ItemTypes { get; set; }
     }
 }

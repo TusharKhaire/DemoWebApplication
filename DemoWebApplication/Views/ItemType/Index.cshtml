@@ -1,0 +1,28 @@
+﻿@model IEnumerable<DemoWebApplication.ItemType>
+   
+<h4>Item Types</h4>
+<br />
+<p>@Html.ActionLink("Create New Item Type","Create")</p>
+<br />
+
+@using (Html.BeginForm())
+{
+    
+}
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(x=>x.TypeName)</th>
+    
+        <th>@Html.DisplayNameFor(x=>x.Details)</th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <th>@Html.DisplayFor(x=>item.TypeName)</th>
+            <th>@Html.DisplayFor(x=>item.Details)</th>
+            <th>@Html.ActionLink("Edit","Edit",new { id=item.TypeId}) | 
+                @Html.ActionLink("Delete","Delete", new { id=item.TypeId})</th>
+        </tr>
+    }
+
+</table>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -36,6 +38,45 @@ namespace DemoWebApplication.Controllers
             ModelState.Clear();
             return View();
             }
+        }
+        [HttpGet]
+        public ActionResult Edit(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var itemtype = dbcon.ItemTypes.Find(id);
+            if (itemtype == null)
+                return HttpNotFound();
+            TempData["TypeId"] = id;
+            TempData.Keep();
+            return View(itemtype);
+        }
+        [HttpPost]
+        public ActionResult Edit([Bind]ItemType type)
+        {
+            if (String.IsNullOrEmpty(type.TypeName))
+            {
+                ModelState.AddModelError("Typename", "Please Enter Type name");
+                return View(type);
+            }
+            NumberFormatInfo formatprovide = new NumberFormatInfo();
+            formatprovide.NumberDecimalSeparator = ",";
+            formatprovide.NumberGroupSeparator = ".";
+            formatprovide.NumberGroupSizes = new int[] { 2 };
+            Double itemtypeid = Convert.ToDouble(TempData["TypeId"],formatprovide);
+            var it = dbcon.ItemTypes.Where(x => x.TypeId == itemtypeid).FirstOrDefault();
+            if (it != null)
+            {
+                it.TypeName = type.TypeName;
+                it.Details = type.Details;
+                dbcon.Entry(it).State = System.Data.EntityState.Modified;
+                dbcon.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+                return View(type);
         }
         
     }

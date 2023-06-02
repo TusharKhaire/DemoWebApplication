@@ -22,7 +22,7 @@ namespace DemoWebApplication.Controllers
             return View();
         }
         [HttpPost ]
-        public ActionResult Create([Bind] ItemType type)
+        public ActionResult Create([Bind] ItemType type)  //For creating new type 
         {
             ViewBag.Message = null;
             if (string.IsNullOrEmpty(type.TypeName))

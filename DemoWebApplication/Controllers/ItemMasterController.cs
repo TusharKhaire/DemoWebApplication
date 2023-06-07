@@ -90,6 +90,13 @@ namespace DemoWebApplication.Controllers
             {
                 return HttpNotFound();
             }
+            List<SelectListItem> typelist = new List<SelectListItem>();
+            List<ItemType> itemtypenames = dbcon.ItemTypes.ToList();
+            foreach (var type in itemtypenames)
+            {
+                typelist.Add(new SelectListItem { Text = type.TypeName, Value = type.TypeId.ToString() });
+            }
+            i.itemtypes = typelist;
             TempData["ItemCode"] = id;
             TempData.Keep();
             return View(i);

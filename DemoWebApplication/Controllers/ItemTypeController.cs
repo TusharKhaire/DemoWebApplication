@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -71,7 +72,7 @@ namespace DemoWebApplication.Controllers
             {
                 it.TypeName = type.TypeName;
                 it.Details = type.Details;
-                dbcon.Entry(it).State = System.Data.EntityState.Modified;
+                dbcon.Entry(it).State = EntityState.Modified;
                 dbcon.SaveChanges();
                 return RedirectToAction("Index");
             }

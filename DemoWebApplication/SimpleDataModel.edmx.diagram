@@ -5,10 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="3c568b5b7d9c4567ae06034ab3f0c613" Name="Diagram1">
-        <EntityTypeShape EntityType="DemoDbModel.UserProfile" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DemoDbModel.AccountMaster" Width="1.5" PointX="3.375" PointY="0.75" />
-        <EntityTypeShape EntityType="DemoDbModel.ItemMaster" Width="1.5" PointX="5.25" PointY="0.75" />
-        <EntityTypeShape EntityType="DemoDbModel.ItemType" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="DemoDbModel.UserProfile" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DemoDbModel.AccountMaster" Width="1.5" PointX="2.25" PointY="0.5" />
+        <EntityTypeShape EntityType="DemoDbModel.ItemMaster" Width="1.5" PointX="4" PointY="0.5" />
+        <EntityTypeShape EntityType="DemoDbModel.ItemType" Width="1.5" PointX="7.375" PointY="0.5" />
+        <EntityTypeShape EntityType="DemoDbModel.BatchMaster" Width="1.5" PointX="9.125" PointY="0.5" />
+        <EntityTypeShape EntityType="DemoDbModel.GodownMaster" Width="1.5" PointX="10.75" PointY="0.5" />
+        <EntityTypeShape EntityType="DemoDbModel.ItemDetail" Width="1.5" PointX="5.625" PointY="0.5" />
+        <EntityTypeShape EntityType="DemoDbModel.UnitMaster" Width="1.5" PointX="7.375" PointY="2.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

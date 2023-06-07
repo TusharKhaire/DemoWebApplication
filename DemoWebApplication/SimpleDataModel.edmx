@@ -17,6 +17,40 @@
           <Property Name="DateofBirth" Type="datetime" />
           <Property Name="UserType" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="BatchMaster">
+          <Key>
+            <PropertyRef Name="BatchId" />
+          </Key>
+          <Property Name="BatchId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BatchName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Discription" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="GodownMaster">
+          <Key>
+            <PropertyRef Name="GodownId" />
+          </Key>
+          <Property Name="GodownId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GodownName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="ItemDetail">
+          <Key>
+            <PropertyRef Name="ItemdetailId" />
+          </Key>
+          <Property Name="ItemdetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemMasterId" Type="int" />
+          <Property Name="GodownId" Type="int" />
+          <Property Name="BatchId" Type="int" />
+          <Property Name="BatchName" Type="nvarchar" MaxLength="255" />
+          <Property Name="UnitId" Type="int" />
+          <Property Name="mfrdate" Type="datetime" />
+          <Property Name="Expirydate" Type="datetime" />
+          <Property Name="PurchasePrice" Type="int" />
+          <Property Name="MRP" Type="int" />
+          <Property Name="OpeningStock" Type="int" />
+          <Property Name="ClosingStock" Type="int" />
+          <Property Name="DiscPer" Type="int" />
+        </EntityType>
         <EntityType Name="ItemMaster">
           <Key>
             <PropertyRef Name="ItemCode" />
@@ -35,6 +69,13 @@
           <Property Name="TypeName" Type="nvarchar(max)" />
           <Property Name="Details" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="UnitMaster">
+          <Key>
+            <PropertyRef Name="UnitId" />
+          </Key>
+          <Property Name="UnitId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UnitName" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="UserProfile">
           <Key>
             <PropertyRef Name="UserId" />
@@ -46,8 +87,12 @@
         </EntityType>
         <EntityContainer Name="DemoDbModelStoreContainer">
           <EntitySet Name="AccountMaster" EntityType="Self.AccountMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BatchMaster" EntityType="Self.BatchMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GodownMaster" EntityType="Self.GodownMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemDetail" EntityType="Self.ItemDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemMaster" EntityType="Self.ItemMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemType" EntityType="Self.ItemType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UnitMaster" EntityType="Self.UnitMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -68,6 +113,10 @@
           <EntitySet Name="AccountMasters" EntityType="DemoDbModel.AccountMaster" />
           <EntitySet Name="ItemMasters" EntityType="DemoDbModel.ItemMaster" />
           <EntitySet Name="ItemTypes" EntityType="DemoDbModel.ItemType" />
+          <EntitySet Name="BatchMasters" EntityType="DemoDbModel.BatchMaster" />
+          <EntitySet Name="GodownMasters" EntityType="DemoDbModel.GodownMaster" />
+          <EntitySet Name="ItemDetails" EntityType="DemoDbModel.ItemDetail" />
+          <EntitySet Name="UnitMasters" EntityType="DemoDbModel.UnitMaster" />
           </EntityContainer>
         <EntityType Name="AccountMaster">
           <Key>
@@ -98,6 +147,47 @@
           <Property Name="TypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BatchMaster">
+          <Key>
+            <PropertyRef Name="BatchId" />
+          </Key>
+          <Property Name="BatchId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BatchName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Discription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="GodownMaster">
+          <Key>
+            <PropertyRef Name="GodownId" />
+          </Key>
+          <Property Name="GodownId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GodownName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ItemDetail">
+          <Key>
+            <PropertyRef Name="ItemdetailId" />
+          </Key>
+          <Property Name="ItemdetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemMasterId" Type="Int32" />
+          <Property Name="GodownId" Type="Int32" />
+          <Property Name="BatchId" Type="Int32" />
+          <Property Name="BatchName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UnitId" Type="Int32" />
+          <Property Name="mfrdate" Type="DateTime" Precision="3" />
+          <Property Name="Expirydate" Type="DateTime" Precision="3" />
+          <Property Name="PurchasePrice" Type="Int32" />
+          <Property Name="MRP" Type="Int32" />
+          <Property Name="OpeningStock" Type="Int32" />
+          <Property Name="ClosingStock" Type="Int32" />
+          <Property Name="DiscPer" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UnitMaster">
+          <Key>
+            <PropertyRef Name="UnitId" />
+          </Key>
+          <Property Name="UnitId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UnitName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -145,6 +235,51 @@
                 <ScalarProperty Name="Details" ColumnName="Details" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
                 <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BatchMasters">
+            <EntityTypeMapping TypeName="DemoDbModel.BatchMaster">
+              <MappingFragment StoreEntitySet="BatchMaster">
+                <ScalarProperty Name="Discription" ColumnName="Discription" />
+                <ScalarProperty Name="BatchName" ColumnName="BatchName" />
+                <ScalarProperty Name="BatchId" ColumnName="BatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GodownMasters">
+            <EntityTypeMapping TypeName="DemoDbModel.GodownMaster">
+              <MappingFragment StoreEntitySet="GodownMaster">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="GodownName" ColumnName="GodownName" />
+                <ScalarProperty Name="GodownId" ColumnName="GodownId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemDetails">
+            <EntityTypeMapping TypeName="DemoDbModel.ItemDetail">
+              <MappingFragment StoreEntitySet="ItemDetail">
+                <ScalarProperty Name="DiscPer" ColumnName="DiscPer" />
+                <ScalarProperty Name="ClosingStock" ColumnName="ClosingStock" />
+                <ScalarProperty Name="OpeningStock" ColumnName="OpeningStock" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="Expirydate" ColumnName="Expirydate" />
+                <ScalarProperty Name="mfrdate" ColumnName="mfrdate" />
+                <ScalarProperty Name="UnitId" ColumnName="UnitId" />
+                <ScalarProperty Name="BatchName" ColumnName="BatchName" />
+                <ScalarProperty Name="BatchId" ColumnName="BatchId" />
+                <ScalarProperty Name="GodownId" ColumnName="GodownId" />
+                <ScalarProperty Name="ItemMasterId" ColumnName="ItemMasterId" />
+                <ScalarProperty Name="ItemdetailId" ColumnName="ItemdetailId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UnitMasters">
+            <EntityTypeMapping TypeName="DemoDbModel.UnitMaster">
+              <MappingFragment StoreEntitySet="UnitMaster">
+                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
+                <ScalarProperty Name="UnitId" ColumnName="UnitId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

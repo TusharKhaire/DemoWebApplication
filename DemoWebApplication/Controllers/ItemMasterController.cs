@@ -8,7 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using DemoWebApplication.Services;
 using DemoWebApplication.Enums;
-using System.Data.Entity;    
+using System.Data.Entity;
+using DemoWebApplication.Models;
 namespace DemoWebApplication.Controllers
 {
     public class ItemMasterController : Controller

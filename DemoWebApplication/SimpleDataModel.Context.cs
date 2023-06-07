@@ -29,5 +29,9 @@ namespace DemoWebApplication
         public DbSet<AccountMaster> AccountMasters { get; set; }
         public DbSet<ItemMaster> ItemMasters { get; set; }
         public DbSet<ItemType> ItemTypes { get; set; }
+        public DbSet<BatchMaster> BatchMasters { get; set; }
+        public DbSet<GodownMaster> GodownMasters { get; set; }
+        public DbSet<ItemDetail> ItemDetails { get; set; }
+        public DbSet<UnitMaster> UnitMasters { get; set; }
     }
 }

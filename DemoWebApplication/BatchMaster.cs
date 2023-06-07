@@ -11,16 +11,11 @@ namespace DemoWebApplication
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    public partial class AccountMaster
+    
+    public partial class BatchMaster
     {
-        [Required] public int AccountCode { get; set; }
-        [Required] public string AccountName { get; set; }
-        [Required] public string Address { get; set; }
-        public string MobileNo { get; set; }
-        public string Email { get; set; }
-        [Required] public Nullable<System.DateTime> DateofBirth { get; set; }
-        public string UserType { get; set; }
+        public int BatchId { get; set; }
+        public string BatchName { get; set; }
+        public string Discription { get; set; }
     }
 }

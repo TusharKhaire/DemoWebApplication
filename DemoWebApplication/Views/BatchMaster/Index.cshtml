@@ -1,0 +1,45 @@
+﻿@model IEnumerable<DemoWebApplication.BatchMaster>
+
+<h4>Batch master</h4>
+<br />
+<p>@Html.ActionLink("Add New Batch", "Create")</p>
+<br />
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(x=>x.BatchName)</th>
+
+        <th>@Html.DisplayNameFor(x => x.Discription )</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@Html.DisplayFor(x => item.BatchName)</th>
+            <th>@Html.DisplayFor(x => item.Discription)</th>
+            <th>
+                @Html.ActionLink("Edit", "Edit", new { id = item.BatchId  }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.BatchId })
+            </th>
+        </tr>
+    }
+
+</table>
+@*@using (Html.BeginForm())
+{
+<input type="button" ID="btnconfirm" runat="server" Value="Confrimation MsgBox"
+            onclick =" return confirm_meth()"  />
+}*@
+
+<script type="text/Javascript" language="javascript">
+   
+
+    function confirm_meth() {
+        if (confirm("Do you want to continue!Click 'YES'") == true) {
+            document.writeln("<b>You had click on 'YES' Button</b>");
+        }
+        else {
+            document.writeln("<b>You had clic on 'NO' Button</b>");
+        }
+    }
+</script>

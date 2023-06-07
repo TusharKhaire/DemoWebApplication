@@ -12,17 +12,19 @@ namespace DemoWebApplication
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     public partial class ItemMaster
     {
-        [Key]
+        [Required]
         public int ItemCode { get; set; }
         [Required]
         public string ItemName { get; set; }
         [Required]
-        public string ItemType { get; set; }
+        public int ItemType { get; set; }
         public string HSNCODE { get; set; }
-        [Range(1,100,ErrorMessage ="Please Enter Valid Gst %")]
         public string GstPer { get; set; }
+        public string TypeName { get; set; }
+        public IList<SelectListItem> itemtypes { get; set; }
     }
 }

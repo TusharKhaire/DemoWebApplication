@@ -15,7 +15,7 @@ namespace DemoWebApplication
 
     public partial class AccountMaster
     {
-        [Key]
+        [Required]
         public int AccountCode { get; set; }
         [Required]
         public string AccountName { get; set; }

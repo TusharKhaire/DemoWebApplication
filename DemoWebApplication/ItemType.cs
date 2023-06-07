@@ -15,7 +15,7 @@ namespace DemoWebApplication
 
     public partial class ItemType
     {
-        [Key]
+        [Required]
         public int TypeId { get; set; }
         [Required]
         public string TypeName { get; set; }

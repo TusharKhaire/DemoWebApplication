@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using DemoWebApplication.Services;
 using DemoWebApplication.Enums;
+using System.Data.Entity;
 namespace DemoWebApplication.Controllers
 {
     public class ItemMasterController : Controller
@@ -17,12 +18,34 @@ namespace DemoWebApplication.Controllers
         // GET: ItemMaster
         public ActionResult Index()
         {
-            return View(dbcon.ItemMasters.ToList());
+            List<ItemMaster> items = new List<ItemMaster>();
+            var result = dbcon.ItemMasters.ToList();
+            foreach(var item in result )
+            {
+                ItemMaster im = new ItemMaster();
+                var itemTypedata = dbcon.ItemTypes.Where(x => x.TypeId == item.ItemType).FirstOrDefault();
+                im.TypeName =itemTypedata.TypeName ;
+                im.ItemCode = item.ItemCode;
+                im.ItemName = item.ItemName;
+                im.ItemType = item.ItemType;
+                im.HSNCODE = item.HSNCODE;
+                im.GstPer = item.GstPer;
+                items.Add(im);
+            }
+            return View(items);
         }
         [HttpGet]
         public ActionResult AddItem()
         {
-            return View();
+            ItemMaster viewmodel = new ItemMaster();
+            List<SelectListItem> itemtypename = new List<SelectListItem>();
+            List<ItemType> typelist = dbcon.ItemTypes.ToList();
+            foreach(var type in typelist)
+            {
+                itemtypename.Add(new SelectListItem { Text = type.TypeName, Value = type.TypeId.ToString() });
+            }
+            viewmodel.itemtypes = itemtypename;
+            return View(viewmodel );
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

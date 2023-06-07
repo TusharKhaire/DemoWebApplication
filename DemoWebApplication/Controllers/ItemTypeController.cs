@@ -78,6 +78,14 @@ namespace DemoWebApplication.Controllers
             else
                 return View(type);
         }
+
+        [HttpPost]
+        public ActionResult Delete([Bind] ItemType deletetype)
+        {
+            dbcon.ItemTypes.Remove(deletetype);
+            dbcon.SaveChanges();
+            return View("Index");
+        }
         
     }
 }

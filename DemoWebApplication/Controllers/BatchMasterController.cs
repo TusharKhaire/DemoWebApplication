@@ -33,7 +33,7 @@ namespace DemoWebApplication.Controllers
             }
             else
             {
-                dbcon.BatchMasters .Add(BM);
+                dbcon.BatchMasters.Add(BM);
                 dbcon.SaveChanges();
                 ViewBag.Message = "Batch" + BM.BatchName + " saved";
                 ModelState.Clear();
@@ -47,7 +47,7 @@ namespace DemoWebApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var batch = dbcon.BatchMasters .Find(id);
+            var batch = dbcon.BatchMasters.Find(id);
             if (batch == null)
                 return HttpNotFound();
             TempData["batchid"] = id;
@@ -57,7 +57,7 @@ namespace DemoWebApplication.Controllers
         [HttpPost]
         public ActionResult Edit([Bind]BatchMaster batch)
         {
-            if (String.IsNullOrEmpty(batch.BatchName ))
+            if (String.IsNullOrEmpty(batch.BatchName))
             {
                 ModelState.AddModelError("BatchName", "Please Enter Batch name");
                 return View(batch);
@@ -80,12 +80,29 @@ namespace DemoWebApplication.Controllers
                 return View(batch);
         }
 
-        [HttpPost]
-        public ActionResult Delete([Bind] ItemType deletebatch)
+        //[HttpPost]
+        public ActionResult Delete(long? id)
         {
-            dbcon.ItemTypes.Remove(deletebatch);
-            dbcon.SaveChanges();
-            return View("Index");
+            TempData["DeleteMsg"] = null;
+            if (id != null)
+            {
+                var batch = dbcon.BatchMasters.Where(x => x.BatchId == id).FirstOrDefault();
+                if(batch != null)
+                {
+                    dbcon.Entry(batch).State = EntityState.Deleted;
+                    int a = dbcon.SaveChanges();
+                    if (a>0)
+                    {
+                        TempData["DeleteMsg"] = "Batch "+ batch.BatchName + " deleted succesfully";
+                    }else
+                        TempData["DeleteMsg"] = "Select Valid Batch to delete";
+                }
+                else
+                    TempData["DeleteMsg"] = "Select Valid Batch to delete";
+
+            }
+            
+            return RedirectToAction("Index");
         }
 
     }

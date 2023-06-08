@@ -6,11 +6,19 @@
 <br />
 <script src="~/Scripts/jquery.validate.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
+@{ 
+    if (TempData["DeleteMsg"] != null)
+    {
+        <script type="text/javascript">
+            alert(@Html.Raw(Json.Encode(TempData["DeleteMsg"])));
+        </script>
+    }
+}
 <table class="table">
     <tr>
-        <th>@Html.DisplayNameFor(x=>x.BatchName)</th>
+        <th>@Html.DisplayNameFor(x => x.BatchName)</th>
 
-        <th>@Html.DisplayNameFor(x => x.Discription )</th>
+        <th>@Html.DisplayNameFor(x => x.Discription)</th>
     </tr>
     @foreach (var item in Model)
     {
@@ -18,7 +26,7 @@
             <th>@Html.DisplayFor(x => item.BatchName)</th>
             <th>@Html.DisplayFor(x => item.Discription)</th>
             <th>
-                @Html.ActionLink("Edit", "Edit", new { id = item.BatchId  }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.BatchId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.BatchId })
             </th>
         </tr>
@@ -27,19 +35,28 @@
 </table>
 @*@using (Html.BeginForm())
 {
-<input type="button" ID="btnconfirm" runat="server" Value="Confrimation MsgBox"
-            onclick =" return confirm_meth()"  />
+    <input type="button" ID="btnconfirm" runat="server" Value="Edit" onclick=" return confirmToDelete()" />
 }*@
 
 <script type="text/Javascript" language="javascript">
-   
 
-    function confirm_meth() {
-        if (confirm("Do you want to continue!Click 'YES'") == true) {
-            document.writeln("<b>You had click on 'YES' Button</b>");
+
+    function confirmToDelete( batch_id) {
+        if (confirm("Do you want to delete this batch") == true) {
+                 @Html.ActionLink("Delete", "Delete")
+            //$.ajax({
+            //    url: 'Delete',
+            //    data: { id, id }
+            //}).done(function () {
+            //    alert('Deleted')
+            //});
+
+            //document.writeln("<b>You had click on 'YES' Button</b>");
         }
         else {
-            document.writeln("<b>You had clic on 'NO' Button</b>");
+            // document.writeln("<b>You had clic on 'NO' Button</b>");
         }
     }
+
+
 </script>

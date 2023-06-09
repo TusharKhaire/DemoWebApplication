@@ -1,0 +1,27 @@
+﻿@model DemoWebApplication.Models.ItemDetailM
+
+@{ 
+    if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            @Html.Raw(Json.Encode(ViewBag.Message));
+        </script>
+    }
+}
+<h2>Create New Item</h2>
+<hr />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class="text-danger"})
+        @Html.HiddenFor(x=>x.ItemdetailId)
+        <div class="form-group">
+            @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class="control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class="form-control"})
+                @Html.ValidationMessageFor(x => x.ItemName, "", new { @class="text-danger"})
+            </div>
+        </div>
+    </div>
+}

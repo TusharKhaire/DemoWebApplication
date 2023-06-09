@@ -1,0 +1,52 @@
+﻿@model IEnumerable<DemoWebApplication.ItemDetail>
+
+
+<h2>Item Details</h2>
+@{ 
+    if (ViewBag.Message != null)
+    {
+        <script>
+            alert(@Html.Raw(Json.Encode(ViewBag.Message)));
+        </script>
+    }
+}
+@Html.AntiForgeryToken()
+<p>
+    @Html.ActionLink("Create New Item","Create")
+</p>
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(x=>x.ItemName)</th>
+        <th>@Html.DisplayNameFor(x=>x.ItemType)</th>
+        <th>@Html.DisplayNameFor(x=>x.Godown)</th>
+        <th>@Html.DisplayNameFor(x=>x.BatchName)</th>
+        <th>@Html.DisplayNameFor(x=>x.Unit)</th>
+        <th>@Html.DisplayNameFor(x=>x.DiscPer)</th>
+        <th>@Html.DisplayNameFor(x=>x.HsnCode)</th>
+        <th>@Html.DisplayNameFor(x=>x.Expirydate)</th>
+        <th>@Html.DisplayNameFor(x=>x.PurchasePrice)</th>
+        <th>@Html.DisplayNameFor(x=>x.MRP)</th>
+        <th>@Html.DisplayNameFor(x=>x.OpeningStock)</th>
+        <th>@Html.DisplayNameFor(x=>x.ClosingStock)</th>
+        <th></th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <th>@Html.DisplayFor(x=>item.ItemName)</th>
+            <th>@Html.DisplayFor(x=>item.ItemType)</th>
+            <th>@Html.DisplayFor(x=>item.Godown)</th>
+            <th>@Html.DisplayFor(x=>item.BatchName)</th>
+            <th>@Html.DisplayFor(x=>item.Unit)</th>
+            <th>@Html.DisplayFor(x=>item.DiscPer)</th>
+            <th>@Html.DisplayFor(x=>item.HsnCode)</th>
+            <th>@Html.DisplayFor(x=>item.Expirydate)</th>
+            <th>@Html.DisplayFor(x=>item.PurchasePrice)</th>
+            <th>@Html.DisplayFor(x=>item.MRP)</th>
+            <th>@Html.DisplayFor(x=>item.OpeningStock)</th>
+            <th>@Html.DisplayFor(x=>item.ClosingStock)</th>
+            <th>@Html.ActionLink("Edit","Edit",new { id=item.ItemdetailId})|
+            @Html.ActionLink("Delete","Delete",new { id=item.ItemdetailId})</th>
+        </tr>
+    }
+</table>

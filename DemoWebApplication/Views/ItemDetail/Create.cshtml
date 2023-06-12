@@ -1,6 +1,6 @@
 ﻿@model DemoWebApplication.Models.ItemDetailM
 
-@{ 
+@{
     if (ViewBag.Message != null)
     {
         <script type="text/javascript">
@@ -8,20 +8,82 @@
         </script>
     }
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <h2>Create New Item</h2>
 <hr />
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class="text-danger"})
-        @Html.HiddenFor(x=>x.ItemdetailId)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(x => x.ItemdetailId)
         <div class="form-group">
-            @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class="control-label col-md-2"})
+            @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class="form-control"})
-                @Html.ValidationMessageFor(x => x.ItemName, "", new { @class="text-danger"})
+                @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.ItemName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(x => x.ItemType,new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(x => x.ItemType, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            itmName = $("#ItemName").select2({
+            ajax: {
+                url: '@Url.Action("GetItemByName", "ItemMaster")',
+                dataType: 'json',
+                delay: 1000,
+                data: function (params) {
+                    return {
+                        searchText: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            },
+            tags: true,
+            createTag: function (params) {
+                return {
+                    id: params.term,
+                    text: params.term,
+                    newOption: true
+                }
+            },
+            templateResult: function (data) {
+                var $result = $("<span></span>");
+                $result.text(data.text);
+               // tabindex: 3;
+                if (data.newOption) {
+                    $result.append(" <em>(new)</em>");
+                }
+                return $result;
+               },
+
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 2,
+            //width: false //commented
+
+        }).on('select2:select', function () {
+            $("#ItemType").focus();
+        });
+
+        });
+    </script>
 }

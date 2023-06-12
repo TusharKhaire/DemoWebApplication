@@ -52,6 +52,15 @@ namespace DemoWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddItem([Bind] ItemMaster i)
         {
+            ItemMaster viewmodel = new ItemMaster();
+            List<SelectListItem> itemtypename = new List<SelectListItem>();
+            List<ItemType> typelist = dbcon.ItemTypes.ToList();
+            foreach (var type in typelist)
+            {
+                itemtypename.Add(new SelectListItem { Text = type.TypeName, Value = type.TypeId.ToString() });
+            }
+            viewmodel.itemtypes = itemtypename;
+
             ViewBag.Message = string.Format("");
             if (ModelState.IsValid)
             {
@@ -62,7 +71,8 @@ namespace DemoWebApplication.Controllers
                     dbcon.SaveChanges();
                    // ViewBag.Message = String.Format("Item Name " + i.ItemName + " save succesfully");
                     ViewBag.Alert = CommonServices.ShowAlert(Alerts.Alert.Success, "Item Name " + i.ItemName + " save succesfully");  //String.Format("Item Name " + i.ItemName + " save succesfully");
-                    return View();
+                    ModelState.Clear();
+                    return View(viewmodel);
                 }
                 else
                 {

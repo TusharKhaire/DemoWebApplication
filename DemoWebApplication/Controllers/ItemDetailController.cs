@@ -83,5 +83,10 @@ namespace DemoWebApplication.Controllers
 
             return View(viewmodel);
         }
+        public JsonResult GetItemByName(string searchText)
+        {
+            var ItemName = dbcon.ItemMasters.Where(a => a.ItemName.Contains(searchText)).ToList();
+            return Json(ItemName.Select(q => new { id = q.ItemCode, text = q.ItemName }), JsonRequestBehavior.AllowGet);
+        }
     }
 }

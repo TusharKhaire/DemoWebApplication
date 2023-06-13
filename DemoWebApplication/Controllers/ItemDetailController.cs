@@ -14,13 +14,13 @@ namespace DemoWebApplication.Controllers
         {
             List<ItemDetail> itemdetaillist = new List<ItemDetail>();
             var result = dbcon.ItemDetails.ToList();
-            foreach(var item in result)
+            foreach (var item in result)
             {
                 ItemDetail id = new ItemDetail();
                 var itemnamedata = dbcon.ItemMasters.Where(x => x.ItemCode == item.ItemMasterId).FirstOrDefault();
                 var itemtypedata = dbcon.ItemTypes.Where(x => x.TypeId == itemnamedata.ItemType).FirstOrDefault();
-                var godowndata = dbcon.GodownMasters.Where(x=>x.GodownId==item.GodownId).FirstOrDefault();
-                var UnitData = dbcon.UnitMasters.Where(x=>x.UnitId==item.UnitId).FirstOrDefault();
+                var godowndata = dbcon.GodownMasters.Where(x => x.GodownId == item.GodownId).FirstOrDefault();
+                var UnitData = dbcon.UnitMasters.Where(x => x.UnitId == item.UnitId).FirstOrDefault();
                 id.ItemdetailId = item.ItemdetailId;
                 id.ItemMasterId = item.ItemMasterId;
                 id.ItemName = itemnamedata.ItemName;
@@ -52,7 +52,7 @@ namespace DemoWebApplication.Controllers
             });
             viewmodel.itemDetailList = Itemdetailnames;
             List<SelectListItem> Itemtypenames = new List<SelectListItem>();
-            List<ItemType > itemtype = dbcon.ItemTypes.ToList();
+            List<ItemType> itemtype = dbcon.ItemTypes.ToList();
             itemtype.ForEach(x =>
             {
                 Itemtypenames.Add(new SelectListItem { Text = x.TypeName, Value = x.TypeId.ToString() });
@@ -122,14 +122,21 @@ namespace DemoWebApplication.Controllers
                 Itembatchnames.Add(new SelectListItem { Text = x.BatchName, Value = x.BatchId.ToString() });
             });
             viewmodel.lstbatches = Itembatchnames;
-            viewmodel.mfrdate =new DateTime();
-            viewmodel.Expirydate =new DateTime();
+            viewmodel.mfrdate = new DateTime();
+            viewmodel.Expirydate = new DateTime();
             return View(viewmodel);
         }
         public JsonResult GetItemByName(string searchText)
         {
             var ItemName = dbcon.ItemMasters.Where(a => a.ItemName.Contains(searchText)).ToList();
             return Json(ItemName.Select(q => new { id = q.ItemCode, text = q.ItemName }), JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult GetItemTyeData(int itemcode)
+        {
+            var itemtype = dbcon.ItemTypes.Where(x => x.TypeId == itemcode).FirstOrDefault();
+            return Json(itemtype, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

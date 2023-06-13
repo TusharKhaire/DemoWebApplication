@@ -24,50 +24,129 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(x => x.ItemdetailId)
-        <div class="form-group">
-            @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.ItemName, "", new { @class = "text-danger" })
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ItemName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(x => x.ItemType, Model.lstitemtypes, "--Select--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ItemType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Godown, "Godown Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(x => x.Godown, Model.lstgodowns, "--Select--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Godown, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Unit, "Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(x => x.Unit, Model.lstunits, "--Select--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Unit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.BatchName, "Batch", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(x => x.BatchName, Model.lstbatches, "--Select--", new { @class = "form-control" })
+                    @Html.HiddenFor(x => x.BatchId)
+                    @Html.ValidationMessageFor(x => x.BatchName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.DiscPer, "Disc %", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(x => x.DiscPer, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(x => x.DiscPer, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(x => x.ItemType,Model.lstitemtypes,"--Select--",new { @class = "form-control" } )
-                @Html.ValidationMessageFor(x => x.ItemType, "", new { @class = "text-danger" })
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.mfrdate, "MFR Date", new { @class = "control-label col-md-3" })
+                <div>
+                    @Html.CheckBox(name: "chk_Mfr", isChecked: false, htmlAttributes: new { @class = "col-md-1" })
+                    @Html.TextBoxFor(x => x.mfrdate, new { @type = "date", @class = "form-control datepicker col-md-8", @Value = new DateTime() })
+                    @Html.ValidationMessageFor(x => x.mfrdate, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(x => x.Godown, "Godown Name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(x => x.Godown,Model.lstgodowns,"--Select--",new { @class = "form-control" } )
-                @Html.ValidationMessageFor(x => x.Godown, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(x => x.Expirydate, "Expiry date", new { @class = "control-label col-md-3" })
+                <div>
+                    @Html.CheckBox(name: "chk_Exp", isChecked: false, htmlAttributes: new { @class = "col-md-1" })
+                    @Html.TextBoxFor(x => x.Expirydate, new { @type = "date", @class = "form-control datepicker col-md-8", @Value = new DateTime() })
+                    @Html.ValidationMessageFor(x => x.Expirydate, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(x => x.Unit, "Unit", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(x => x.Unit, Model.lstunits,"--Select--",new { @class = "form-control"  })
-                @Html.ValidationMessageFor(x => x.Unit, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(x => x.MRP, "MRP", new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(x => x.MRP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(x => x.MRP, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(x => x.BatchName, "Batch", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(x => x.BatchName,Model.lstbatches,"--Select--",new { @class = "form-control"  })
-                @Html.HiddenFor(x=>x.BatchId)
-                @Html.ValidationMessageFor(x => x.BatchName, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(x => x.OpeningStock, "Opening Stock", new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(x => x.OpeningStock, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(x => x.OpeningStock, "", new { @class = "text-danger" })
+                </div>
             </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.ClosingStock, "Closing Stock", new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(x => x.ClosingStock, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(x => x.ClosingStock, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
         </div>
+      
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="save" id="btn_Save" class="btn btn-default" /> 
+                <input type="submit" value="save" id="btn_Save" class="btn btn-default" />
             </div>
         </div>
     </div>
+   
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $('#chk_Exp').change(function () {
+                $('#chk_Exp').val(this.checked);
+                if (this.checked) {
+                    //var returnVal = confirm("Are you sure?");
+                    //$(this).prop("checked", returnVal);
+                    $('#chk_Exp').val(this.checked);
+                    $('#Expirydate').removeAttr('disabled');
+                }
+                else {
+                    $('#Expirydate').attr('disabled', 'disabled');
+                }
+            });
+
+            $('#chk_Mfr').change(function () {
+                $('#chk_Mfr').val(this.checked);
+                if (this.checked) {
+                    //var returnVal = confirm("Are you sure?");
+                    //$(this).prop("checked", returnVal);
+                    $('#chk_Mfr').val(this.checked);
+                    $('#mfrdate').removeAttr('disabled');
+                }
+                else {
+                    $('#mfrdate').attr('disabled', 'disabled');
+                }
+            });
+
             itmName = $("#ItemName").select2({
             ajax: {
                 url: '@Url.Action("GetItemByName", "ItemMaster")',

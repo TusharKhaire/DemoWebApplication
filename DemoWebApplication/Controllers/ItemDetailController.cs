@@ -51,7 +51,6 @@ namespace DemoWebApplication.Controllers
                 Itemdetailnames.Add(new SelectListItem { Text = x.ItemName, Value = x.ItemCode.ToString() });
             });
             viewmodel.itemDetailList = Itemdetailnames;
-
             List<SelectListItem> Itemtypenames = new List<SelectListItem>();
             List<ItemType > itemtype = dbcon.ItemTypes.ToList();
             itemtype.ForEach(x =>
@@ -80,7 +79,51 @@ namespace DemoWebApplication.Controllers
                 Itembatchnames.Add(new SelectListItem { Text = x.BatchName, Value = x.BatchId.ToString() });
             });
             viewmodel.lstbatches = Itembatchnames;
-
+            viewmodel.mfrdate = new DateTime();
+            viewmodel.Expirydate = new DateTime();
+            return View(viewmodel);
+        }
+        [HttpPost]
+        public ActionResult Create(ItemDetail item)
+        {
+            DemoWebApplication.Models.ItemDetailM viewmodel = new DemoWebApplication.Models.ItemDetailM();
+            List<SelectListItem> Itemdetailnames = new List<SelectListItem>();
+            List<ItemMaster> itemname = dbcon.ItemMasters.ToList();
+            itemname.ForEach(x =>
+            {
+                Itemdetailnames.Add(new SelectListItem { Text = x.ItemName, Value = x.ItemCode.ToString() });
+            });
+            viewmodel.itemDetailList = Itemdetailnames;
+            List<SelectListItem> Itemtypenames = new List<SelectListItem>();
+            List<ItemType> itemtype = dbcon.ItemTypes.ToList();
+            itemtype.ForEach(x =>
+            {
+                Itemtypenames.Add(new SelectListItem { Text = x.TypeName, Value = x.TypeId.ToString() });
+            });
+            viewmodel.lstitemtypes = Itemtypenames;
+            List<SelectListItem> Itemunitnames = new List<SelectListItem>();
+            List<UnitMaster> unitlist = dbcon.UnitMasters.ToList();
+            unitlist.ForEach(x =>
+            {
+                Itemunitnames.Add(new SelectListItem { Text = x.UnitName, Value = x.UnitId.ToString() });
+            });
+            viewmodel.lstunits = Itemunitnames;
+            List<SelectListItem> Itemgodownnames = new List<SelectListItem>();
+            List<GodownMaster> godownlist = dbcon.GodownMasters.ToList();
+            godownlist.ForEach(x =>
+            {
+                Itemgodownnames.Add(new SelectListItem { Text = x.GodownName, Value = x.GodownId.ToString() });
+            });
+            viewmodel.lstgodowns = Itemgodownnames;
+            List<SelectListItem> Itembatchnames = new List<SelectListItem>();
+            List<BatchMaster> batchlist = dbcon.BatchMasters.ToList();
+            batchlist.ForEach(x =>
+            {
+                Itembatchnames.Add(new SelectListItem { Text = x.BatchName, Value = x.BatchId.ToString() });
+            });
+            viewmodel.lstbatches = Itembatchnames;
+            viewmodel.mfrdate =new DateTime();
+            viewmodel.Expirydate =new DateTime();
             return View(viewmodel);
         }
         public JsonResult GetItemByName(string searchText)

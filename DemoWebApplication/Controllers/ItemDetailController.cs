@@ -134,6 +134,7 @@ namespace DemoWebApplication.Controllers
         [HttpPost]
         public JsonResult GetItemTyeData(int itemcode)
         {
+          
             var itemtype = dbcon.ItemTypes.Where(x => x.TypeId == itemcode).FirstOrDefault();
             return Json(itemtype, JsonRequestBehavior.AllowGet);
 

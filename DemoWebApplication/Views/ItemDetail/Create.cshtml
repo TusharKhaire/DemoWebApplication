@@ -19,9 +19,10 @@
         @Html.HiddenFor(x => x.ItemdetailId)
         <div class="col-md-6">
             <div class="form-group">
-                @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })
+                @Html.LabelFor(x => x.ItemName, "ItemName", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="row-fluid col-md-10">
+                    @* @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })*@
+                    @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control", data_live_search = "true" })
                     @Html.ValidationMessageFor(x => x.ItemName, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -117,12 +118,15 @@
             $('#mfrdate').attr('disabled', 'disabled');
 
             $('#chk_Exp').change(function () {
+               // debugger;
                 $('#chk_Exp').val(this.checked);
                 if (this.checked) {
                     //var returnVal = confirm("Are you sure?");
                     //$(this).prop("checked", returnVal);
                     $('#chk_Exp').val(this.checked);
                     $('#Expirydate').removeAttr('disabled');
+                   // $('#Expirydate').datepicker({ dateFormat: 'dd/MMM/yyyy' });
+                   // $('#Expirydate').datepicker('setDate', new Date());
                 }
                 else {
                     $('#Expirydate').attr('disabled', 'disabled');
@@ -143,22 +147,49 @@
             });
 
             $('#ItemName').change(function () {
-                debugger;
                 var ItemCode = $('#ItemName').val();
+                //$.getJSON('/ItemDetail/GetItemTyeData', { itemcode: ItemCode },
+                //    function (data) {
+                //    alert(data.TypeId);
+                //});
+                var getReportColumnsParams = {
+                    "ItemCode": ItemCode
+                };
                 alert(ItemCode);
-                debugger;
-               ajax:({
-                    type:'POST',
-                    dataType:'json',
-                    url:'/ItemDetail/GetItemTyeData',
-                   data: jQuery.param({ itemcode: ItemCode }),
-                    success: function (data) {
-                        alert(data.TypeId);
-                    },
-                    error: function (XMLHttpRequest,textStutus,errorThrown) {
-                        alert("error");
-                    }
+                $.ajax({
+                        url: "/ItemDetail/GetItemTypeData",
+                        type: "POST",
+                        dataType: 'json',
+                        delay: 1000,
+                        // data: getReportColumnsParams,
+                        // url:'@Url.Action("GetItemTypeData", "ItemDetail")',
+                        data: ItemCode,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (result) {
+                        console.log(result);
+                        alert("Success");
+                        },
+                        error: function (err) {
+                            console.log(err);
+                            alert("Error");
+                        }
                 });
+                //$.ajax({
+                //    url: "/ItemDetail/GetitemDetails",
+                //    Method: "Get",
+                //    success: function (result) {
+                //        console.log(result);
+                //        result = JSON.parse(result);
+                //        console.log(result);
+                //        //$("#ItemType").val(result.ItemType)
+                //        document.getElementById('ItemType').value = result.ItemType
+                //        $("#DiscPer").val(result.DiscPer);
+
+                //    },
+                //    error: function (err) {
+                //        console.log(err);
+                //    }
+                //})
             });
 
 

@@ -15,7 +15,7 @@ function ClearAll() {
     element.getElementsByClassName('form-control')[2].value = "";
     element.getElementsByClassName('form-control')[3].value = "";
     element.getElementsByClassName('form-control')[4].value = "";
-};
+}
 function ClearAllItem() {
     const element = document.getElementById("myDIV");
     element.getElementsByClassName('form-control')[0].value = "";
@@ -23,7 +23,7 @@ function ClearAllItem() {
     element.getElementsByClassName('form-control')[2].value = "";
     element.getElementsByClassName('form-control')[3].value = "";
     element.getElementsByClassName('form-control')[4].value = "";
-};
+}
 
 function CheckValidations(ctrlId, ctrlname) {
     var txtcontrol = document.getElementById("ctrlId");
@@ -34,6 +34,6 @@ function CheckValidations(ctrlId, ctrlname) {
         return false;
     }
 
-};
+}
 
 

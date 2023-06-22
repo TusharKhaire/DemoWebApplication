@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using DemoWebApplication.Models;
+using Newtonsoft.Json;
 namespace DemoWebApplication.Controllers
 {
     public class ItemDetailController : Controller
@@ -132,12 +133,22 @@ namespace DemoWebApplication.Controllers
             return Json(ItemName.Select(q => new { id = q.ItemCode, text = q.ItemName }), JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult GetItemTyeData(int itemcode)
+        public JsonResult GetItemTypeData(int itemcode)
         {
-          
             var itemtype = dbcon.ItemTypes.Where(x => x.TypeId == itemcode).FirstOrDefault();
-            return Json(itemtype, JsonRequestBehavior.AllowGet);
-
+            return Json(itemtype);
+        }
+        public JsonResult GetitemDetails()
+        {
+            var itemtype = dbcon.ItemTypes.ToList();
+            //return Json(itemtype, JsonRequestBehavior.AllowGet);
+            ItemDetailM id = new ItemDetailM();
+            id.ItemdetailId  = 1;
+            id.ItemName = "ItemName";
+            id.ItemType  = "Reguler";
+            id.DiscPer = 12;
+            var result = JsonConvert.SerializeObject(id);
+            return Json(result,JsonRequestBehavior.AllowGet);
         }
     }
 }

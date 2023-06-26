@@ -85,7 +85,7 @@ namespace DemoWebApplication.Controllers
             return View(viewmodel);
         }
         [HttpPost]
-        public ActionResult Create(ItemDetail item)
+        public ActionResult Create([Bind]ItemDetail item)
         {
             DemoWebApplication.Models.ItemDetailM viewmodel = new DemoWebApplication.Models.ItemDetailM();
             List<SelectListItem> Itemdetailnames = new List<SelectListItem>();
@@ -96,11 +96,11 @@ namespace DemoWebApplication.Controllers
             });
             viewmodel.itemDetailList = Itemdetailnames;
             List<SelectListItem> Itemtypenames = new List<SelectListItem>();
-            List<ItemType> itemtype = dbcon.ItemTypes.ToList();
-            itemtype.ForEach(x =>
-            {
-                Itemtypenames.Add(new SelectListItem { Text = x.TypeName, Value = x.TypeId.ToString() });
-            });
+            //List<ItemType> itemtype = dbcon.ItemTypes.ToList();
+            //itemtype.ForEach(x =>
+            //{
+            //    Itemtypenames.Add(new SelectListItem { Text = x.TypeName, Value = x.TypeId.ToString() });
+            //});
             viewmodel.lstitemtypes = Itemtypenames;
             List<SelectListItem> Itemunitnames = new List<SelectListItem>();
             List<UnitMaster> unitlist = dbcon.UnitMasters.ToList();
@@ -135,8 +135,9 @@ namespace DemoWebApplication.Controllers
         [HttpPost]
         public JsonResult GetItemTypeData(int itemcode)
         {
-            var itemtype = dbcon.ItemTypes.Where(x => x.TypeId == itemcode).FirstOrDefault();
-            return Json(itemtype);
+            var itemmaster = dbcon.ItemMasters.Where(x => x.ItemCode == itemcode).FirstOrDefault();
+            var itemtype = dbcon.ItemTypes.Where(x => x.TypeId == itemmaster .ItemType ).FirstOrDefault();
+            return Json(itemtype,JsonRequestBehavior.AllowGet );
         }
         public JsonResult GetitemDetails()
         {

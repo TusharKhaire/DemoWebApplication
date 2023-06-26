@@ -29,7 +29,7 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(x => x.ItemType, Model.lstitemtypes, "--Select--", new { @class = "form-control" })
+                    @Html.EditorFor(x => x.ItemType,new {htmlAttributes=new { @class = "form-control" } })
                     @Html.ValidationMessageFor(x => x.ItemType, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -82,6 +82,13 @@
             </div>
 
             <div class="form-group">
+                @Html.LabelFor(x => x.PurchasePrice , "Purchase Price", new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(x => x.PurchasePrice, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(x => x.PurchasePrice, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.LabelFor(x => x.MRP, "MRP", new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
                     @Html.EditorFor(x => x.MRP, new { htmlAttributes = new { @class = "form-control" } })
@@ -102,7 +109,6 @@
                     @Html.ValidationMessageFor(x => x.ClosingStock, "", new { @class = "text-danger" })
                 </div>
             </div>
-
         </div>
 
         <div class="form-group">
@@ -116,6 +122,8 @@
         $(document).ready(function () {
             $('#Expirydate').attr('disabled', 'disabled');
             $('#mfrdate').attr('disabled', 'disabled');
+            $("#ItemType").attr('disabled', 'disabled');
+            $("#ClosingStock").attr('disabled', 'disabled');
 
             $('#chk_Exp').change(function () {
                // debugger;
@@ -140,6 +148,7 @@
                     //$(this).prop("checked", returnVal);
                     $('#chk_Mfr').val(this.checked);
                     $('#mfrdate').removeAttr('disabled');
+                    //$('#chk_Mfr').val(Date.now());
                 }
                 else {
                     $('#mfrdate').attr('disabled', 'disabled');
@@ -148,31 +157,25 @@
 
             $('#ItemName').change(function () {
                 var ItemCode = $('#ItemName').val();
-                //$.getJSON('/ItemDetail/GetItemTyeData', { itemcode: ItemCode },
-                //    function (data) {
-                //    alert(data.TypeId);
-                //});
                 var getReportColumnsParams = {
                     "ItemCode": ItemCode
                 };
-                alert(ItemCode);
-                $.ajax({
-                        url: "/ItemDetail/GetItemTypeData",
-                        type: "POST",
-                        dataType: 'json',
-                        delay: 1000,
-                        // data: getReportColumnsParams,
-                        // url:'@Url.Action("GetItemTypeData", "ItemDetail")',
-                        data: ItemCode,
-                        contentType: "application/json; charset=utf-8",
-                        success: function (result) {
-                        console.log(result);
-                        alert("Success");
-                        },
-                        error: function (err) {
-                            console.log(err);
-                            alert("Error");
-                        }
+                //alert(ItemCode);
+               $.ajax({
+                    url: "/ItemDetail/GetItemTypeData",
+                    type: "POST",
+                    dataType: 'json',
+                    data: { itemcode: ItemCode },
+                    success: function (result) {
+                        //console.log(result);
+                        $("#ItemType").val(result.TypeName);
+                        //$("#ItemType").attr("disable", "Disable");
+                        $("#ItemType").attr('disabled', 'disabled');
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("Error");
+                    }
                 });
                 //$.ajax({
                 //    url: "/ItemDetail/GetitemDetails",
@@ -192,49 +195,11 @@
                 //})
             });
 
-
-            @*itmName = $("#ItemName").select2({
-            ajax: {
-                url: '@Url.Action("GetItemByName", "ItemMaster")',
-                dataType: 'json',
-                delay: 1000,
-                data: function (params) {
-                    return {
-                        searchText: params.term
-                    };
-                },
-                processResults: function (data, params) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            },
-            tags: true,
-            createTag: function (params) {
-                return {
-                    id: params.term,
-                    text: params.term,
-                    newOption: true
-                }
-            },
-            templateResult: function (data) {
-                var $result = $("<span></span>");
-                $result.text(data.text);
-               // tabindex: 3;
-                if (data.newOption) {
-                    $result.append(" <em>(new)</em>");
-                }
-                return $result;
-               },
-
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 2,
-            //width: false //commented
-
-        }).on('select2:select', function () {
-            $("#ItemType").focus();
-        });*@
+            $('#OpeningStock').keyup(function () {
+                
+                //$('#ClosingStock').val($('#OpeningStock').val());
+                $('#ClosingStock').get(0).value = $('#OpeningStock').val();
+            });
 
         });
     </script>

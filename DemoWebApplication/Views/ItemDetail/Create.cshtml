@@ -113,7 +113,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="save" id="btn_Save" class="btn btn-default" />
+                <input type="submit" value="save" id="btn_Save" class="btn btn-default" onclick='return Validation()' />
             </div>
         </div>
     </div>
@@ -124,7 +124,11 @@
             $('#mfrdate').attr('disabled', 'disabled');
             $("#ItemType").attr('disabled', 'disabled');
             $("#ClosingStock").attr('disabled', 'disabled');
-
+            $('#ClosingStock').val($('#OpeningStock').val());
+            if ($('#ItemName').val() != "") {
+                //alert($('#ItemName').val());
+              
+            }
             $('#chk_Exp').change(function () {
                // debugger;
                 $('#chk_Exp').val(this.checked);
@@ -155,7 +159,7 @@
                 }
             });
 
-            $('#ItemName').change(function () {
+             $('#ItemName').change(function () {
                 var ItemCode = $('#ItemName').val();
                 var getReportColumnsParams = {
                     "ItemCode": ItemCode
@@ -197,10 +201,32 @@
 
             $('#OpeningStock').keyup(function () {
                 
-                //$('#ClosingStock').val($('#OpeningStock').val());
-                $('#ClosingStock').get(0).value = $('#OpeningStock').val();
+                $('#ClosingStock').val($('#OpeningStock').val());
+                //$('#ClosingStock').get(0).value = $('#OpeningStock').val();
             });
+            $('#btn_Save').click(function Validation() {
+                if ($('#ItemName').val() == "") {
+                    alert(" Please Enter Item Name");
+                    return false;
+                }
+                else if ($('#Godown').val() == "") {
+                    alert(" Please Enter Godown Name");
+                    return false;
+                }
+                else if ($('#Unit').val() == "") {
+                    alert(" Please Enter Unit For Item");
+                    return false;
+                }
+                else if ($('#OpeningStock').val() == "") {
+                    alert(" Please Enter Opening Stock");
+                    return false;
+                }
+                else if ($('#OpeningStock').val() == 0) {
+                    alert(" Please Enter Opening Stock");
+                    return false;
+                }
 
+            });
         });
     </script>
 }

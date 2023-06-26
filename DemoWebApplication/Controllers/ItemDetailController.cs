@@ -87,6 +87,30 @@ namespace DemoWebApplication.Controllers
         [HttpPost]
         public ActionResult Create([Bind]ItemDetail item)
         {
+            if (item !=null)
+            {
+                if (string.IsNullOrEmpty(item.ItemName))
+                {
+                    ModelState.AddModelError("ItemName", "Please Enter Item Name");
+                    return View();
+                }
+                else if (string.IsNullOrEmpty(item.Godown ))
+                {
+                    ModelState.AddModelError("Godown", "Please Enter Godown");
+                    return View();
+                }
+                else if (item.GodownId<1)
+                {
+                    ModelState.AddModelError("Godown", "Please Enter Godown");
+                    return View();
+                }
+                else if (item.OpeningStock <1)
+                {
+                    ModelState.AddModelError("OpeningStock", "Please Enter Opening Stock");
+                    return View();
+                }
+            }
+
             DemoWebApplication.Models.ItemDetailM viewmodel = new DemoWebApplication.Models.ItemDetailM();
             List<SelectListItem> Itemdetailnames = new List<SelectListItem>();
             List<ItemMaster> itemname = dbcon.ItemMasters.ToList();

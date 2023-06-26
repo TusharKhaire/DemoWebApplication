@@ -25,7 +25,7 @@ namespace DemoWebApplication
         public Nullable<int> PurchasePrice { get; set; }
         public Nullable<int> MRP { get; set; }
         public Nullable<int> OpeningStock { get; set; }
-        public Nullable<int> ClosingStock { get; set; }
+        public int ClosingStock { get; set; }
         public Nullable<int> DiscPer { get; set; }
         public string ItemName { get; set; }
         public string ItemType { get; set; }

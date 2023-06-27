@@ -125,6 +125,7 @@
             $("#ItemType").attr('disabled', 'disabled');
             $("#ClosingStock").attr('disabled', 'disabled');
             $('#ClosingStock').val($('#OpeningStock').val());
+            //$('#ClosingStock').text($('#OpeningStock').val());
             if ($('#ItemName').val() != "") {
                 //alert($('#ItemName').val());
               
@@ -201,8 +202,9 @@
 
             $('#OpeningStock').keyup(function () {
                 
-                $('#ClosingStock').val($('#OpeningStock').val());
-                //$('#ClosingStock').get(0).value = $('#OpeningStock').val();
+               // $('#ClosingStock').val($('#OpeningStock').val());
+                $('#ClosingStock').get(0).value = $('#OpeningStock').val();
+
             });
             $('#btn_Save').click(function Validation() {
                 if ($('#ItemName').val() == "") {

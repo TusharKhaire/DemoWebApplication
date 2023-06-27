@@ -29,7 +29,7 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(x => x.ItemType,new {htmlAttributes=new { @class = "form-control" } })
+                    @Html.EditorFor(x => x.ItemType,new {htmlAttributes=new { @class = "form-control", @readonly = "readonly" } })
                     @Html.ValidationMessageFor(x => x.ItemType, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -105,7 +105,7 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.ClosingStock, "Closing Stock", new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @Html.EditorFor(x => x.ClosingStock, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(x => x.ClosingStock, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                     @Html.ValidationMessageFor(x => x.ClosingStock, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -122,8 +122,8 @@
         $(document).ready(function () {
             $('#Expirydate').attr('disabled', 'disabled');
             $('#mfrdate').attr('disabled', 'disabled');
-            $("#ItemType").attr('disabled', 'disabled');
-            $("#ClosingStock").attr('disabled', 'disabled');
+            //$("#ItemType").attr('disabled', 'disabled');
+            //$("#ClosingStock").attr('disabled', 'disabled');
             $('#ClosingStock').val($('#OpeningStock').val());
             //$('#ClosingStock').text($('#OpeningStock').val());
             if ($('#ItemName').val() != "") {
@@ -175,7 +175,7 @@
                         //console.log(result);
                         $("#ItemType").val(result.TypeName);
                         //$("#ItemType").attr("disable", "Disable");
-                        $("#ItemType").attr('disabled', 'disabled');
+                        //$("#ItemType").attr('disabled', 'disabled');
                     },
                     error: function (err) {
                         console.log(err);

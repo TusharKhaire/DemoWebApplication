@@ -4,7 +4,7 @@
     if (ViewBag.Message != null)
     {
         <script type="text/javascript">
-            @Html.Raw(Json.Encode(ViewBag.Message));
+            alert(@Html.Raw(Json.Encode(ViewBag.Message)));
         </script>
     }
 }
@@ -19,12 +19,15 @@
         @Html.HiddenFor(x => x.ItemdetailId)
         <div class="col-md-6">
             <div class="form-group">
+
                 @Html.LabelFor(x => x.ItemName, "ItemName", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="row-fluid col-md-10">
                     @* @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })*@
                     @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control", data_live_search = "true" })
                     @Html.ValidationMessageFor(x => x.ItemName, "", new { @class = "text-danger" })
                 </div>
+
+
             </div>
             <div class="form-group">
                 @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })

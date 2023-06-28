@@ -27,7 +27,7 @@ namespace DemoWebApplication.Controllers
                 id.ItemName = itemnamedata.ItemName;
                 id.ItemType = itemtypedata.TypeName;
                 id.Godown = godowndata.GodownName;
-                id.Unit = UnitData.UnitName;
+                id.Unit  = UnitData.UnitName ;
                 id.BatchId = item.BatchId;
                 id.HsnCode = item.HsnCode;
                 id.DiscPer = item.DiscPer;
@@ -85,32 +85,48 @@ namespace DemoWebApplication.Controllers
             return View(viewmodel);
         }
         [HttpPost]
-        public ActionResult Create([Bind]ItemDetail item)
+        public ActionResult Create(DemoWebApplication.Models.ItemDetailM item)
         {
-            if (item !=null)
+            if (item != null)
             {
                 if (string.IsNullOrEmpty(item.ItemName))
                 {
                     ModelState.AddModelError("ItemName", "Please Enter Item Name");
                     return View();
                 }
-                else if (string.IsNullOrEmpty(item.Godown ))
+                else if (string.IsNullOrEmpty(item.Godown))
                 {
                     ModelState.AddModelError("Godown", "Please Enter Godown");
                     return View();
                 }
-                else if (item.GodownId<1)
+                else if (item.GodownId < 1)
                 {
                     ModelState.AddModelError("Godown", "Please Enter Godown");
                     return View();
                 }
-                else if (item.OpeningStock <1)
+                else if (item.OpeningStock < 1)
                 {
                     ModelState.AddModelError("OpeningStock", "Please Enter Opening Stock");
                     return View();
                 }
             }
-
+            ItemDetail newitem = new ItemDetail();
+            newitem.ItemMasterId = Convert.ToInt32(item.ItemName);
+            newitem.GodownId = Convert.ToInt32(item.Godown);
+            newitem.BatchId = Convert.ToInt32(item.BatchName);
+            newitem.BatchName = item.BatchName;
+            newitem.UnitId  = Convert.ToInt32(item.Unit);
+            newitem.mfrdate = item.mfrdate;
+            newitem.Expirydate = item.Expirydate;
+            newitem.PurchasePrice = item.PurchasePrice;
+            newitem.MRP = item.MRP;
+            newitem.OpeningStock = item.OpeningStock;
+            newitem.ClosingStock = item.ClosingStock;
+            newitem.DiscPer  = item.DiscPer ;
+            dbcon.ItemDetails.Add(newitem);
+            dbcon.SaveChanges();
+            ViewBag.Message = "Item Save Scessfully";
+            ModelState.Clear();
             DemoWebApplication.Models.ItemDetailM viewmodel = new DemoWebApplication.Models.ItemDetailM();
             List<SelectListItem> Itemdetailnames = new List<SelectListItem>();
             List<ItemMaster> itemname = dbcon.ItemMasters.ToList();
@@ -160,20 +176,20 @@ namespace DemoWebApplication.Controllers
         public JsonResult GetItemTypeData(int itemcode)
         {
             var itemmaster = dbcon.ItemMasters.Where(x => x.ItemCode == itemcode).FirstOrDefault();
-            var itemtype = dbcon.ItemTypes.Where(x => x.TypeId == itemmaster .ItemType ).FirstOrDefault();
-            return Json(itemtype,JsonRequestBehavior.AllowGet );
+            var itemtype = dbcon.ItemTypes.Where(x => x.TypeId == itemmaster.ItemType).FirstOrDefault();
+            return Json(itemtype, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetitemDetails()
         {
             var itemtype = dbcon.ItemTypes.ToList();
             //return Json(itemtype, JsonRequestBehavior.AllowGet);
             ItemDetailM id = new ItemDetailM();
-            id.ItemdetailId  = 1;
+            id.ItemdetailId = 1;
             id.ItemName = "ItemName";
-            id.ItemType  = "Reguler";
+            id.ItemType = "Reguler";
             id.DiscPer = 12;
             var result = JsonConvert.SerializeObject(id);
-            return Json(result,JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -11,6 +11,11 @@
 
 <h2>Create New Item</h2>
 <hr />
+@*Add script files Bcz activate select tag *@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -25,6 +30,7 @@
                     @* @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })*@
                     @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control", data_live_search = "true" })
                     @Html.ValidationMessageFor(x => x.ItemName, "", new { @class = "text-danger" })
+
                 </div>
 
 
@@ -32,7 +38,7 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(x => x.ItemType,new {htmlAttributes=new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.EditorFor(x => x.ItemType, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                     @Html.ValidationMessageFor(x => x.ItemType, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -53,9 +59,15 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.BatchName, "Batch", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(x => x.BatchName, Model.lstbatches, "--Select--", new { @class = "form-control" })
-                    @Html.HiddenFor(x => x.BatchId)
+                    @Html.DropDownListFor(x => x.BatchName, new SelectList(Model.lstbatches, "Value", "Text"), "--Select--", new { @class = "form-control" })
+                    @*@Html.TextBoxFor(x => x.Itemname)*@
+                    @*<select id="BatchName" name="BatchName" placeholder="Enter BatchName" style="width:100%">
+                        {
+                        <option value="@Model.BatchId  ">@Model.BatchName  </option>
+                        }
+                    </select>*@
                     @Html.ValidationMessageFor(x => x.BatchName, "", new { @class = "text-danger" })
+
                 </div>
             </div>
             <div class="form-group">
@@ -85,7 +97,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(x => x.PurchasePrice , "Purchase Price", new { @class = "control-label col-md-3" })
+                @Html.LabelFor(x => x.PurchasePrice, "Purchase Price", new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
                     @Html.EditorFor(x => x.PurchasePrice, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(x => x.PurchasePrice, "", new { @class = "text-danger" })
@@ -131,18 +143,18 @@
             //$('#ClosingStock').text($('#OpeningStock').val());
             if ($('#ItemName').val() != "") {
                 //alert($('#ItemName').val());
-              
+
             }
             $('#chk_Exp').change(function () {
-               // debugger;
+                // debugger;
                 $('#chk_Exp').val(this.checked);
                 if (this.checked) {
                     //var returnVal = confirm("Are you sure?");
                     //$(this).prop("checked", returnVal);
                     $('#chk_Exp').val(this.checked);
                     $('#Expirydate').removeAttr('disabled');
-                   // $('#Expirydate').datepicker({ dateFormat: 'dd/MMM/yyyy' });
-                   // $('#Expirydate').datepicker('setDate', new Date());
+                    // $('#Expirydate').datepicker({ dateFormat: 'dd/MMM/yyyy' });
+                    // $('#Expirydate').datepicker('setDate', new Date());
                 }
                 else {
                     $('#Expirydate').attr('disabled', 'disabled');
@@ -163,13 +175,13 @@
                 }
             });
 
-             $('#ItemName').change(function () {
+            $('#ItemName').change(function () {
                 var ItemCode = $('#ItemName').val();
                 var getReportColumnsParams = {
                     "ItemCode": ItemCode
                 };
                 //alert(ItemCode);
-               $.ajax({
+                $.ajax({
                     url: "/ItemDetail/GetItemTypeData",
                     type: "POST",
                     dataType: 'json',
@@ -204,8 +216,8 @@
             });
 
             $('#OpeningStock').keyup(function () {
-                
-               // $('#ClosingStock').val($('#OpeningStock').val());
+
+                // $('#ClosingStock').val($('#OpeningStock').val());
                 $('#ClosingStock').get(0).value = $('#OpeningStock').val();
 
             });

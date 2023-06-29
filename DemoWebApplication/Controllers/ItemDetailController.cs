@@ -29,9 +29,10 @@ namespace DemoWebApplication.Controllers
                 id.Godown = godowndata.GodownName;
                 id.Unit  = UnitData.UnitName ;
                 id.BatchId = item.BatchId;
-                id.HsnCode = item.HsnCode;
+                id.BatchName = item.BatchName;
+                id.HsnCode = itemnamedata.HSNCODE;
                 id.DiscPer = item.DiscPer;
-                id.Expirydate = item.Expirydate;
+                id.Expirydate = item.Expirydate;  //.HasValue  ? Formatting(item.Expirydate,"dd/MMM/yyyy") : "");
                 id.PurchasePrice = item.PurchasePrice;
                 id.MRP = item.MRP;
                 id.OpeningStock = item.OpeningStock;
@@ -85,7 +86,7 @@ namespace DemoWebApplication.Controllers
             return View(viewmodel);
         }
         [HttpPost]
-        public ActionResult Create(DemoWebApplication.Models.ItemDetailM item)
+        public ActionResult Create(ItemDetail item)
         {
             if (item != null)
             {
@@ -110,11 +111,13 @@ namespace DemoWebApplication.Controllers
                     return View();
                 }
             }
+            int batchid = Convert.ToInt32(item.BatchName);
+            var batchname = dbcon.BatchMasters.Where(x => x.BatchId == batchid).FirstOrDefault();
             ItemDetail newitem = new ItemDetail();
             newitem.ItemMasterId = Convert.ToInt32(item.ItemName);
             newitem.GodownId = Convert.ToInt32(item.Godown);
             newitem.BatchId = Convert.ToInt32(item.BatchName);
-            newitem.BatchName = item.BatchName;
+            newitem.BatchName = batchname.BatchName;
             newitem.UnitId  = Convert.ToInt32(item.Unit);
             newitem.mfrdate = item.mfrdate;
             newitem.Expirydate = item.Expirydate;

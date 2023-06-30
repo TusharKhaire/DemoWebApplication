@@ -1,6 +1,13 @@
 ﻿@model DemoWebApplication.Models.ItemDetailM
 
+
 @{
+    Layout = null; //solve by select2 not function jquery error
+}
+
+@{
+    /**/
+
     if (ViewBag.Message != null)
     {
         <script type="text/javascript">
@@ -8,16 +15,22 @@
         </script>
     }
 }
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+<script src="~/Scripts/MyJs.js"></script>
+<script src="~/Scripts/jquery-3.6.4.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
 
-<h2>Create New Item</h2>
-<hr />
-@*Add script files Bcz activate select tag *@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<h2>Create New Item</h2>
+<hr />
+
 @using (Html.BeginForm())
 {
+
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -59,13 +72,14 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.BatchName, "Batch", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(x => x.BatchName, new SelectList(Model.lstbatches, "Value", "Text"), "--Select--", new { @class = "form-control" })
+                    @*@Html.DropDownListFor(x => x.BatchName, new SelectList(Model.lstbatches, "Value", "Text"), "--Select--", new { @class = "form-control" })*@
                     @*@Html.TextBoxFor(x => x.Itemname)*@
-                    @*<select id="BatchName" name="BatchName" placeholder="Enter BatchName" style="width:100%">
-                        {
-                        <option value="@Model.BatchId  ">@Model.BatchName  </option>
-                        }
-                    </select>*@
+                    @Html.DropDownListFor(model => model.BatchName, Model.lstbatches, "Select an option", new { @class = "select2-searchable form-control" })
+                    @*<select id="BatchName" name="BatchName" placeholder="Enter BatchName" style="width:50%">
+                            {
+                            <option value="@Model.BatchId">@Model.BatchName  </option>
+                            }
+                        </select>*@
                     @Html.ValidationMessageFor(x => x.BatchName, "", new { @class = "text-danger" })
 
                 </div>
@@ -134,116 +148,147 @@
     </div>
 
     <script type="text/javascript">
+
+
         $(document).ready(function () {
-            $('#Expirydate').attr('disabled', 'disabled');
-            $('#mfrdate').attr('disabled', 'disabled');
-            //$("#ItemType").attr('disabled', 'disabled');
-            //$("#ClosingStock").attr('disabled', 'disabled');
-            $('#ClosingStock').val($('#OpeningStock').val());
-            //$('#ClosingStock').text($('#OpeningStock').val());
-            if ($('#ItemName').val() != "") {
-                //alert($('#ItemName').val());
 
-            }
-            $('#chk_Exp').change(function () {
-                // debugger;
-                $('#chk_Exp').val(this.checked);
-                if (this.checked) {
-                    //var returnVal = confirm("Are you sure?");
-                    //$(this).prop("checked", returnVal);
-                    $('#chk_Exp').val(this.checked);
-                    $('#Expirydate').removeAttr('disabled');
-                    // $('#Expirydate').datepicker({ dateFormat: 'dd/MMM/yyyy' });
-                    // $('#Expirydate').datepicker('setDate', new Date());
-                }
-                else {
+            //$('.select2-searchable').select2({
+            //    theme: 'bootstrap',
+            //    width: '100%',
+            //    //minimumResultsForSearch: Infinity
+            //});
                     $('#Expirydate').attr('disabled', 'disabled');
-                }
-            });
-
-            $('#chk_Mfr').change(function () {
-                $('#chk_Mfr').val(this.checked);
-                if (this.checked) {
-                    //var returnVal = confirm("Are you sure?");
-                    //$(this).prop("checked", returnVal);
-                    $('#chk_Mfr').val(this.checked);
-                    $('#mfrdate').removeAttr('disabled');
-                    //$('#chk_Mfr').val(Date.now());
-                }
-                else {
                     $('#mfrdate').attr('disabled', 'disabled');
-                }
-            });
+                    //$("#ItemType").attr('disabled', 'disabled');
+                    //$("#ClosingStock").attr('disabled', 'disabled');
+                    $('#ClosingStock').val($('#OpeningStock').val());
+                        //$('#ClosingStock').text($('#OpeningStock').val());
+                        if ($('#ItemName').val() != "") {
+                            //alert($('#ItemName').val());
 
-            $('#ItemName').change(function () {
-                var ItemCode = $('#ItemName').val();
-                var getReportColumnsParams = {
-                    "ItemCode": ItemCode
-                };
-                //alert(ItemCode);
-                $.ajax({
-                    url: "/ItemDetail/GetItemTypeData",
-                    type: "POST",
-                    dataType: 'json',
-                    data: { itemcode: ItemCode },
-                    success: function (result) {
-                        //console.log(result);
-                        $("#ItemType").val(result.TypeName);
-                        //$("#ItemType").attr("disable", "Disable");
-                        //$("#ItemType").attr('disabled', 'disabled');
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        alert("Error");
-                    }
-                });
-                //$.ajax({
-                //    url: "/ItemDetail/GetitemDetails",
-                //    Method: "Get",
-                //    success: function (result) {
-                //        console.log(result);
-                //        result = JSON.parse(result);
-                //        console.log(result);
-                //        //$("#ItemType").val(result.ItemType)
-                //        document.getElementById('ItemType').value = result.ItemType
-                //        $("#DiscPer").val(result.DiscPer);
+                        }
+                    $('#chk_Exp').change(function() {
+                            debugger;
+                        $('#chk_Exp').val(this.checked);
+                            if (this.checked) {
+                            //var returnVal = confirm("Are you sure?");
+                            //$(this).prop("checked", returnVal);
+                            $('#chk_Exp').val(this.checked);
+                            $('#Expirydate').removeAttr('disabled');
+                                    // $('#Expirydate').datepicker({ dateFormat: 'dd/MMM/yyyy' });
+                                    // $('#Expirydate').datepicker('setDate', new Date());
+                                }
+                        else {
+                            $('#Expirydate').attr('disabled', 'disabled');
+                                }
+                                });
 
-                //    },
-                //    error: function (err) {
-                //        console.log(err);
-                //    }
-                //})
-            });
+                    $('#chk_Mfr').change(function() {
+                        $('#chk_Mfr').val(this.checked);
+                                if (this.checked) {
+                            //var returnVal = confirm("Are you sure?");
+                            //$(this).prop("checked", returnVal);
+                            $('#chk_Mfr').val(this.checked);
+                            $('#mfrdate').removeAttr('disabled');
+                                        //$('#chk_Mfr').val(Date.now());
+                                    }
+                        else {
+                            $('#mfrdate').attr('disabled', 'disabled');
+                                    }
+                                    });
 
-            $('#OpeningStock').keyup(function () {
+                    $('#ItemName').change(function() {
+                                    var ItemCode = $('#ItemName').val();
+                                    var getReportColumnsParams = {
+                            "ItemCode": ItemCode
+                        };
+                        //alert(ItemCode);
+                        $.ajax({
+                                url: "/ItemDetail/GetItemTypeData",
+                            type: "POST",
+                            dataType: 'json',
+                            data: { itemcode: ItemCode },
+                            success: function(result) {
+                                //console.log(result);
+                                $("#ItemType").val(result.TypeName);
+                                        //$("#ItemType").attr("disable", "Disable");
+                                        //$("#ItemType").attr('disabled', 'disabled');
+                                    },
+                            error: function(err) {
+                                        console.log(err);
+                                        alert("Error");
+                                    }
+                                });
 
-                // $('#ClosingStock').val($('#OpeningStock').val());
-                $('#ClosingStock').get(0).value = $('#OpeningStock').val();
+                            });
 
-            });
-            $('#btn_Save').click(function Validation() {
-                if ($('#ItemName').val() == "") {
-                    alert(" Please Enter Item Name");
-                    return false;
-                }
-                else if ($('#Godown').val() == "") {
-                    alert(" Please Enter Godown Name");
-                    return false;
-                }
-                else if ($('#Unit').val() == "") {
-                    alert(" Please Enter Unit For Item");
-                    return false;
-                }
-                else if ($('#OpeningStock').val() == "") {
-                    alert(" Please Enter Opening Stock");
-                    return false;
-                }
-                else if ($('#OpeningStock').val() == 0) {
-                    alert(" Please Enter Opening Stock");
-                    return false;
-                }
+                    $('#OpeningStock').keyup(function() {
 
-            });
-        });
+                        // $('#ClosingStock').val($('#OpeningStock').val());
+                        $('#ClosingStock').get(0).value = $('#OpeningStock').val();
+
+                            });
+                    $('#btn_Save').click(function Validation() {
+                                if ($('#ItemName').val() == "") {
+                                    alert(" Please Enter Item Name");
+                                    return false;
+                                }
+                        else if ($('#Godown').val() == "") {
+                                    alert(" Please Enter Godown Name");
+                                    return false;
+                                }
+                        else if ($('#Unit').val() == "") {
+                                    alert(" Please Enter Unit For Item");
+                                    return false;
+                                }
+                        else if ($('#OpeningStock').val() == "") {
+                                    alert(" Please Enter Opening Stock");
+                                    return false;
+                                }
+                        else if ($('#OpeningStock').val() == 0) {
+                                    alert(" Please Enter Opening Stock");
+                                    return false;
+                        }
+
+                     });
+
+                            BatchName = $("#BatchName").select2({
+                            ajax:
+                                {
+                                url: '@Url.Action("GetBatchDetails", "ItemDetail")',
+                            dataType: 'json',
+                            delay: 1000,
+                            data: function(params) {
+                                        return { searchText: params.term };
+                                    },
+                            processResults: function(data, params) {
+                                        return { results: data};
+                                    },
+                            cache: true
+                                },
+                        tags: true,
+                        createTag: function(params) {
+                                    return {
+                                    id: params.term,
+                                text: params.term,
+                                newOption: true
+                                        }
+                                },
+                        templateResult: function(data) {
+                                    var $result = $("<span></span>");
+                            $result.text(data.text);
+                                    // tabindex: 3;
+                                    if (data.newOption)
+                                    {
+                                $result.append(" <em>(new)</em>");
+                                    }
+                                    return $result;
+                                },
+                        escapeMarkup: function(markup) { return markup; }, // let our custom formatter work
+                        minimumInputLength: 2,
+                    }).on('select2:select', function() {
+                        $("#DiscPer").focus();
+                            });
+                        });
     </script>
 }

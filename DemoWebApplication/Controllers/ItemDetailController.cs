@@ -27,7 +27,7 @@ namespace DemoWebApplication.Controllers
                 id.ItemName = itemnamedata.ItemName;
                 id.ItemType = itemtypedata.TypeName;
                 id.Godown = godowndata.GodownName;
-                id.Unit  = UnitData.UnitName ;
+                id.Unit = UnitData.UnitName;
                 id.BatchId = item.BatchId;
                 id.BatchName = item.BatchName;
                 id.HsnCode = itemnamedata.HSNCODE;
@@ -83,6 +83,7 @@ namespace DemoWebApplication.Controllers
             viewmodel.lstbatches = Itembatchnames;
             viewmodel.mfrdate = new DateTime();
             viewmodel.Expirydate = new DateTime();
+
             return View(viewmodel);
         }
         [HttpPost]
@@ -111,21 +112,56 @@ namespace DemoWebApplication.Controllers
                     return View();
                 }
             }
-            int batchid = Convert.ToInt32(item.BatchName);
-            var batchname = dbcon.BatchMasters.Where(x => x.BatchId == batchid).FirstOrDefault();
+            int batchid=0;
+            string batchname="" ; 
+            if (int.TryParse(item.BatchName, out int n))
+            {
+                 batchid = Convert.ToInt32(item.BatchName);
+                var chk_batchname = dbcon.BatchMasters.Where(x => x.BatchId == batchid).FirstOrDefault();
+                if (chk_batchname != null)
+                {
+                    batchname = chk_batchname.BatchName;
+                }
+                else
+                {
+                    BatchMaster bm = new BatchMaster();
+                    bm.BatchName = item.BatchName;
+                    bm.Discription = "";
+                    dbcon.BatchMasters.Add(bm);
+                    dbcon.SaveChanges();
+                     chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName== item.BatchName).FirstOrDefault();
+                    {
+                        batchid  = chk_batchname.BatchId ;
+                        batchname = chk_batchname.BatchName;
+                    }
+                }
+            }
+            else
+            {
+                BatchMaster bm = new BatchMaster();
+                bm.BatchName = item.BatchName;
+                bm.Discription = "";
+                dbcon.BatchMasters.Add(bm);
+                dbcon.SaveChanges();
+               var chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName == item.BatchName).FirstOrDefault();
+                {
+                    batchid = chk_batchname.BatchId;
+                    batchname = chk_batchname.BatchName;
+                }
+            }
             ItemDetail newitem = new ItemDetail();
             newitem.ItemMasterId = Convert.ToInt32(item.ItemName);
             newitem.GodownId = Convert.ToInt32(item.Godown);
-            newitem.BatchId = Convert.ToInt32(item.BatchName);
-            newitem.BatchName = batchname.BatchName;
-            newitem.UnitId  = Convert.ToInt32(item.Unit);
+            newitem.BatchId = batchid;//Convert.ToInt32(item.BatchName);
+            newitem.BatchName = batchname;
+            newitem.UnitId = Convert.ToInt32(item.Unit);
             newitem.mfrdate = item.mfrdate;
             newitem.Expirydate = item.Expirydate;
             newitem.PurchasePrice = item.PurchasePrice;
             newitem.MRP = item.MRP;
             newitem.OpeningStock = item.OpeningStock;
             newitem.ClosingStock = item.ClosingStock;
-            newitem.DiscPer  = item.DiscPer ;
+            newitem.DiscPer = item.DiscPer;
             dbcon.ItemDetails.Add(newitem);
             dbcon.SaveChanges();
             ViewBag.Message = "Item Save Scessfully";
@@ -194,5 +230,12 @@ namespace DemoWebApplication.Controllers
             var result = JsonConvert.SerializeObject(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetBatchDetails(string searchText)
+        {
+            var Batch = dbcon.BatchMasters.Where(a => a.BatchName.Contains(searchText)).ToList();
+            return Json(Batch.Select(q => new { id = q.BatchId, text = q.BatchName }), JsonRequestBehavior.AllowGet);
+            //return Json("",JsonRequestBehavior .AllowGet);
+        }
     }
+
 }

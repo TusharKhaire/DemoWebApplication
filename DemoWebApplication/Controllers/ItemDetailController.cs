@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Globalization;
 using DemoWebApplication.Models;
 using Newtonsoft.Json;
+using System.Net;
+using System.Data;
+
 namespace DemoWebApplication.Controllers
 {
     public class ItemDetailController : Controller
@@ -206,6 +210,68 @@ namespace DemoWebApplication.Controllers
             viewmodel.Expirydate = new DateTime();
             return View(viewmodel);
         }
+        [HttpGet]
+        public ActionResult Edit(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ItemDetail item_detail = dbcon.ItemDetails.Find(id);
+            if (item_detail == null)
+            {
+                return HttpNotFound();
+            }
+            DemoWebApplication.Models.ItemDetailM viewmodel =new DemoWebApplication.Models.ItemDetailM();
+            List<SelectListItem> itemDetailName = new List<SelectListItem>();
+            List<ItemMaster> itemNames = dbcon.ItemMasters.ToList();
+            itemNames.ForEach(x => {
+                itemDetailName.Add(new SelectListItem {Text=x.ItemName,Value=x.ItemCode.ToString() });
+            });
+            List<SelectListItem> GodownNameLists = new List<SelectListItem>();
+            List<GodownMaster> GodownNames = dbcon.GodownMasters.ToList();
+            GodownNames.ForEach(x =>
+            {
+                GodownNameLists.Add(new SelectListItem { Text = x.GodownName, Value = x.GodownId.ToString() });
+            });
+            List<SelectListItem>UnitListItems =new List<SelectListItem>();
+            List<UnitMaster> UnitNames = dbcon.UnitMasters.ToList();
+            UnitNames.ForEach(x =>
+            {
+                UnitListItems.Add(new SelectListItem { Text = x.UnitName, Value = x.UnitId.ToString() });
+            });
+            List<SelectListItem>BatchListItem =new List<SelectListItem>();
+            List<BatchMaster> BatchNames = dbcon.BatchMasters.ToList();
+            BatchNames.ForEach(x =>
+            {
+                BatchListItem.Add(new SelectListItem { Text = x.BatchName, Value = x.BatchId.ToString() });
+            });
+            viewmodel.itemDetailList = itemDetailName;
+            viewmodel.lstunits = UnitListItems;
+            viewmodel.lstgodowns = GodownNameLists;
+            viewmodel.lstbatches = BatchListItem;
+            viewmodel.ItemdetailId = item_detail.ItemdetailId;
+            viewmodel.ItemMasterId = item_detail.ItemMasterId;
+            viewmodel.BatchId = item_detail.BatchId;
+            viewmodel.BatchName = item_detail.BatchName;
+            viewmodel.GodownId = item_detail.GodownId;
+            viewmodel.UnitId = item_detail.UnitId;
+            viewmodel.DiscPer = item_detail.DiscPer;
+            viewmodel.mfrdate = item_detail.mfrdate;
+            viewmodel.Expirydate  = item_detail.Expirydate;
+            viewmodel.PurchasePrice = item_detail.PurchasePrice;
+            viewmodel.MRP = item_detail.MRP ;
+            viewmodel.OpeningStock = item_detail.OpeningStock;
+            viewmodel.ClosingStock = item_detail.ClosingStock;
+            
+            return View("Create",viewmodel);
+        }
+        [HttpPost]
+        public ActionResult Edit(ItemDetail Item)
+        {
+            return View();
+        }
+
         public JsonResult GetItemByName(string searchText)
         {
             var ItemName = dbcon.ItemMasters.Where(a => a.ItemName.Contains(searchText)).ToList();

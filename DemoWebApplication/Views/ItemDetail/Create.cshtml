@@ -141,8 +141,10 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-offset-1 col-md-10">
                 <input type="submit" value="save" id="btn_Save" class="btn btn-default" onclick='return Validation()' />
+                <input type="button"   value="Update" id="btn_Modify" class="btn btn-default" typeof="post" onclick="window.location.href='@Url.Action("Edit","ItemDetail")'" />
+                <input type="button"  value="Show All" id="btn_ShowAll" class="btn btn-default" onclick="window.location.href='@Url.Action("Index","ItemDetail")'" />
             </div>
         </div>
     </div>

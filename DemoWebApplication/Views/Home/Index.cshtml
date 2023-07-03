@@ -1,24 +1,45 @@
 ﻿@{
+    /**/
+
     ViewBag.Title = "Home Page";
 }
 
 <li class=" btn-group nav ">
-    <button class="btn navbar-btn dropdown-toggle " data-toggle="dropdown" style="background-color:cornsilk">
+    <button class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" style="background-color:cornsilk">
         Master
         <span class="caret"></span>
         @* <span class="sr-only">Toggle Dropdown</span>*@
     </button>
     <ul class="dropdown-menu" role="menu">
         <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
-    <li>@Html.ActionLink("Item Master","Index","ItemMaster")</li>
+        <li>@Html.ActionLink("Item Type", "Index", "ItemType")</li>
+        <li>@Html.ActionLink("Batch Master", "Index", "BatchMaster")</li>
+        <li>@Html.ActionLink("Godown Master", "Index", "GodownMaster")</li>
+        <li>@Html.ActionLink("Unit Master", "Index", "UnitMaster")</li>
     </ul>
-    <button class=" btn navbar-btn dropdown-toggle" data-toggle="dropdown1">
+</li>
+<li class=" btn-group nav ">
+
+    <button class=" btn navbar-btn dropdown-toggle" data-toggle="dropdown" style="background-color:cornsilk">
         Transaction
         <span class="caret"></span>
     </button>
-
+    <ul class="dropdown-menu" role="menu">
+        <li>@Html.ActionLink("ItemDetail", "Index", "ItemDetail")</li>
+    </ul>
 </li>
+@{
+    //var a =window.innerHeight;
+    <div id="myDiv" class="jumbotron"></div>
+}
 
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', function () {
+        var screenHeight = window.innerHeight;
+        var myDiv = document.getElementById('myDiv');
+        myDiv.style.height = (screenHeight * 0.7) + 'px';
+    });
+</script>
 @*<div class="jumbotron">
         <h1>ASP.NET</h1>
         <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,7 +14,9 @@ namespace DemoWebApplication.Models
         public Nullable<int> BatchId { get; set; }
         public string BatchName { get; set; }
         public Nullable<int> UnitId { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}")]
         public Nullable<System.DateTime> mfrdate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}")]
         public Nullable<System.DateTime> Expirydate { get; set; }
         public Nullable<int> PurchasePrice { get; set; }
         public Nullable<int> MRP { get; set; }

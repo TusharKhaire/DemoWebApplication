@@ -41,12 +41,10 @@
                 @Html.LabelFor(x => x.ItemName, "ItemName", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="row-fluid col-md-10">
                     @* @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control" })*@
-                    @Html.DropDownListFor(x => x.ItemName, Model.itemDetailList, "--Select--", new { @class = "form-control", data_live_search = "true" })
+                    @Html.DropDownListFor(x => x.ItemMasterId, Model.itemDetailList, "--Select--", new { @class = "form-control", data_live_search = "true" })
                     @Html.ValidationMessageFor(x => x.ItemName, "", new { @class = "text-danger" })
 
                 </div>
-
-
             </div>
             <div class="form-group">
                 @Html.LabelFor(x => x.ItemType, "Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -58,14 +56,15 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.Godown, "Godown Name", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(x => x.Godown, Model.lstgodowns, "--Select--", new { @class = "form-control" })
+                    @Html.DropDownListFor(x => x.GodownId, Model.lstgodowns, "--Select--", new { @class = "form-control" })
                     @Html.ValidationMessageFor(x => x.Godown, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(x => x.Unit, "Unit", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(x => x.Unit, Model.lstunits, "--Select--", new { @class = "form-control" })
+                    @Html.DropDownListFor(x => x.UnitId, Model.lstunits, "-- Select --", new { @class = "form-control" })
+                    @*@Html.DropDownList("BrandID", TryCast(ViewBag.BrandID, SelectList), ViewBag.DefaultBrand, htmlAttributes:= New With { .class = "form-control"}))*@
                     @Html.ValidationMessageFor(x => x.Unit, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -74,7 +73,7 @@
                 <div class="col-md-10">
                     @*@Html.DropDownListFor(x => x.BatchName, new SelectList(Model.lstbatches, "Value", "Text"), "--Select--", new { @class = "form-control" })*@
                     @*@Html.TextBoxFor(x => x.Itemname)*@
-                    @Html.DropDownListFor(model => model.BatchName, Model.lstbatches, "Select an option", new { @class = "select2-searchable form-control" })
+                    @Html.DropDownListFor(model => model.BatchId, Model.lstbatches, "Select an option", new { @class = "select2-searchable form-control" })
                     @*<select id="BatchName" name="BatchName" placeholder="Enter BatchName" style="width:50%">
                             {
                             <option value="@Model.BatchId">@Model.BatchName  </option>
@@ -97,7 +96,7 @@
                 @Html.LabelFor(x => x.mfrdate, "MFR Date", new { @class = "control-label col-md-3" })
                 <div>
                     @Html.CheckBox(name: "chk_Mfr", isChecked: false, htmlAttributes: new { @class = "col-md-1" })
-                    @Html.TextBoxFor(x => x.mfrdate, new { @type = "date", @class = "form-control datepicker col-md-8", @Value = new DateTime() })
+                    @Html.TextBoxFor(x => x.mfrdate, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control datepicker col-md-7" })
                     @Html.ValidationMessageFor(x => x.mfrdate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -105,7 +104,7 @@
                 @Html.LabelFor(x => x.Expirydate, "Expiry date", new { @class = "control-label col-md-3" })
                 <div>
                     @Html.CheckBox(name: "chk_Exp", isChecked: false, htmlAttributes: new { @class = "col-md-1" })
-                    @Html.TextBoxFor(x => x.Expirydate, new { @type = "date", @class = "form-control datepicker col-md-8", @Value = new DateTime() })
+                    @Html.TextBoxFor(x => x.Expirydate, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control datepicker col-md-7" }) @*, @Value = new DateTime()*@
                     @Html.ValidationMessageFor(x => x.Expirydate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -143,8 +142,10 @@
         <div class="form-group">
             <div class="col-md-offset-1 col-md-10">
                 <input type="submit" value="save" id="btn_Save" class="btn btn-default" onclick='return Validation()' />
-                <input type="button"   value="Update" id="btn_Modify" class="btn btn-default" typeof="post" onclick="window.location.href='@Url.Action("Edit","ItemDetail")'" />
-                <input type="button"  value="Show All" id="btn_ShowAll" class="btn btn-default" onclick="window.location.href='@Url.Action("Index","ItemDetail")'" />
+                <form action="Edit" method="post">
+                    <input type="submit" value="Update" id="btn_Modify" class="btn btn-default" typeof="post" /> @*onclick="window.location.href='@Url.Action("Edit", "ItemDetail")'*@
+                </form>
+                <input type="button" value="Show All" id="btn_ShowAll" class="btn btn-default" onclick="window.location.href='@Url.Action("Index","ItemDetail")'" />
             </div>
         </div>
     </div>
@@ -176,8 +177,8 @@
                             //var returnVal = confirm("Are you sure?");
                             //$(this).prop("checked", returnVal);
                             $('#chk_Exp').val(this.checked);
-                            $('#Expirydate').removeAttr('disabled');
-                                    // $('#Expirydate').datepicker({ dateFormat: 'dd/MMM/yyyy' });
+                                $('#Expirydate').removeAttr('disabled');
+                               // $('#Expirydate').val(Date.now());
                                     // $('#Expirydate').datepicker('setDate', new Date());
                                 }
                         else {
@@ -199,8 +200,8 @@
                                     }
                                     });
 
-                    $('#ItemName').change(function() {
-                                    var ItemCode = $('#ItemName').val();
+                    $('#ItemMasterId').change(function() {
+                        var ItemCode = $('#ItemMasterId').val();
                                     var getReportColumnsParams = {
                             "ItemCode": ItemCode
                         };
@@ -210,7 +211,7 @@
                             type: "POST",
                             dataType: 'json',
                             data: { itemcode: ItemCode },
-                            success: function(result) {
+                            success: function (result) {
                                 //console.log(result);
                                 $("#ItemType").val(result.TypeName);
                                         //$("#ItemType").attr("disable", "Disable");
@@ -253,8 +254,30 @@
                         }
 
                      });
+            $('#btn_Modify').click(function Validation() {
+                if ($('#ItemName').val() == "") {
+                    alert(" Please Enter Item Name");
+                    return false;
+                }
+                else if ($('#Godown').val() == "") {
+                    alert(" Please Enter Godown Name");
+                    return false;
+                }
+                else if ($('#Unit').val() == "") {
+                    alert(" Please Enter Unit For Item");
+                    return false;
+                }
+                else if ($('#OpeningStock').val() == "") {
+                    alert(" Please Enter Opening Stock");
+                    return false;
+                }
+                else if ($('#OpeningStock').val() == 0) {
+                    alert(" Please Enter Opening Stock");
+                    return false;
+                }
 
-                            BatchName = $("#BatchName").select2({
+            });
+            BatchName = $("#BatchId").select2({
                             ajax:
                                 {
                                 url: '@Url.Action("GetBatchDetails", "ItemDetail")',

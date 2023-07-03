@@ -8,6 +8,7 @@ using DemoWebApplication.Models;
 using Newtonsoft.Json;
 using System.Net;
 using System.Data;
+using System.Data.Entity;
 
 namespace DemoWebApplication.Controllers
 {
@@ -150,11 +151,12 @@ namespace DemoWebApplication.Controllers
                 }
             }
             ItemDetail newitem = new ItemDetail();
-            newitem.ItemMasterId = Convert.ToInt32(item.ItemName);
-            newitem.GodownId = Convert.ToInt32(item.Godown);
+            //newitem.ItemMasterId = Convert.ToInt32(item.ItemName);
+            newitem.ItemMasterId = item.ItemMasterId;
+            newitem.GodownId = item.GodownId;
             newitem.BatchId = batchid;//Convert.ToInt32(item.BatchName);
             newitem.BatchName = batchname;
-            newitem.UnitId = Convert.ToInt32(item.Unit);
+            newitem.UnitId = item.UnitId;
             newitem.mfrdate = item.mfrdate;
             newitem.Expirydate = item.Expirydate;
             newitem.PurchasePrice = item.PurchasePrice;
@@ -208,12 +210,13 @@ namespace DemoWebApplication.Controllers
         }
         [HttpGet]
         public ActionResult Edit(long? id)
-        {
+       {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ItemDetail item_detail = dbcon.ItemDetails.Find(id);
+
             if (item_detail == null)
             {
                 return HttpNotFound();
@@ -262,13 +265,48 @@ namespace DemoWebApplication.Controllers
             viewmodel.OpeningStock = item_detail.OpeningStock;
             viewmodel.ClosingStock = item_detail.ClosingStock;
             viewmodel.ItemType = itemtypeData.TypeName;
+            TempData["ItemdetailId"] = id;
+            TempData.Keep();
             return View("Create",viewmodel);
         }
         [HttpPost]
         public ActionResult Edit(ItemDetail Item)
         {
-
-            return View();
+            NumberFormatInfo formatprovider = new NumberFormatInfo();
+            formatprovider.NumberDecimalSeparator = ",";
+            formatprovider.NumberGroupSeparator = ".";
+            formatprovider.NumberGroupSizes = new int[] { 2 };
+            Double ItemDetailcode = Convert.ToDouble(TempData["ItemdetailId"],formatprovider);
+            var itemDetailsData = dbcon.ItemDetails.Where(x => x.ItemdetailId == ItemDetailcode).FirstOrDefault();
+            if (itemDetailsData!=null)
+            {
+                if (ModelState .IsValid)
+                {
+                    itemDetailsData.ItemMasterId = Item.ItemMasterId;
+                    itemDetailsData.GodownId = Item.GodownId;
+                    itemDetailsData.BatchId = Item.BatchId;
+                    itemDetailsData.BatchName = Item.BatchName;
+                    itemDetailsData.UnitId = Item.UnitId;
+                    itemDetailsData.mfrdate = Item.mfrdate;
+                    itemDetailsData.Expirydate = Item.Expirydate;
+                    itemDetailsData.PurchasePrice = Item.PurchasePrice;
+                    itemDetailsData.MRP = Item.MRP;
+                    itemDetailsData.OpeningStock = Item.OpeningStock;
+                    itemDetailsData.ClosingStock = Item.ClosingStock;
+                    dbcon.Entry(itemDetailsData).State = EntityState.Modified;
+                    dbcon.SaveChanges();
+                    ViewBag.Message = "Item Modify Sucessfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Edit");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Edit");
+            }
         }
 
         public JsonResult GetItemByName(string searchText)

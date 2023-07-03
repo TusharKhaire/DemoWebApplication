@@ -72,7 +72,7 @@
                 @Html.LabelFor(x => x.BatchName, "Batch", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @*@Html.DropDownListFor(x => x.BatchName, new SelectList(Model.lstbatches, "Value", "Text"), "--Select--", new { @class = "form-control" })*@
-                    @*@Html.TextBoxFor(x => x.Itemname)*@
+                    @Html.HiddenFor(x => x.BatchName)
                     @Html.DropDownListFor(model => model.BatchId, Model.lstbatches, "Select an option", new { @class = "select2-searchable form-control" })
                     @*<select id="BatchName" name="BatchName" placeholder="Enter BatchName" style="width:50%">
                             {
@@ -232,15 +232,15 @@
 
                             });
                     $('#btn_Save').click(function Validation() {
-                                if ($('#ItemName').val() == "") {
+                        if ($('#ItemMasterId').val() == "") {
                                     alert(" Please Enter Item Name");
                                     return false;
                                 }
-                        else if ($('#Godown').val() == "") {
+                        else if ($('#GodownId').val() == "") {
                                     alert(" Please Enter Godown Name");
                                     return false;
                                 }
-                        else if ($('#Unit').val() == "") {
+                        else if ($('#UnitId').val() == "") {
                                     alert(" Please Enter Unit For Item");
                                     return false;
                                 }
@@ -255,15 +255,15 @@
 
                      });
             $('#btn_Modify').click(function Validation() {
-                if ($('#ItemName').val() == "") {
+                if ($('#ItemMasterId').val() == "") {
                     alert(" Please Enter Item Name");
                     return false;
                 }
-                else if ($('#Godown').val() == "") {
+                else if ($('#GodownId').val() == "") {
                     alert(" Please Enter Godown Name");
                     return false;
                 }
-                else if ($('#Unit').val() == "") {
+                else if ($('#UnitId').val() == "") {
                     alert(" Please Enter Unit For Item");
                     return false;
                 }
@@ -277,6 +277,7 @@
                 }
 
             });
+
             BatchName = $("#BatchId").select2({
                             ajax:
                                 {
@@ -301,7 +302,7 @@
                                 },
                         templateResult: function(data) {
                                     var $result = $("<span></span>");
-                            $result.text(data.text);
+                                        $result.text(data.text);
                                     // tabindex: 3;
                                     if (data.newOption)
                                     {
@@ -314,6 +315,12 @@
                     }).on('select2:select', function() {
                         $("#DiscPer").focus();
                             });
-                        });
+        });
+
+        $('#BatchId').change(function () {
+            var Batchname = $(this).children('option:selected').text();
+            //alert(Batchname);
+            $('#BatchName').val(Batchname);
+        });
     </script>
 }

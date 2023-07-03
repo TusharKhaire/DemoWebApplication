@@ -25,12 +25,15 @@ namespace DemoWebApplication.Controllers
                 ItemDetail id = new ItemDetail();
                 var itemnamedata = dbcon.ItemMasters.Where(x => x.ItemCode == item.ItemMasterId).FirstOrDefault();
                 var itemtypedata = dbcon.ItemTypes.Where(x => x.TypeId == itemnamedata.ItemType).FirstOrDefault();
+                //var itemtypesdata = dbcon.ItemMasters.Join(dbcon.ItemTypes, a => a.ItemCode, b => b.TypeId, (a, b) => new { ItemMasters = a, ItemTypes = b }).Where(ab => ab.ItemMasters.ItemCode == ab.ItemTypes.TypeId).Select(ab => ab.ItemTypes.TypeName).Distinct();
                 var godowndata = dbcon.GodownMasters.Where(x => x.GodownId == item.GodownId).FirstOrDefault();
                 var UnitData = dbcon.UnitMasters.Where(x => x.UnitId == item.UnitId).FirstOrDefault();
                 id.ItemdetailId = item.ItemdetailId;
                 id.ItemMasterId = item.ItemMasterId;
                 id.ItemName = itemnamedata.ItemName;
                 id.ItemType = itemtypedata.TypeName;
+                //var type= itemtypesdata.Select(data => data.TypeName);
+                //id.ItemType = type;
                 id.Godown = godowndata.GodownName;
                 id.Unit = UnitData.UnitName;
                 id.BatchId = item.BatchId;
@@ -114,28 +117,10 @@ namespace DemoWebApplication.Controllers
             }
             int batchid=0;
             string batchname="" ; 
-            if (int.TryParse(item.BatchName, out int n))
+            if (item.BatchId !=null)
             {
-                //batchid = item.BatchId;
-                var chk_batchname = dbcon.BatchMasters.Where(x => x.BatchId == item.BatchId).FirstOrDefault();
-                if (chk_batchname != null)
-                {
-                    batchid = chk_batchname.BatchId;
-                    batchname = chk_batchname.BatchName;
-                }
-                else
-                {
-                    BatchMaster bm = new BatchMaster();
-                    bm.BatchName = item.BatchName;
-                    bm.Discription = "";
-                    dbcon.BatchMasters.Add(bm);
-                    dbcon.SaveChanges();
-                     chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName== item.BatchName).FirstOrDefault();
-                    {
-                        batchid  = chk_batchname.BatchId ;
-                        batchname = chk_batchname.BatchName;
-                    }
-                }
+                batchid = item.BatchId.HasValue ? (int)item.BatchId : 0;
+                batchname=item.BatchName;
             }
             else
             {
@@ -144,12 +129,13 @@ namespace DemoWebApplication.Controllers
                 bm.Discription = "";
                 dbcon.BatchMasters.Add(bm);
                 dbcon.SaveChanges();
-               var chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName == item.BatchName).FirstOrDefault();
+                var chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName == item.BatchName).FirstOrDefault();
                 {
                     batchid = chk_batchname.BatchId;
                     batchname = chk_batchname.BatchName;
                 }
             }
+            
             ItemDetail newitem = new ItemDetail();
             //newitem.ItemMasterId = Convert.ToInt32(item.ItemName);
             newitem.ItemMasterId = item.ItemMasterId;
@@ -282,15 +268,55 @@ namespace DemoWebApplication.Controllers
             {
                 if (ModelState .IsValid)
                 {
+                    int batchid = 0;
+                    string batchname = "";
+                    if (Item.BatchId != null)
+                    {
+                        var chk_batchname = dbcon.BatchMasters.Where(x => x.BatchId == Item.BatchId).FirstOrDefault();
+                        if (chk_batchname != null)
+                        {
+                            batchid = Item.BatchId.HasValue ? (int)Item.BatchId : 0;
+                            batchname = Item.BatchName;
+                        }
+                        else
+                        {
+                            BatchMaster bm = new BatchMaster();
+                            bm.BatchName = Item.BatchName;
+                            bm.Discription = "";
+                            dbcon.BatchMasters.Add(bm);
+                            dbcon.SaveChanges();
+                             chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName == Item.BatchName).FirstOrDefault();
+                            {
+                                batchid = chk_batchname.BatchId;
+                                batchname = chk_batchname.BatchName;
+                            }
+                        }
+                        
+                    }
+                    else
+                    {
+                        BatchMaster bm = new BatchMaster();
+                        bm.BatchName = Item.BatchName;
+                        bm.Discription = "";
+                        dbcon.BatchMasters.Add(bm);
+                        dbcon.SaveChanges();
+                        var chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName == Item.BatchName).FirstOrDefault();
+                        {
+                            batchid = chk_batchname.BatchId;
+                            batchname = chk_batchname.BatchName;
+                        }
+                    }
+
                     itemDetailsData.ItemMasterId = Item.ItemMasterId;
                     itemDetailsData.GodownId = Item.GodownId;
-                    itemDetailsData.BatchId = Item.BatchId;
-                    itemDetailsData.BatchName = Item.BatchName;
+                    itemDetailsData.BatchId = batchid;
+                    itemDetailsData.BatchName = batchname;
                     itemDetailsData.UnitId = Item.UnitId;
                     itemDetailsData.mfrdate = Item.mfrdate;
                     itemDetailsData.Expirydate = Item.Expirydate;
                     itemDetailsData.PurchasePrice = Item.PurchasePrice;
                     itemDetailsData.MRP = Item.MRP;
+                    itemDetailsData.DiscPer = Item.DiscPer;
                     itemDetailsData.OpeningStock = Item.OpeningStock;
                     itemDetailsData.ClosingStock = Item.ClosingStock;
                     dbcon.Entry(itemDetailsData).State = EntityState.Modified;
@@ -309,6 +335,22 @@ namespace DemoWebApplication.Controllers
             }
         }
 
+        public ActionResult Delete(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ItemDetail item_detail = dbcon.ItemDetails.Find(id);
+
+            if (item_detail == null)
+            {
+                return HttpNotFound();
+            }
+            dbcon.ItemDetails.Remove(item_detail);
+            dbcon.SaveChanges();
+            return RedirectToAction("Index");
+        }
         public JsonResult GetItemByName(string searchText)
         {
             var ItemName = dbcon.ItemMasters.Where(a => a.ItemName.Contains(searchText)).ToList();

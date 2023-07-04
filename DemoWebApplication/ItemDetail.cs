@@ -32,6 +32,6 @@ namespace DemoWebApplication
         public string Godown { get; set; }
         public string Unit { get; set; }
         public string HsnCode { get; set; }
-
+        public int currentpageno { get; set; }
     }
 }

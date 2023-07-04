@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Data;
 using System.Data.Entity;
+using PagedList;
+using PagedList.Mvc;
 
 namespace DemoWebApplication.Controllers
 {
@@ -16,40 +18,54 @@ namespace DemoWebApplication.Controllers
     {
         DemoDbEntities dbcon = new DemoDbEntities();
         // GET: ItemDetail
-        public ActionResult Index()
+        public ActionResult Index(string search,int ? i)
         {
+            
             List<ItemDetail> itemdetaillist = new List<ItemDetail>();
             var result = dbcon.ItemDetails.ToList();
-            foreach (var item in result)
+            var itemtypesdata = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId, (a, b) => new { ItemMasters = a, ItemDetail = b }).Where(ab => ab.ItemMasters.ItemCode == ab.ItemDetail.ItemMasterId).Select(ab => ab.ItemMasters.ItemName).Distinct();    //
+            var itemData = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId, (a, b) => new { ItemMaster = a, ItemDetail = b }).Where(x=>x.ItemMaster.ItemName.StartsWith(search)||search==null).ToList();
+            var newItemData = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId,
+        (a, b) => new { ItemMaster = a, ItemDetail = b }).Select(ab => new
+        {
+            ItemName = ab.ItemMaster.ItemName,
+            ItemDetailsId = ab.ItemDetail.ItemdetailId ,
+            ItemMasterId = ab.ItemDetail.ItemMasterId
+        }).ToList();
+            foreach (var item in itemData)    // change result to itemData for working with joins operation
             {
                 ItemDetail id = new ItemDetail();
-                var itemnamedata = dbcon.ItemMasters.Where(x => x.ItemCode == item.ItemMasterId).FirstOrDefault();
+                var itemnamedata = dbcon.ItemMasters.Where(x => x.ItemCode == item.ItemDetail.ItemMasterId).FirstOrDefault();
                 var itemtypedata = dbcon.ItemTypes.Where(x => x.TypeId == itemnamedata.ItemType).FirstOrDefault();
                 //var itemtypesdata = dbcon.ItemMasters.Join(dbcon.ItemTypes, a => a.ItemCode, b => b.TypeId, (a, b) => new { ItemMasters = a, ItemTypes = b }).Where(ab => ab.ItemMasters.ItemCode == ab.ItemTypes.TypeId).Select(ab => ab.ItemTypes.TypeName).Distinct();
-                var godowndata = dbcon.GodownMasters.Where(x => x.GodownId == item.GodownId).FirstOrDefault();
-                var UnitData = dbcon.UnitMasters.Where(x => x.UnitId == item.UnitId).FirstOrDefault();
-                id.ItemdetailId = item.ItemdetailId;
-                id.ItemMasterId = item.ItemMasterId;
-                id.ItemName = itemnamedata.ItemName;
+                var godowndata = dbcon.GodownMasters.Where(x => x.GodownId == item.ItemDetail.GodownId).FirstOrDefault();
+                var UnitData = dbcon.UnitMasters.Where(x => x.UnitId == item.ItemDetail.UnitId).FirstOrDefault();
+                id.ItemdetailId = item.ItemDetail.ItemdetailId;
+                id.ItemMasterId = item.ItemDetail.ItemMasterId;
+                id.ItemName = item.ItemMaster.ItemName;
                 id.ItemType = itemtypedata.TypeName;
                 //var type= itemtypesdata.Select(data => data.TypeName);
                 //id.ItemType = type;
                 id.Godown = godowndata.GodownName;
                 id.Unit = UnitData.UnitName;
-                id.BatchId = item.BatchId;
-                id.BatchName = item.BatchName;
+                id.BatchId = item.ItemDetail.BatchId;
+                id.BatchName = item.ItemDetail.BatchName;
                 id.HsnCode = itemnamedata.HSNCODE;
-                id.DiscPer = item.DiscPer;
-                id.Expirydate = item.Expirydate;  //.HasValue  ? Formatting(item.Expirydate,"dd/MMM/yyyy") : "");
-                id.PurchasePrice = item.PurchasePrice;
-                id.MRP = item.MRP;
-                id.OpeningStock = item.OpeningStock;
-                id.ClosingStock = item.ClosingStock;
-
+                id.DiscPer = item.ItemDetail.DiscPer;
+                id.Expirydate = item.ItemDetail.Expirydate;  //.HasValue  ? Formatting(item.Expirydate,"dd/MMM/yyyy") : "");
+                id.PurchasePrice = item.ItemDetail.PurchasePrice;
+                id.MRP = item.ItemDetail.MRP;
+                id.OpeningStock = item.ItemDetail.OpeningStock;
+                id.ClosingStock = item.ItemDetail.ClosingStock;
+                id.currentpageno = i??1;
                 itemdetaillist.Add(id);
             }
-            return View(itemdetaillist);
+            return View(itemdetaillist.ToPagedList(i ?? 1, 4));
         }
+        //private ItemDetail GetItemsList(int currentPage)
+        //{
+
+        //}
         [HttpGet]
         public ActionResult Create()
         {
@@ -99,7 +115,7 @@ namespace DemoWebApplication.Controllers
         {
             if (item != null)
             {
-                if (item.ItemMasterId  <1)
+                if (item.ItemMasterId < 1)
                 {
                     ModelState.AddModelError("ItemName", "Please Enter Item Name");
                     return View();
@@ -115,12 +131,12 @@ namespace DemoWebApplication.Controllers
                     return View();
                 }
             }
-            int batchid=0;
-            string batchname="" ; 
-            if (item.BatchId !=null)
+            int batchid = 0;
+            string batchname = "";
+            if (item.BatchId != null)
             {
                 batchid = item.BatchId.HasValue ? (int)item.BatchId : 0;
-                batchname=item.BatchName;
+                batchname = item.BatchName;
             }
             else
             {
@@ -135,7 +151,7 @@ namespace DemoWebApplication.Controllers
                     batchname = chk_batchname.BatchName;
                 }
             }
-            
+
             ItemDetail newitem = new ItemDetail();
             //newitem.ItemMasterId = Convert.ToInt32(item.ItemName);
             newitem.ItemMasterId = item.ItemMasterId;
@@ -196,7 +212,7 @@ namespace DemoWebApplication.Controllers
         }
         [HttpGet]
         public ActionResult Edit(long? id)
-       {
+        {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -207,11 +223,12 @@ namespace DemoWebApplication.Controllers
             {
                 return HttpNotFound();
             }
-            DemoWebApplication.Models.ItemDetailM viewmodel =new DemoWebApplication.Models.ItemDetailM();
+            DemoWebApplication.Models.ItemDetailM viewmodel = new DemoWebApplication.Models.ItemDetailM();
             List<SelectListItem> itemDetailName = new List<SelectListItem>();
             List<ItemMaster> itemNames = dbcon.ItemMasters.ToList();
-            itemNames.ForEach(x => {
-                itemDetailName.Add(new SelectListItem {Text=x.ItemName,Value=x.ItemCode.ToString() });
+            itemNames.ForEach(x =>
+            {
+                itemDetailName.Add(new SelectListItem { Text = x.ItemName, Value = x.ItemCode.ToString() });
             });
             List<SelectListItem> GodownNameLists = new List<SelectListItem>();
             List<GodownMaster> GodownNames = dbcon.GodownMasters.ToList();
@@ -219,13 +236,13 @@ namespace DemoWebApplication.Controllers
             {
                 GodownNameLists.Add(new SelectListItem { Text = x.GodownName, Value = x.GodownId.ToString() });
             });
-            List<SelectListItem>UnitListItems =new List<SelectListItem>();
+            List<SelectListItem> UnitListItems = new List<SelectListItem>();
             List<UnitMaster> UnitNames = dbcon.UnitMasters.ToList();
             UnitNames.ForEach(x =>
             {
                 UnitListItems.Add(new SelectListItem { Text = x.UnitName, Value = x.UnitId.ToString() });
             });
-            List<SelectListItem>BatchListItem =new List<SelectListItem>();
+            List<SelectListItem> BatchListItem = new List<SelectListItem>();
             List<BatchMaster> BatchNames = dbcon.BatchMasters.ToList();
             BatchNames.ForEach(x =>
             {
@@ -245,15 +262,15 @@ namespace DemoWebApplication.Controllers
             viewmodel.UnitId = item_detail.UnitId;
             viewmodel.DiscPer = item_detail.DiscPer;
             viewmodel.mfrdate = item_detail.mfrdate;
-            viewmodel.Expirydate  = item_detail.Expirydate;
+            viewmodel.Expirydate = item_detail.Expirydate;
             viewmodel.PurchasePrice = item_detail.PurchasePrice;
-            viewmodel.MRP = item_detail.MRP ;
+            viewmodel.MRP = item_detail.MRP;
             viewmodel.OpeningStock = item_detail.OpeningStock;
             viewmodel.ClosingStock = item_detail.ClosingStock;
             viewmodel.ItemType = itemtypeData.TypeName;
             TempData["ItemdetailId"] = id;
             TempData.Keep();
-            return View("Create",viewmodel);
+            return View("Create", viewmodel);
         }
         [HttpPost]
         public ActionResult Edit(ItemDetail Item)
@@ -262,11 +279,11 @@ namespace DemoWebApplication.Controllers
             formatprovider.NumberDecimalSeparator = ",";
             formatprovider.NumberGroupSeparator = ".";
             formatprovider.NumberGroupSizes = new int[] { 2 };
-            Double ItemDetailcode = Convert.ToDouble(TempData["ItemdetailId"],formatprovider);
+            Double ItemDetailcode = Convert.ToDouble(TempData["ItemdetailId"], formatprovider);
             var itemDetailsData = dbcon.ItemDetails.Where(x => x.ItemdetailId == ItemDetailcode).FirstOrDefault();
-            if (itemDetailsData!=null)
+            if (itemDetailsData != null)
             {
-                if (ModelState .IsValid)
+                if (ModelState.IsValid)
                 {
                     int batchid = 0;
                     string batchname = "";
@@ -285,13 +302,13 @@ namespace DemoWebApplication.Controllers
                             bm.Discription = "";
                             dbcon.BatchMasters.Add(bm);
                             dbcon.SaveChanges();
-                             chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName == Item.BatchName).FirstOrDefault();
+                            chk_batchname = dbcon.BatchMasters.Where(x => x.BatchName == Item.BatchName).FirstOrDefault();
                             {
                                 batchid = chk_batchname.BatchId;
                                 batchname = chk_batchname.BatchName;
                             }
                         }
-                        
+
                     }
                     else
                     {

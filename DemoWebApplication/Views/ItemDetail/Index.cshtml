@@ -73,7 +73,7 @@
             srno += 1;
         }
     }
-
+       
 </table>
 @Html.PagedListPager(Model, i => Url.Action("Index", "ItemDetail", new { i, search = Request.QueryString["search"] }))
 <script type="text/javascript">

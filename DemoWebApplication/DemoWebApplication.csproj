@@ -148,6 +148,7 @@
     <Compile Include="Controllers\ItemMasterController.cs" />
     <Compile Include="Controllers\ItemTypeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SalesInvoiceController.cs" />
     <Compile Include="Controllers\UnitMasterController.cs" />
     <Compile Include="Enums\Alerts.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,6 +168,7 @@
     </Compile>
     <Compile Include="Models\ItemDetailM.cs" />
     <Compile Include="Models\ItemMasterM.cs" />
+    <Compile Include="Models\SalesInvoice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesInvoiceDetail.cs">
       <DependentUpon>SimpleDataModel.tt</DependentUpon>
@@ -280,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\SalesInvoice\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

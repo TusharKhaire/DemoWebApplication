@@ -57,7 +57,7 @@ namespace DemoWebApplication.Controllers
                 id.MRP = item.ItemDetail.MRP;
                 id.OpeningStock = item.ItemDetail.OpeningStock;
                 id.ClosingStock = item.ItemDetail.ClosingStock;
-                id.currentpageno = i??1;
+                
                 itemdetaillist.Add(id);
             }
             return View(itemdetaillist.ToPagedList(i ?? 1, 4));

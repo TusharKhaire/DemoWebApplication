@@ -11,13 +11,10 @@ namespace DemoWebApplication
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class ItemType
     {
-        [Required]
         public int TypeId { get; set; }
-        [Required]
         public string TypeName { get; set; }
         public string Details { get; set; }
     }

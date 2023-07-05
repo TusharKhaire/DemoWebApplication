@@ -11,16 +11,12 @@ namespace DemoWebApplication
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
     public partial class ItemMaster
     {
-        [Required]
         public int ItemCode { get; set; }
-        [Required]
         public string ItemName { get; set; }
-        [Required]
         public int ItemType { get; set; }
         public string HSNCODE { get; set; }
         public string GstPer { get; set; }

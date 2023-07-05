@@ -168,6 +168,12 @@
     <Compile Include="Models\ItemDetailM.cs" />
     <Compile Include="Models\ItemMasterM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesInvoiceDetail.cs">
+      <DependentUpon>SimpleDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SalesInvoiceMaster.cs">
+      <DependentUpon>SimpleDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Services\CommonServices.cs" />
     <Compile Include="SimpleDataModel.Context.cs">
       <AutoGen>True</AutoGen>

@@ -46,7 +46,7 @@
     }
     else
     {
-        int srno= 1 + 4 * (Model.PageNumber - 1);
+        int srno= 1 + Model.PageSize * (Model.PageNumber - 1);
      
 
         foreach (var item in Model)

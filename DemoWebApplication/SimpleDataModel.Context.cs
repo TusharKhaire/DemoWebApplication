@@ -33,5 +33,7 @@ namespace DemoWebApplication
         public DbSet<GodownMaster> GodownMasters { get; set; }
         public DbSet<ItemDetail> ItemDetails { get; set; }
         public DbSet<UnitMaster> UnitMasters { get; set; }
+        public DbSet<SalesInvoiceDetail> SalesInvoiceDetails { get; set; }
+        public DbSet<SalesInvoiceMaster> SalesInvoiceMasters { get; set; }
     }
 }

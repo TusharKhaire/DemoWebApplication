@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
+using System.Web.Mvc;
 
 namespace DemoWebApplication.Models
 {
@@ -50,6 +50,10 @@ namespace DemoWebApplication.Models
         public Nullable<int> MRP { get; set; }
         public Nullable<int> PurchasePrice { get; set; }
 
-
+        //new Added 
+        public Double NetAmout { get; set; }
+        public Double GstAmount { get; set; }
+        public IList<SelectListItem> lst_CustomerNameList { get; set; }
+        public IList<SelectListItem> lst_ItemName { get; set; }
     }
 }

@@ -25,6 +25,7 @@ namespace DemoWebApplication.Controllers
             var result = dbcon.ItemDetails.ToList();
             var itemtypesdata = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId, (a, b) => new { ItemMasters = a, ItemDetail = b }).Where(ab => ab.ItemMasters.ItemCode == ab.ItemDetail.ItemMasterId).Select(ab => ab.ItemMasters.ItemName).Distinct();    //
             var itemData = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId, (a, b) => new { ItemMaster = a, ItemDetail = b }).Where(x=>x.ItemMaster.ItemName.StartsWith(search)||search==null).ToList();
+
             var newItemData = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId,
         (a, b) => new { ItemMaster = a, ItemDetail = b }).Select(ab => new
         {

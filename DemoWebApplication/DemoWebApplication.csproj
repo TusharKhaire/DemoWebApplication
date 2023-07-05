@@ -279,10 +279,10 @@
     <Content Include="Views\UnitMaster\Create.cshtml" />
     <Content Include="Views\ItemDetail\Index.cshtml" />
     <Content Include="Views\ItemDetail\Create.cshtml" />
+    <Content Include="Views\SalesInvoice\CreateInvoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\SalesInvoice\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

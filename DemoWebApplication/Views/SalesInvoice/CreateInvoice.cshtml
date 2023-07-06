@@ -156,7 +156,7 @@
 
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="tbl_body"></tbody>
         </table>
     </div>
     <div class="form-horizontal col-md-12">
@@ -216,12 +216,101 @@
     <script type="text/javascript">
 
        
+        $(document).ready(function () {
+            $("#CAddress").keydown(function (e) {
+                //debugger;
+                if (e.keyCode == 13) {
+                    $("#Phoneno").focus();
+                }
+                //debugger;
+            });
 
+            $("#Phoneno").keydown(function (e) {
+                //debugger;
+                if (e.keyCode == 13) {
+                    $("#ItemName").focus();
+                }
+                //debugger;
+            });
+            $("#qty").keydown(function (e) {
+                var code = e.keyCode || e.which;
+                // debugger;
+                if (code == 13 || code == 9) { //Enter keycode or Tab keycode
+                    $("#MRP").focus();
+                }
+            });
+
+            $("#MRP").keydown(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13 || code == 9) { //Enter keycode
+                    $("#disc").focus();
+                }
+            });
+          
+        });
 
         $(document).ready(function () {
+            var itemname, batch, godown, expdate, HSNCode, Itemtype = ""
+            let Gst,MRP,Disc,PurPrice,salesprice,Qty,DiscPer = 0
+            $('#Accountname').change(function () {
+                var AccountCode = $(this).children('option:selected').val();
+                //alert(AccountCode);
+                $.ajax({
+                    url: "/SalesInvoice/GetCustomerData",
+                    type: "Post",
+                    dataType: "json",
+                    data: { id: AccountCode },
+                    success: function (result) {
+                        //console.log(result);
+                        //alert("success");
+                        $("#CAddress").val(result.Address);
+                        $("#Phoneno").val(result.MobileNo);
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+            });
 
-           
-          
+            $('#disc').keydown(function (e) {
+                if (e.keyCode == 13) {
+                    var ItemDetailsCode = $("#ItemName").children('option:selected').val();
+                    //alert(ItemDetailsCode);
+                    itemname = $("#ItemName").val();
+                    //alert(itemname);
+                    if (itemname == "") {
+                        alert("Please Select Valid Item");
+                        return;
+                    }
+                    $.ajax({
+                        url: "/SalesInvoice/GetItemsData",
+                        type: "post",
+                        dataType: "json",
+                        data: { code:ItemDetailsCode},
+                        success: function (result) {
+                            //alert("success");
+                            debugger;
+                            itemname = result.Itemname;
+                            batch = result.Batch;
+                            godown = result.Godown;
+                            HSNCode = result.HSNCOde;
+                            Itemtype = result.ItemType;
+                            Gst = result.Gst;
+                            mrp = result.MRP;
+                            PurPrice = result.PurPrice;
+                            Qty = $("#qty").val();
+                            salesprice = $("#MRP").val();
+                            DiscPer = $("#disc").val();
+                        },
+                        error: function (err) {
+                            console.log(err);
+                            alert("Error");
+                        }
+                    });
+                }
+            });
+        });
+        $(document).ready(function () {
         AccountName = $("#Accountname").select2({
 
                             ajax:
@@ -307,37 +396,7 @@
                 });
         });
 
-        $(document).ready(function () {
-            $("#CAddress").keydown(function (e) {
-                //debugger;
-                if (e.keyCode == 13) {
-                    $("#Phoneno").focus();
-                }
-                //debugger;
-            });
-
-            $("#Phoneno").keydown(function (e) {
-                //debugger;
-                if (e.keyCode == 13) {
-                    $("#ItemName").focus();
-                }
-                //debugger;
-            });
-            $("#qty").keydown(function (e) {
-                var code = e.keyCode || e.which;
-               // debugger;
-                if (code == 13 || code == 9) { //Enter keycode or Tab keycode
-                    $("#MRP").focus();
-                }
-            });
-
-            $("#MRP").keydown(function (e) {
-                var code = e.keyCode || e.which;
-                if (code == 13 || code == 9) { //Enter keycode
-                    $("#disc").focus();
-                }
-            });
-        });
+        
 
     </script>
 }

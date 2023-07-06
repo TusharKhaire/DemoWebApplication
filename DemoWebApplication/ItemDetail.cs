@@ -29,7 +29,6 @@ namespace DemoWebApplication
         public Nullable<int> ClosingStock { get; set; }
         public Nullable<int> DiscPer { get; set; }
 
-
         public string ItemName { get; set; }
         public string ItemType { get; set; }
         public string Godown { get; set; }

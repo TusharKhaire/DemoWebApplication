@@ -116,6 +116,7 @@
           <Property Name="BillDiscount" Type="int" />
           <Property Name="Duedate" Type="datetime" Nullable="false" />
           <Property Name="ApplyGst" Type="bit" Nullable="false" />
+          <Property Name="CustState" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="UnitMaster">
           <Key>
@@ -288,6 +289,7 @@
           <Property Name="BillDiscount" Type="Int32" />
           <Property Name="Duedate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ApplyGst" Type="Boolean" Nullable="false" />
+          <Property Name="CustState" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -415,6 +417,7 @@
           <EntitySetMapping Name="SalesInvoiceMasters">
             <EntityTypeMapping TypeName="DemoDbModel.SalesInvoiceMaster">
               <MappingFragment StoreEntitySet="SalesInvoiceMaster">
+                <ScalarProperty Name="CustState" ColumnName="CustState" />
                 <ScalarProperty Name="ApplyGst" ColumnName="ApplyGst" />
                 <ScalarProperty Name="Duedate" ColumnName="Duedate" />
                 <ScalarProperty Name="BillDiscount" ColumnName="BillDiscount" />

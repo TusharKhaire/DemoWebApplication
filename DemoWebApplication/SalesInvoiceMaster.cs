@@ -29,5 +29,6 @@ namespace DemoWebApplication
         public Nullable<int> BillDiscount { get; set; }
         public System.DateTime Duedate { get; set; }
         public bool ApplyGst { get; set; }
+        public string CustState { get; set; }
     }
 }

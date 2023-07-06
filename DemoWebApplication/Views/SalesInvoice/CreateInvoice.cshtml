@@ -13,6 +13,14 @@
 
 @Styles.Render("~/Content/css")
 @Scripts.Render("~/bundles/modernizr")
+<script src="~/Scripts/MyJs.js"></script>
+<script src="~/Scripts/jquery-3.6.4.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 @using (Html.BeginForm())
 {
@@ -24,7 +32,7 @@
                 @Html.HiddenFor(x => x.Accountnumber)
                 @Html.LabelFor(x => x.Accountname, "Cust. Name", htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @Html.DropDownListFor(x => x.Accountname, Model.lst_CustomerNameList, "--Select Name--", new { @class = "form-control" })
+                    @Html.DropDownListFor(x => x.Accountname, Model.lst_CustomerNameList, "", new { @class = "form-control" })
                     @Html.ValidationMessageFor(x => x.Accountname, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -75,6 +83,13 @@
                 </div>
             </div>
             <div class="form-group">
+                @Html.LabelFor(x => x.CustState, "State", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(x => x.CustState, Model.lst_State, "", new { @class = "form-control", @value = Model.CustState })
+                    @Html.ValidationMessageFor(x => x.CustState, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.LabelFor(x => x.PaymentmodeCash, "Payment Mode", htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
                     @Html.RadioButtonFor(x => x.PaymentmodeCash, "Cash", new { @checked = "checked" })
@@ -91,13 +106,15 @@
                     @Html.Label("Don't Apply Gst")
                 </div>
             </div>
+
         </div>
     </div>
     <hr />
     <div class="form-horizontal col-md-12">
         <div class="form-group col-md-3">
-            @Html.LabelFor(x => x.Itemdetailid, "Item Name", htmlAttributes: new { @class = "control-label " })
-            @Html.DropDownListFor(x => x.Itemdetailid, Model.lst_ItemName, "", new { @class = "form-control " })
+            @Html.HiddenFor(x => x.Itemdetailid)
+            @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class = "control-label " })
+            @Html.DropDownListFor(x => x.ItemName, Model.lst_ItemName, "", new { @class = "form-control " })
         </div>
         <div class="form-group col-md-3">
             @Html.LabelFor(x => x.qty, "Qty", htmlAttributes: new { @class = "control-label " })
@@ -112,35 +129,34 @@
             @Html.EditorFor(x => x.disc, new { htmlAttributes = new { @class = "form-control " } })
         </div>
     </div>
-    <div>
+    <div class="col-md-12">
         @* Grid Design *@
         <table class="table" border="1" id="tbl_sales">
             <thead>
                 <tr>
-                    <th >Item Code</th>
+                    <th>Sr</th>
+                    <th style="display:none">Item Code</th>
                     <th>Item Name</th>
                     <th>Batch </th>
                     <th>Godown</th>
                     <th>Expiry Date</th>
-                    <th>HSN Code</th>
+                    <th style="display:none">HSN Code</th>
                     <th>Qty</th>
-                    <th>Prise</th>
+                    <th>Price</th>
                     <th>Disc %</th>
                     <th>Disc Amt</th>
                     <th>Net Amt</th>
                     <th>GST %</th>
-                    <th>ISTAMT</th>
+                    <th>IGSTAMT</th>
                     <th>SGSTAMT</th>
                     <th>CGSTAMT</th>
                     <th>Total Amt</th>
                     <th>MRP</th>
                     <th>Pur.Prise</th>
-                    <th>Sr</th>
+
                 </tr>
             </thead>
-            <tbody>
-
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <div class="form-horizontal col-md-12">
@@ -193,8 +209,135 @@
     </div>
     <div class="form-horizontal">
         <div class="col-md-offset-5">
-            <input type="submit" id="btn_save" value="Save" />
+            <input type="button" id="btn_save" value="Save" />
         </div>
     </div>
+
+    <script type="text/javascript">
+
+       
+
+
+        $(document).ready(function () {
+
+           
+          
+        AccountName = $("#Accountname").select2({
+
+                            ajax:
+                                {
+                                url: '@Url.Action("GetCustomerName", "SalesInvoice")',
+                            dataType: 'json',
+                            delay: 1000,
+                            data: function(params) {
+                                        return { searchText: params.term };
+                                    },
+                                processResults: function (data, params) {
+
+                                        return { results: data};
+                                    },
+                            cache: true
+                                },
+                        tags: true,
+                        createTag: function(params) {
+                                    return {
+                                    id: params.term,
+                                text: params.term,
+                                newOption: true
+                                        }
+                                },
+                        templateResult: function(data) {
+                                    var $result = $("<span></span>");
+                                        $result.text(data.text);
+                                    // tabindex: 3;
+                                    if (data.newOption)
+                                    {
+                                $result.append(" <em>(new)</em>");
+                                    }
+                                    return $result;
+                                },
+                        escapeMarkup: function(markup) { return markup; }, // let our custom formatter work
+                        minimumInputLength: 2,
+                    }).on('select2:select', function() {
+                        $("#CAddress").focus();
+            });
+        ItemName = $("#ItemName").select2({
+
+                            ajax:
+                                {
+                                url: '@Url.Action("GetItemByName", "SalesInvoice")',
+                            dataType: 'json',
+                            delay: 1000,
+                                data: function (params) {
+                                    //debugger;
+                                        return { searchText: params.term };
+                                    },
+                                processResults: function (data, params) {
+
+                                        return { results: data};
+                                    },
+                            cache: true
+                                },
+                        tags: true,
+                        createTag: function(params) {
+                                    return {
+                                    id: params.term,
+                                text: params.term,
+                                newOption: true
+                                        }
+                                },
+            templateResult: function (data) {
+                //debugger;
+                var $result = $("<span></span>");
+
+                                        $result.text(data.text);
+                // tabindex: 3;
+               // alert(data.text);
+                                    if (data.newOption)
+                                    {
+                                $result.append(" <em>(new)</em>");
+                                    }
+                return $result;
+                //debugger;
+                                },
+                        escapeMarkup: function(markup) { return markup; }, // let our custom formatter work
+                        minimumInputLength: 2,
+                    }).on('select2:select', function() {
+                        $("#qty").focus();
+                });
+        });
+
+        $(document).ready(function () {
+            $("#CAddress").keydown(function (e) {
+                //debugger;
+                if (e.keyCode == 13) {
+                    $("#Phoneno").focus();
+                }
+                //debugger;
+            });
+            $("#Phoneno").keydown(function (e) {
+                //debugger;
+                if (e.keyCode == 13) {
+                    $("#ItemName").focus();
+                }
+                //debugger;
+            });
+            $("#qty").keydown(function (e) {
+                var code = e.keyCode || e.which;
+               // debugger;
+                if (code == 13 || code == 9) { //Enter keycode or Tab keycode
+                    $("#MRP").focus();
+                }
+            });
+
+            $("#MRP").keydown(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13 || code == 9) { //Enter keycode
+                    $("#disc").focus();
+                }
+            });
+        });
+
+    </script>
 }
 

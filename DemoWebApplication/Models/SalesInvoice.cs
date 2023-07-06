@@ -24,6 +24,7 @@ namespace DemoWebApplication.Models
         public Nullable<int> BillDiscount { get; set; }
         public System.DateTime Duedate { get; set; }
         public bool ApplyGst { get; set; }
+        public string CustState { get; set; }
 
         // Sales Details Data
         public int SalesDetailId { get; set; }
@@ -51,9 +52,11 @@ namespace DemoWebApplication.Models
         public Nullable<int> PurchasePrice { get; set; }
 
         //new Added 
+        public string ItemName { get; set; }
         public Double NetAmout { get; set; }
         public Double GstAmount { get; set; }
         public IList<SelectListItem> lst_CustomerNameList { get; set; }
         public IList<SelectListItem> lst_ItemName { get; set; }
+        public IList<SelectListItem> lst_State { get; set; }
     }
 }

@@ -1,221 +1,29 @@
 ﻿@model DemoWebApplication.Models.SalesInvoice
-
-@{
-    Layout = null;
-    if (ViewBag.Message != null)
-    {
-        <script type="text/javascript">
+<html>
+<head>
+    @{
+        Layout = null;
+        if (ViewBag.Message != null)
+        {
+            <script type="text/javascript">
             alert(@Html.Raw(Json.Encode(ViewBag.Message)));
-        </script>
+            </script>
+        }
     }
-}
-<div style="align-content:center"><h3>Sales Invoice</h3></div>
+    <div style="align-content:center"><h3>Sales Invoice</h3></div>
 
-@Styles.Render("~/Content/css")
-@Scripts.Render("~/bundles/modernizr")
-<script src="~/Scripts/MyJs.js"></script>
-<script src="~/Scripts/jquery-3.6.4.min.js"></script>
-<script src="~/Scripts/jquery.validate.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-horizontal col-md-12">
-        <div class="col-md-4">
-            <div class="form-group">
-                @Html.HiddenFor(x => x.Accountnumber)
-                @Html.LabelFor(x => x.Accountname, "Cust. Name", htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(x => x.Accountname, Model.lst_CustomerNameList, "", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(x => x.Accountname, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.CAddress, "Address", htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(x => x.CAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.CAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.Phoneno, "Mobile No", htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(x => x.Phoneno, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.Phoneno, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                @Html.LabelFor(x => x.Billno, "Bill No", htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(x => x.Billno, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.Billno, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.Invoicedate, "Bill Date", htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(x => x.Invoicedate, "", new { htmlAttributes = new { @type = "date", @class = "form-control datepicker", @Value = Model.Invoicedate.ToString("yyyy-MM-dd") } })
-                    @Html.ValidationMessageFor(x => x.Invoicedate, "", new { @class = "text=danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.Duedate, "Due Date", htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(x => x.Duedate, "", new { htmlAttributes = new { @type = "date", @class = "form-control datepicker", @Value = Model.Duedate.ToString("yyyy-MM-dd") } })
-                    @Html.ValidationMessageFor(x => x.Duedate, "", new { @class = "text=danger" })
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                @Html.LabelFor(x => x.Manualno, "Manual No", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(x => x.Manualno, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.Manualno, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.CustState, "State", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.DropDownListFor(x => x.CustState, Model.lst_State, "", new { @class = "form-control", @value = Model.CustState })
-                    @Html.ValidationMessageFor(x => x.CustState, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.PaymentmodeCash, "Payment Mode", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.RadioButtonFor(x => x.PaymentmodeCash, "Cash", new { @checked = "checked" })
-                    @Html.Label("Cash")
-                    @*<label class="btn btn-outline-primary">Cash</label>*@
-                    @Html.RadioButtonFor(x => x.PaymentmodeCash, "Credit")
-                    @Html.Label("Credit")
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4"></label>
-                <div class="col-md-8">
-                    @Html.CheckBoxFor(x => x.ApplyGst)
-                    @Html.Label("Don't Apply Gst")
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <hr />
-    <div class="form-horizontal col-md-12">
-        <div class="form-group col-md-3">
-            @Html.HiddenFor(x => x.Itemdetailid)
-            @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class = "control-label " })
-            @Html.DropDownListFor(x => x.ItemName, Model.lst_ItemName, "", new { @class = "form-control " })
-        </div>
-        <div class="form-group col-md-3">
-            @Html.LabelFor(x => x.qty, "Qty", htmlAttributes: new { @class = "control-label " })
-            @Html.EditorFor(x => x.qty, new { htmlAttributes = new { @class = "form-control " } })
-        </div>
-        <div class="form-group col-md-3">
-            @Html.LabelFor(x => x.MRP, "Price", htmlAttributes: new { @class = "control-label " })
-            @Html.EditorFor(x => x.MRP, new { htmlAttributes = new { @class = "form-control " } })
-        </div>
-        <div class="form-group col-md-3">
-            @Html.LabelFor(x => x.disc, "Disc %", htmlAttributes: new { @class = "control-label " })
-            @Html.EditorFor(x => x.disc, new { htmlAttributes = new { @class = "form-control " } })
-        </div>
-    </div>
-    <div class="col-md-12">
-        @* Grid Design *@
-        <table class="table" border="1" id="tbl_sales">
-            <thead>
-                <tr>
-                    <th>Sr</th>
-                    <th style="display:none">Item Code</th>
-                    <th>Item Name</th>
-                    <th>Batch </th>
-                    <th>Godown</th>
-                    <th>Expiry Date</th>
-                    <th style="display:none">HSN Code</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Disc %</th>
-                    <th>Disc Amt</th>
-                    <th>Net Amt</th>
-                    <th>GST %</th>
-                    <th>IGSTAMT</th>
-                    <th>SGSTAMT</th>
-                    <th>CGSTAMT</th>
-                    <th>Total Amt</th>
-                    <th>MRP</th>
-                    <th>Pur.Prise</th>
-
-                </tr>
-            </thead>
-            <tbody id="tbl_body"></tbody>
-        </table>
-    </div>
-    <div class="form-horizontal col-md-12">
-        @* Footer *@
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <div class="form-group" style="height:35px">
-
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.Paidamount, "Paid Amount", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(x => x.Paidamount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.Paidamount, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.Balanceamount, "Balance Amount", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(x => x.Balanceamount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.Balanceamount, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                @Html.LabelFor(x => x.NetAmout, "Net Amount", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(x => x.NetAmout, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.NetAmout, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.GstAmount, "GST Amount", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(x => x.GstAmount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.GstAmount, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.Totalbillamount, "Total Amount", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(x => x.Totalbillamount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(x => x.Totalbillamount, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="form-horizontal">
-        <div class="col-md-offset-5">
-            <input type="button" id="btn_save" value="Save" />
-        </div>
-    </div>
-
-    <script type="text/javascript">
-
-       
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/MyJs.js"></script>
+    <script src="~/Scripts/jquery-3.6.4.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+   
         $(document).ready(function () {
             $("#CAddress").keydown(function (e) {
                 //debugger;
@@ -246,12 +54,12 @@
                     $("#disc").focus();
                 }
             });
-          
+
         });
 
         $(document).ready(function () {
             var itemname, batch, godown, expdate, HSNCode, Itemtype = ""
-            let Gst,MRP,Disc,PurPrice,salesprice,Qty,DiscPer = 0
+            var Gst, MRP, Disc, PurPrice, salesprice, Qty, DiscAmt = 0
             $('#Accountname').change(function () {
                 var AccountCode = $(this).children('option:selected').val();
                 //alert(AccountCode);
@@ -275,9 +83,9 @@
             $('#disc').keydown(function (e) {
                 if (e.keyCode == 13) {
                     var ItemDetailsCode = $("#ItemName").children('option:selected').val();
-                    //alert(ItemDetailsCode);
+                   // alert(ItemDetailsCode);
                     itemname = $("#ItemName").val();
-                    //alert(itemname);
+                   // alert(itemname);
                     if (itemname == "") {
                         alert("Please Select Valid Item");
                         return;
@@ -286,7 +94,7 @@
                         url: "/SalesInvoice/GetItemsData",
                         type: "post",
                         dataType: "json",
-                        data: { code:ItemDetailsCode},
+                        data: { code: ItemDetailsCode },
                         success: function (result) {
                             //alert("success");
                             debugger;
@@ -296,20 +104,88 @@
                             HSNCode = result.HSNCOde;
                             Itemtype = result.ItemType;
                             Gst = result.Gst;
-                            mrp = result.MRP;
-                            PurPrice = result.PurPrice;
+                            MRP = result.MRP;
+                            PurPrice = PurPrice;
                             Qty = $("#qty").val();
                             salesprice = $("#MRP").val();
-                            DiscPer = $("#disc").val();
+                            Disc = $("#disc").val();
+                            debugger;
+                            var row = $('<tr/>');
+                            
+                            row.append("<td>" + 1 + "</td>");
+                            row.append("<td>" + ItemDetailsCode + "</td>");
+                            row.append("<td>" + itemname + "</td>");
+                            row.append("<td>" + batch + "</td>");
+                            row.append("<td>" + godown + "</td>");
+                            row.append("<td>" + expdate + "</td>");
+                            //row.append("<td>" + HSNCode + "</td>");
+                            row.append("<td>" + '<input type="text"  name="Qty"  value=' + Qty + ' size="2" onchange="calculate(this);">' + "</td>");
+                            row.append("<td>" + '<input type="text"  name="salesprice"  value=' + salesprice + ' size="2">' + "</td>");
+                            row.append("<td>" + '<input type="text"  name="Disc"  value=' + Disc + ' size="2">' + "</td>");
+                            //row.append("<td>" + salesprice + "</td>");
+                            //row.append("<td>" + Disc + "</td>");
+                            row.append("<td>" + 0 + "</td>");
+                            row.append("<td>" + '<label  name="netamt" >' + 0 + '  </label>' + "</td>");
+                            row.append("<td>" + '<label  name="Gst"  >' + Gst + '  </label>' + "</td>");
+                            //row.append("<td>" + Gst + "</td>");
+                            row.append("<td>" + 0 + "</td>");
+                            row.append("<td>" + 0 + "</td>");
+                            row.append("<td>" + 0 + "</td>");
+                            row.append("<td>" + 0 + "</td>");
+                            row.append("<td>" + MRP + "</td>");
+                            row.append("<td>" + PurPrice + "</td>");
+                            $("#tbl_body").append(row);
+
+                            $("#qty").val('');
+                            $("#MRP").val('');
+                            $("#disc").val('');
+                            $("#ItemName").children('option:selected').remove();
+                            calculate();
+                            return false;
                         },
                         error: function (err) {
                             console.log(err);
                             alert("Error");
                         }
                     });
+                   
+                    //var row = "<tr><td>" + 1 + "</td><td>" + ItemDetailsCode + "</td><td>" + itemname + "</td><td>" + batch + "</td><td>" + godown + "</td><td>" + expdate + "</td><td>" + HSNCode + "</td><td>" + Qty + "</td><td>" + salesprice + "</td><td>" + Disc + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + Gst + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + MRP + "</td><td>" + PurPrice + "</td></tr>";
+                    //$("#tbl_body").append(row);
+                    
+                    //var row = "<tr><td>" + 1 + "</td><td>" + ItemDetailsCode + "</td><td>" + itemname + "</td><td>" + batch + "</td><td>" + godown + "</td><td>" + expdate + "</td><td>" + HSNCode + "</td><td>" + Qty + "</td><td>" + salesprice + "</td><td>" + Disc + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + Gst + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + MRP + "</td><td>" + PurPrice + "</td></tr>";
+                    //$("table#tbl_body").append(row);
+
                 }
             });
+            function calculate() {
+                
+                var index = 0;
+                $('table input[type="text"]').click(function () {
+                    debugger;
+                    // Find the index of the clicked input element's parent cell
+                     index = $(this).parent().parent().index();
+                    var qty, salesprice, disc, discamt, Gst, NetAmt, TotalAmt = 0
+                    qty = document.getElementsByName("Qty")[index].value;
+                    salesprice = document.getElementsByName("salesprice")[index].value;
+                    disc = document.getElementsByName("Disc")[index].value;
+                    Gst = document.getElementsByName("Gst")[index].value;
+                    //alert(qty);
+                    document.getElementsByName("netamt")[index].value = qty * salesprice;
+
+                });
+                 
+
+                
+
+            }
+
         });
+    </script>
+    <script type="text/javascript">
+
+
+
+       
         $(document).ready(function () {
         AccountName = $("#Accountname").select2({
 
@@ -396,8 +272,226 @@
                 });
         });
 
-        
+
 
     </script>
-}
+</head>
+<body>
 
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal col-md-12">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.HiddenFor(x => x.Accountnumber)
+                    @Html.LabelFor(x => x.Accountname, "Cust. Name", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(x => x.Accountname, Model.lst_CustomerNameList, "", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Accountname, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CAddress, "Address", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(x => x.CAddress, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.CAddress, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Phoneno, "Mobile No", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(x => x.Phoneno, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.Phoneno, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Billno, "Bill No", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(x => x.Billno, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.Billno, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Invoicedate, "Bill Date", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(x => x.Invoicedate, "", new { htmlAttributes = new { @type = "date", @class = "form-control datepicker", @Value = Model.Invoicedate.ToString("yyyy-MM-dd") } })
+                        @Html.ValidationMessageFor(x => x.Invoicedate, "", new { @class = "text=danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Duedate, "Due Date", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(x => x.Duedate, "", new { htmlAttributes = new { @type = "date", @class = "form-control datepicker", @Value = Model.Duedate.ToString("yyyy-MM-dd") } })
+                        @Html.ValidationMessageFor(x => x.Duedate, "", new { @class = "text=danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Manualno, "Manual No", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.Manualno, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.Manualno, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CustState, "State", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(x => x.CustState, Model.lst_State, "", new { @class = "form-control", @value = Model.CustState })
+                        @Html.ValidationMessageFor(x => x.CustState, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.PaymentmodeCash, "Payment Mode", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.RadioButtonFor(x => x.PaymentmodeCash, "Cash", new { @checked = "checked" })
+                        @Html.Label("Cash")
+                        @*<label class="btn btn-outline-primary">Cash</label>*@
+                        @Html.RadioButtonFor(x => x.PaymentmodeCash, "Credit")
+                        @Html.Label("Credit")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4"></label>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(x => x.ApplyGst)
+                        @Html.Label("Don't Apply Gst")
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr />
+        <div class="form-horizontal col-md-12">
+            <div class="form-group col-md-3">
+                @Html.HiddenFor(x => x.Itemdetailid)
+                @Html.LabelFor(x => x.ItemName, "Item Name", htmlAttributes: new { @class = "control-label " })
+                @Html.DropDownListFor(x => x.ItemName, Model.lst_ItemName, "", new { @class = "form-control " })
+            </div>
+            <div class="form-group col-md-3">
+                @Html.LabelFor(x => x.qty, "Qty", htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(x => x.qty, new { htmlAttributes = new { @class = "form-control " } })
+            </div>
+            <div class="form-group col-md-3">
+                @Html.LabelFor(x => x.MRP, "Price", htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(x => x.MRP, new { htmlAttributes = new { @class = "form-control " } })
+            </div>
+            <div class="form-group col-md-3">
+                @Html.LabelFor(x => x.disc, "Disc %", htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(x => x.disc, new { htmlAttributes = new { @class = "form-control " } })
+            </div>
+        </div>
+        <div class="col-md-12">
+            @* Grid Design *@
+            <table class="table" border="1" id="tbl_sales">
+                <thead>
+                    <tr>
+                        <th>Sr</th>
+                        <th>Item Code</th> @*style="display:none"*@
+                        <th>Item Name</th>
+                        <th>Batch </th>
+                        <th>Godown</th>
+                        <th>Expiry Date</th>
+                        @*<th>HSN Code</th>*@
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Disc %</th>
+                        <th>Disc Amt</th>
+                        <th>Net Amt</th>
+                        <th>GST %</th>
+                        <th>IGSTAMT</th>
+                        <th>SGSTAMT</th>
+                        <th>CGSTAMT</th>
+                        <th>Total Amt</th>
+                        <th>MRP</th>
+                        <th>Pur.Prise</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_body">
+                    @*<tr id="tr_row">
+                        <td>Sr</td>
+                        <td>Item Code</td>
+                        <td>Item Name</td>
+                        <td>Batch </td>
+                        <td>Godown</td>
+                        <td>Expiry Date</td>
+                        <td>HSN Code</td>
+                        <td>Qty</td>
+                        <td>Price</td>
+                        <td>Disc %</td>
+                        <td>Disc Amt</td>
+                        <td>Net Amt</td>
+                        <td>GST %</td>
+                        <td>IGSTAMT</td>
+                        <td>SGSTAMT</td>
+                        <td>CGSTAMT</td>
+                        <td>Total Amt</td>
+                        <td>MRP</td>
+                        <td>Pur.Prise</td>
+                    </tr>*@
+                </tbody>
+
+            </table>
+        </div>
+        <div class="form-horizontal col-md-12">
+            @* Footer *@
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="form-group" style="height:35px">
+
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Paidamount, "Paid Amount", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.Paidamount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.Paidamount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Balanceamount, "Balance Amount", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.Balanceamount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.Balanceamount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.NetAmout, "Net Amount", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.NetAmout, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.NetAmout, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.GstAmount, "GST Amount", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.GstAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.GstAmount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Totalbillamount, "Total Amount", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.Totalbillamount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.Totalbillamount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="col-md-offset-5">
+                <input type="button" id="btn_save" value="Save" />
+            </div>
+        </div>
+
+        
+    }
+</body>
+</html>

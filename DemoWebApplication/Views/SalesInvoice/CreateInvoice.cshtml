@@ -23,7 +23,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
-   
+        var currentrow = 0;
         $(document).ready(function () {
             $("#CAddress").keydown(function (e) {
                 //debugger;
@@ -83,9 +83,9 @@
             $('#disc').keydown(function (e) {
                 if (e.keyCode == 13) {
                     var ItemDetailsCode = $("#ItemName").children('option:selected').val();
-                   // alert(ItemDetailsCode);
+                    // alert(ItemDetailsCode);
                     itemname = $("#ItemName").val();
-                   // alert(itemname);
+                    // alert(itemname);
                     if (itemname == "") {
                         alert("Please Select Valid Item");
                         return;
@@ -110,8 +110,9 @@
                             salesprice = $("#MRP").val();
                             Disc = $("#disc").val();
                             debugger;
+
                             var row = $('<tr/>');
-                            
+
                             row.append("<td>" + 1 + "</td>");
                             row.append("<td>" + ItemDetailsCode + "</td>");
                             row.append("<td>" + itemname + "</td>");
@@ -124,14 +125,14 @@
                             row.append("<td>" + '<input type="text"  name="Disc"  value=' + Disc + ' size="2">' + "</td>");
                             //row.append("<td>" + salesprice + "</td>");
                             //row.append("<td>" + Disc + "</td>");
-                            row.append("<td>" + 0 + "</td>");
-                            row.append("<td>" + '<label  name="netamt" >' + 0 + '  </label>' + "</td>");
-                            row.append("<td>" + '<label  name="Gst"  >' + Gst + '  </label>' + "</td>");
+                            row.append("<td>" + + '<label  name="DiscAmt" >' + 0 + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="netamt" >' + 0 + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="Gst">' + Gst + '</label>' + "</td>");
                             //row.append("<td>" + Gst + "</td>");
-                            row.append("<td>" + 0 + "</td>");
-                            row.append("<td>" + 0 + "</td>");
-                            row.append("<td>" + 0 + "</td>");
-                            row.append("<td>" + 0 + "</td>");
+                            row.append("<td>" + '<label  name="IGstAmt">' + 0 + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="SGstAmt">' + 0 + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="CGstAmt">' + 0 + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="TotalAmt">' + 0 + '</label>' + "</td>");
                             row.append("<td>" + MRP + "</td>");
                             row.append("<td>" + PurPrice + "</td>");
                             $("#tbl_body").append(row);
@@ -148,34 +149,50 @@
                             alert("Error");
                         }
                     });
-                   
+
                     //var row = "<tr><td>" + 1 + "</td><td>" + ItemDetailsCode + "</td><td>" + itemname + "</td><td>" + batch + "</td><td>" + godown + "</td><td>" + expdate + "</td><td>" + HSNCode + "</td><td>" + Qty + "</td><td>" + salesprice + "</td><td>" + Disc + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + Gst + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + MRP + "</td><td>" + PurPrice + "</td></tr>";
                     //$("#tbl_body").append(row);
-                    
+
                     //var row = "<tr><td>" + 1 + "</td><td>" + ItemDetailsCode + "</td><td>" + itemname + "</td><td>" + batch + "</td><td>" + godown + "</td><td>" + expdate + "</td><td>" + HSNCode + "</td><td>" + Qty + "</td><td>" + salesprice + "</td><td>" + Disc + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + Gst + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + 0 + "</td><td>" + MRP + "</td><td>" + PurPrice + "</td></tr>";
                     //$("table#tbl_body").append(row);
 
                 }
             });
+
             function calculate() {
-                
-                var index = 0;
+                var index = currentrow;
+                $('table input[type="text"]').keyup(function (e) {
+                    debugger;
+                    // Find the index of the clicked input element's parent cell
+                    index = $(this).parent().parent().index();
+                    PriceF(index)
+                });
                 $('table input[type="text"]').click(function () {
                     debugger;
                     // Find the index of the clicked input element's parent cell
-                     index = $(this).parent().parent().index();
-                    var qty, salesprice, disc, discamt, Gst, NetAmt, TotalAmt = 0
-                    qty = document.getElementsByName("Qty")[index].value;
-                    salesprice = document.getElementsByName("salesprice")[index].value;
-                    disc = document.getElementsByName("Disc")[index].value;
-                    Gst = document.getElementsByName("Gst")[index].value;
-                    //alert(qty);
-                    document.getElementsByName("netamt")[index].value = qty * salesprice;
-
+                    index = $(this).parent().parent().index();
+                    PriceF(index)
                 });
-                 
 
-                
+            }
+            function PriceF(index) {
+                debugger;
+                var qty, salesprice, disc, DiscAmount, Gst, Sgst, SGSTAmt, IGSTAMT, NetAmt, TotalAmount = 0;
+                qty = document.getElementsByName("Qty")[index].value;
+                salesprice = document.getElementsByName("salesprice")[index].value;
+                disc = document.getElementsByName("Disc")[index].value;
+                Gst = document.getElementsByName("Gst")[index].value;
+                Sgst = Gst / 2;
+                NetAmt = qty * salesprice;
+                DiscAmount = NetAmt * disc / 100;
+                SGSTAmt = (NetAmt - DiscAmount) * (Sgst / 100);
+                TotalAmount = (NetAmt - DiscAmount) + (SGSTAmt * 2);
+                document.getElementsByName("netamt")[index].innerText = NetAmt;
+                document.getElementsByName("SGstAmt")[index].innerText = SGSTAmt;
+                document.getElementsByName("CGstAmt")[index].innerText = SGSTAmt;
+                document.getElementsByName("IGstAmt")[index].innerText = 0;
+                document.getElementsByName("TotalAmt")[index].innerText = TotalAmount;
+                document.getElementsByName("DiscAmt")[index].innerText = DiscAmount;
 
             }
 
@@ -185,7 +202,7 @@
 
 
 
-       
+
         $(document).ready(function () {
         AccountName = $("#Accountname").select2({
 
@@ -413,26 +430,26 @@
                 </thead>
                 <tbody id="tbl_body">
                     @*<tr id="tr_row">
-                        <td>Sr</td>
-                        <td>Item Code</td>
-                        <td>Item Name</td>
-                        <td>Batch </td>
-                        <td>Godown</td>
-                        <td>Expiry Date</td>
-                        <td>HSN Code</td>
-                        <td>Qty</td>
-                        <td>Price</td>
-                        <td>Disc %</td>
-                        <td>Disc Amt</td>
-                        <td>Net Amt</td>
-                        <td>GST %</td>
-                        <td>IGSTAMT</td>
-                        <td>SGSTAMT</td>
-                        <td>CGSTAMT</td>
-                        <td>Total Amt</td>
-                        <td>MRP</td>
-                        <td>Pur.Prise</td>
-                    </tr>*@
+                            <td>Sr</td>
+                            <td>Item Code</td>
+                            <td>Item Name</td>
+                            <td>Batch </td>
+                            <td>Godown</td>
+                            <td>Expiry Date</td>
+                            <td>HSN Code</td>
+                            <td>Qty</td>
+                            <td>Price</td>
+                            <td>Disc %</td>
+                            <td>Disc Amt</td>
+                            <td>Net Amt</td>
+                            <td>GST %</td>
+                            <td>IGSTAMT</td>
+                            <td>SGSTAMT</td>
+                            <td>CGSTAMT</td>
+                            <td>Total Amt</td>
+                            <td>MRP</td>
+                            <td>Pur.Prise</td>
+                        </tr>*@
                 </tbody>
 
             </table>
@@ -491,7 +508,7 @@
             </div>
         </div>
 
-        
+
     }
 </body>
 </html>

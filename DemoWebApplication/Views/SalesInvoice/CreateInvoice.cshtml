@@ -140,7 +140,7 @@
                             var row = $('<tr/>');
                             row.append("<td>" + 1 + "</td>");
                             row.append("<td>" + ItemDetailsCode + "</td>");
-                            row.append("<td>" + itemname + "</td>");
+                            row.append("<td>" + '<label  name="itemname" >' + itemname + '</label>' + "</td>");
                             row.append("<td>" + batch + "</td>");
                             row.append("<td>" + godown + "</td>");
                             row.append("<td>" + expdate + "</td>");
@@ -291,6 +291,7 @@
                 GetTotal();
             });
 
+            
         });
     </script>
     <script type="text/javascript">
@@ -599,11 +600,56 @@
         </div>
         <div class="form-horizontal">
             <div class="col-md-offset-5">
-                <input type="button" id="btn_save" value="Save" />
+                <form action="CreateInvoice" method="post">*
+                    <input type="button" id="btn_save" value="Save" class="btn btn-default" typeof="post" onclick='return  Validation()' />
+                </form>*
             </div>
         </div>
 
 
     }
 </body>
+
 </html>
+<script type="text/javascript">
+    function Validation() {
+        debugger;
+        var AccountCode = "";
+        AccountCode = $("#Accountname").children('option:selected').text();
+        if (AccountCode == "" || AccountCode == "undefined") {
+            alert("Please Select Valid Customer");
+            return false;
+        }
+        else {
+            
+        }
+        var i,rowcount = 0;
+        rowcount = document.getElementsByName("GstPer");
+        if (rowcount.length == 0) {
+            alert("Please enter at list one item");
+            return false;
+        }
+        for (i = 0; i <= rowcount.length - 1; i++) {
+            var Qty = document.getElementsByName("Qty")[i].value;
+            if (Qty == 0) {
+                alert("Please enter Qty for item " + document.getElementsByName("itemname")[i].innerText);
+                return false;
+            }
+            var SalesPrice = document.getElementsByName("salesprice")[i].value;
+            if (SalesPrice == 0) {
+                alert("Please enter Price for item " + document.getElementsByName("itemname")[i].innerText);
+                return false;
+            }
+        }
+        //var formData = $("#myForm").serialize();
+        //$.post("CreateInvoice", formData)
+        //    .done(function (response) {
+        //        // Handle the successful response from the server
+        //        alert("POST request successful");
+        //    })
+        //    .fail(function (xhr, status, error) {
+        //        // Handle any error that occurred during the request
+        //        alert("Error");
+        //    });
+    }
+</script>

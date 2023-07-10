@@ -59,7 +59,7 @@
 
         $(document).ready(function () {
             var itemname, batch, godown, expdate, HSNCode, Itemtype = ""
-            var Gst, MRP, Disc, PurPrice, salesprice, Qty, DiscAmt = 0
+            var Gst, MRP, disc, PurPrice, salesprice, qty, DiscAmt = 0
             $('#Accountname').change(function () {
                 var AccountCode = $(this).children('option:selected').val();
                 //alert(AccountCode);
@@ -105,29 +105,38 @@
                             Itemtype = result.ItemType;
                             Gst = result.Gst;
                             MRP = result.mrp;
+                            expdate = result.expdate;
                             PurPrice = result.purchaseprice;
-                            Qty = $("#qty").val();
+                            qty = $("#qty").val();
                             salesprice = $("#MRP").val();
-                            Disc = $("#disc").val();
+                            disc = $("#disc").val();
+
                             debugger;
                             var state = $('#CustState option:selected').text();
                             var qty, salesprice, disc, DiscAmount, Gst, Sgst, SGSTAmt, IGSTAMT, NetAmt, TotalAmount = 0;
-                            qty = Qty;
-                            salesprice = salesprice;
-                            disc = Disc;
+                            qty = parseFloat(qty) || 0;
+                            salesprice = parseFloat(salesprice) || 0;
+                            disc = parseFloat(disc) || 0;
                             Gst = Gst;
                             Sgst = Gst / 2;
-                            NetAmt = qty * salesprice;
-                            DiscAmount = NetAmt * disc / 100;
-                            if (state == "Maharashtra" || state == "") {
-                                SGSTAmt = (NetAmt - DiscAmount) * (Sgst / 100);
-                                IGSTAMT = 0;
-                            } else {
-                                IGSTAMT = (NetAmt - DiscAmount) * (Gst / 100);
-                                SGSTAmt = 0;
+                            NetAmt = parseFloat((qty * salesprice).toFixed(2));;
+                            DiscAmount = parseFloat((NetAmt * disc / 100).toFixed(2));
+                            var applygst = $("#ApplyGst").prop("checked");
+                            if (applygst) {
+                                SGSTAmt = 0; IGSTAMT = 0;
                             }
-                            TotalAmount = (NetAmt - DiscAmount) + (SGSTAmt * 2);
-                            expdate = "";
+                            else {
+                                if (state == "Maharashtra" || state == "") {
+                                    SGSTAmt = parseFloat(((NetAmt - DiscAmount) * (Sgst / 100)).toFixed(2));
+                                    IGSTAMT = 0;
+                                }
+                                else {
+                                    IGSTAMT = parseFloat(((NetAmt - DiscAmount) * (Gst / 100)).toFixed(2));
+                                    SGSTAmt = 0;
+                                }
+                            }
+
+                            TotalAmount = parseFloat(((NetAmt - DiscAmount) + (SGSTAmt * 2)).toFixed(2));
                             var row = $('<tr/>');
                             row.append("<td>" + 1 + "</td>");
                             row.append("<td>" + ItemDetailsCode + "</td>");
@@ -136,9 +145,9 @@
                             row.append("<td>" + godown + "</td>");
                             row.append("<td>" + expdate + "</td>");
                             //row.append("<td>" + HSNCode + "</td>");
-                            row.append("<td>" + '<input type="text"  name="Qty"  value=' + Qty + ' size="2" onchange="calculate(this);">' + "</td>");
+                            row.append("<td>" + '<input type="text"  name="Qty"  value=' + qty + ' size="2" onchange="calculate(this);">' + "</td>");
                             row.append("<td>" + '<input type="text"  name="salesprice"  value=' + salesprice + ' size="2">' + "</td>");
-                            row.append("<td>" + '<input type="text"  name="Disc"  value=' + Disc + ' size="2">' + "</td>");
+                            row.append("<td>" + '<input type="text"  name="Disc"  value=' + disc + ' size="2">' + "</td>");
                             //row.append("<td>" + salesprice + "</td>");
                             //row.append("<td>" + Disc + "</td>");
                             row.append("<td>" + '<label  name="DiscAmt" >' + DiscAmount + '</label>' + "</td>");
@@ -192,7 +201,7 @@
                     PriceF(index);
                     GetTotal();
                 });
-                
+
             }
             function PriceF(index) {
                 //debugger;
@@ -205,29 +214,36 @@
                 Sgst = Gst / 2;
                 NetAmt = qty * salesprice;
                 DiscAmount = NetAmt * disc / 100;
-                if (state == "Maharashtra" || state == "") {
-                    SGSTAmt = (NetAmt - DiscAmount) * (Sgst / 100);
-                    IGSTAMT = 0;
-                } else {
-                    IGSTAMT = (NetAmt - DiscAmount) * (Gst / 100);
-                    SGSTAmt = 0;
+                var applygst = $("#ApplyGst").prop("checked");
+                if (applygst) {
+                    SGSTAmt = 0; IGSTAMT = 0;
                 }
+                else {
+                    if (state == "Maharashtra" || state == "") {
+                        SGSTAmt = (NetAmt - DiscAmount) * (Sgst / 100);
+                        IGSTAMT = 0;
+                    }
+                    else {
+                        IGSTAMT = (NetAmt - DiscAmount) * (Gst / 100);
+                        SGSTAmt = 0;
+                    }
+                }
+
                 TotalAmount = (NetAmt - DiscAmount) + (SGSTAmt * 2);
-                document.getElementsByName("netamt")[index].innerText = NetAmt;
-                document.getElementsByName("SGstAmt")[index].innerText = SGSTAmt;
-                document.getElementsByName("CGstAmt")[index].innerText = SGSTAmt;
-                document.getElementsByName("IGstAmt")[index].innerText = IGSTAMT;
-                document.getElementsByName("TotalAmt")[index].innerText = TotalAmount;
-                document.getElementsByName("DiscAmt")[index].innerText = DiscAmount;
+                document.getElementsByName("netamt")[index].innerText = parseFloat(NetAmt.toFixed(2));
+                document.getElementsByName("SGstAmt")[index].innerText = parseFloat(SGSTAmt.toFixed(2));
+                document.getElementsByName("CGstAmt")[index].innerText = parseFloat(SGSTAmt.toFixed(2));
+                document.getElementsByName("IGstAmt")[index].innerText = parseFloat(IGSTAMT.toFixed(2));
+                document.getElementsByName("TotalAmt")[index].innerText = parseFloat(TotalAmount.toFixed(2));
+                document.getElementsByName("DiscAmt")[index].innerText = parseFloat(DiscAmount.toFixed(2));
 
             }
             function GetTotal() {
                 debugger;
                 //alert("Get Total Called");
-                let count, i, NetAmount = 0, GstAmount = 0, TotalAmount = 0, paidamount=0,BalanceAmt=0;
+                let count, i, NetAmount = 0, GstAmount = 0, TotalAmount = 0, paidamount = 0, BalanceAmt = 0;
                 count = document.getElementsByName("Qty");
-                for (i = 0; i <= count.length-1; i++)
-                {
+                for (i = 0; i <= count.length - 1; i++) {
                     NetAmount = NetAmount + parseFloat(document.getElementsByName("netamt")[i].innerText);
                     GstAmount = GstAmount + parseFloat(document.getElementsByName("SGstAmt")[i].innerText);
                     GstAmount = GstAmount + parseFloat(document.getElementsByName("CGstAmt")[i].innerText);
@@ -235,7 +251,10 @@
                     TotalAmount = TotalAmount + parseFloat(document.getElementsByName("TotalAmt")[i].innerText);
                 }
                 paidamount = $("#Paidamount").val();
-                BalanceAmt = TotalAmount - paidamount;
+                BalanceAmt = parseFloat((TotalAmount - paidamount).toFixed(2));
+                NetAmount = parseFloat(NetAmount.toFixed(2));
+                GstAmount = parseFloat(GstAmount.toFixed(2));
+                TotalAmount = parseFloat(TotalAmount.toFixed(2));
                 $("#NetAmout").val(NetAmount);
                 $("#GstAmount").val(GstAmount);
                 $("#Totalbillamount").val(TotalAmount);
@@ -252,9 +271,26 @@
                 let TotalAmount = 0, paidamount = 0, BalanceAmt = 0;
                 paidamount = $("#Paidamount").val();
                 TotalAmount = $("#Totalbillamount").val();
-                BalanceAmt = TotalAmount - paidamount;
+                BalanceAmt = parseFloat((TotalAmount - paidamount).toFixed(2));
                 $("#Balanceamount").val(BalanceAmt);
             }
+            $("#CustState").change(function () {
+                let i, count = 0;
+                count = document.getElementsByName("Qty");
+                for (i = 0; i <= count.length - 1; i++) {
+                    PriceF(i)
+                }
+                GetTotal();
+            });
+            $("#ApplyGst").change(function () {
+                let i, count = 0;
+                count = document.getElementsByName("Qty");
+                for (i = 0; i <= count.length - 1; i++) {
+                    PriceF(i)
+                }
+                GetTotal();
+            });
+
         });
     </script>
     <script type="text/javascript">

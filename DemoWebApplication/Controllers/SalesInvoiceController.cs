@@ -140,7 +140,8 @@ namespace DemoWebApplication.Controllers
             obj.closingstock = item.ItemDetail.ClosingStock ?? 0;
             obj.HSNCOde = item.ItemMaster.HSNCODE;
             obj.Gst =Convert.ToDouble( item.ItemMaster.GstPer);
-           
+            string formattedDateString = item.ItemDetail.Expirydate?.ToString("dd-MMM-yyyy");
+            obj.expdate = formattedDateString;
             //obj.expdate = item.ItemDetail.Expirydate?? 0;   
             return Json(obj, JsonRequestBehavior.AllowGet);
         }

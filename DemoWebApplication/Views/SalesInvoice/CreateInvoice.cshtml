@@ -104,15 +104,31 @@
                             HSNCode = result.HSNCOde;
                             Itemtype = result.ItemType;
                             Gst = result.Gst;
-                            MRP = result.MRP;
-                            PurPrice = PurPrice;
+                            MRP = result.mrp;
+                            PurPrice = result.purchaseprice;
                             Qty = $("#qty").val();
                             salesprice = $("#MRP").val();
                             Disc = $("#disc").val();
                             debugger;
-
+                            var state = $('#CustState option:selected').text();
+                            var qty, salesprice, disc, DiscAmount, Gst, Sgst, SGSTAmt, IGSTAMT, NetAmt, TotalAmount = 0;
+                            qty = Qty;
+                            salesprice = salesprice;
+                            disc = Disc;
+                            Gst = Gst;
+                            Sgst = Gst / 2;
+                            NetAmt = qty * salesprice;
+                            DiscAmount = NetAmt * disc / 100;
+                            if (state == "Maharashtra" || state == "") {
+                                SGSTAmt = (NetAmt - DiscAmount) * (Sgst / 100);
+                                IGSTAMT = 0;
+                            } else {
+                                IGSTAMT = (NetAmt - DiscAmount) * (Gst / 100);
+                                SGSTAmt = 0;
+                            }
+                            TotalAmount = (NetAmt - DiscAmount) + (SGSTAmt * 2);
+                            expdate = "";
                             var row = $('<tr/>');
-
                             row.append("<td>" + 1 + "</td>");
                             row.append("<td>" + ItemDetailsCode + "</td>");
                             row.append("<td>" + itemname + "</td>");
@@ -125,14 +141,14 @@
                             row.append("<td>" + '<input type="text"  name="Disc"  value=' + Disc + ' size="2">' + "</td>");
                             //row.append("<td>" + salesprice + "</td>");
                             //row.append("<td>" + Disc + "</td>");
-                            row.append("<td>" + + '<label  name="DiscAmt" >' + 0 + '</label>' + "</td>");
-                            row.append("<td>" + '<label  name="netamt" >' + 0 + '</label>' + "</td>");
-                            row.append("<td>" + '<label  name="Gst">' + Gst + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="DiscAmt" >' + DiscAmount + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="netamt" >' + NetAmt + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="GstPer">' + Gst + '</label>' + "</td>");
                             //row.append("<td>" + Gst + "</td>");
-                            row.append("<td>" + '<label  name="IGstAmt">' + 0 + '</label>' + "</td>");
-                            row.append("<td>" + '<label  name="SGstAmt">' + 0 + '</label>' + "</td>");
-                            row.append("<td>" + '<label  name="CGstAmt">' + 0 + '</label>' + "</td>");
-                            row.append("<td>" + '<label  name="TotalAmt">' + 0 + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="IGstAmt">' + IGSTAMT + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="SGstAmt">' + SGSTAmt + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="CGstAmt">' + SGSTAmt + '</label>' + "</td>");
+                            row.append("<td>" + '<label  name="TotalAmt">' + TotalAmount + '</label>' + "</td>");
                             row.append("<td>" + MRP + "</td>");
                             row.append("<td>" + PurPrice + "</td>");
                             $("#tbl_body").append(row);
@@ -177,20 +193,27 @@
             }
             function PriceF(index) {
                 debugger;
+                var state = $('#CustState option:selected').text();
                 var qty, salesprice, disc, DiscAmount, Gst, Sgst, SGSTAmt, IGSTAMT, NetAmt, TotalAmount = 0;
                 qty = document.getElementsByName("Qty")[index].value;
                 salesprice = document.getElementsByName("salesprice")[index].value;
                 disc = document.getElementsByName("Disc")[index].value;
-                Gst = document.getElementsByName("Gst")[index].value;
+                Gst = document.getElementsByName("GstPer")[index].innerText;
                 Sgst = Gst / 2;
                 NetAmt = qty * salesprice;
                 DiscAmount = NetAmt * disc / 100;
-                SGSTAmt = (NetAmt - DiscAmount) * (Sgst / 100);
+                if (state == "Maharashtra" || state == "") {
+                    SGSTAmt = (NetAmt - DiscAmount) * (Sgst / 100);
+                    IGSTAMT = 0;
+                } else {
+                    IGSTAMT = (NetAmt - DiscAmount) * (Gst / 100);
+                    SGSTAmt = 0;
+                }
                 TotalAmount = (NetAmt - DiscAmount) + (SGSTAmt * 2);
                 document.getElementsByName("netamt")[index].innerText = NetAmt;
                 document.getElementsByName("SGstAmt")[index].innerText = SGSTAmt;
                 document.getElementsByName("CGstAmt")[index].innerText = SGSTAmt;
-                document.getElementsByName("IGstAmt")[index].innerText = 0;
+                document.getElementsByName("IGstAmt")[index].innerText = IGSTAMT;
                 document.getElementsByName("TotalAmt")[index].innerText = TotalAmount;
                 document.getElementsByName("DiscAmt")[index].innerText = DiscAmount;
 
@@ -358,7 +381,7 @@
                 <div class="form-group">
                     @Html.LabelFor(x => x.CustState, "State", htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.DropDownListFor(x => x.CustState, Model.lst_State, "", new { @class = "form-control", @value = Model.CustState })
+                        @Html.DropDownListFor(x => x.CustState, Model.lst_State, Model.CustState, new { @class = "form-control", @value = Model.CustState })
                         @Html.ValidationMessageFor(x => x.CustState, "", new { @class = "text-danger" })
                     </div>
                 </div>

@@ -30,5 +30,7 @@ namespace DemoWebApplication
         public System.DateTime Duedate { get; set; }
         public bool ApplyGst { get; set; }
         public string CustState { get; set; }
+        public Nullable<double> NetBillAmount { get; set; }
+        public Nullable<double> GstAmount { get; set; }
     }
 }

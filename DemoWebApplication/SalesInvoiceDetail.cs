@@ -37,5 +37,9 @@ namespace DemoWebApplication
         public Nullable<int> SrNo { get; set; }
         public Nullable<int> MRP { get; set; }
         public Nullable<int> PurchasePrice { get; set; }
+        public Nullable<int> GST { get; set; }
+        public Nullable<int> IGSTAmt { get; set; }
+        public Nullable<int> IGSTTaxableAmt { get; set; }
+        public Nullable<double> NetAmount { get; set; }
     }
 }

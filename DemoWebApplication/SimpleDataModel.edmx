@@ -96,6 +96,10 @@
           <Property Name="SrNo" Type="int" />
           <Property Name="MRP" Type="int" />
           <Property Name="PurchasePrice" Type="int" />
+          <Property Name="GST" Type="int" />
+          <Property Name="IGSTAmt" Type="int" />
+          <Property Name="IGSTTaxableAmt" Type="int" />
+          <Property Name="NetAmount" Type="float" />
         </EntityType>
         <EntityType Name="SalesInvoiceMaster">
           <Key>
@@ -117,6 +121,8 @@
           <Property Name="Duedate" Type="datetime" Nullable="false" />
           <Property Name="ApplyGst" Type="bit" Nullable="false" />
           <Property Name="CustState" Type="nvarchar" MaxLength="250" />
+          <Property Name="NetBillAmount" Type="float" />
+          <Property Name="GstAmount" Type="float" />
         </EntityType>
         <EntityType Name="UnitMaster">
           <Key>
@@ -269,6 +275,10 @@
           <Property Name="SrNo" Type="Int32" />
           <Property Name="MRP" Type="Int32" />
           <Property Name="PurchasePrice" Type="Int32" />
+          <Property Name="GST" Type="Int32" />
+          <Property Name="IGSTAmt" Type="Int32" />
+          <Property Name="IGSTTaxableAmt" Type="Int32" />
+          <Property Name="NetAmount" Type="Double" />
         </EntityType>
         <EntityType Name="SalesInvoiceMaster">
           <Key>
@@ -290,6 +300,8 @@
           <Property Name="Duedate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ApplyGst" Type="Boolean" Nullable="false" />
           <Property Name="CustState" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NetBillAmount" Type="Double" />
+          <Property Name="GstAmount" Type="Double" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -388,6 +400,10 @@
           <EntitySetMapping Name="SalesInvoiceDetails">
             <EntityTypeMapping TypeName="DemoDbModel.SalesInvoiceDetail">
               <MappingFragment StoreEntitySet="SalesInvoiceDetails">
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="IGSTTaxableAmt" ColumnName="IGSTTaxableAmt" />
+                <ScalarProperty Name="IGSTAmt" ColumnName="IGSTAmt" />
+                <ScalarProperty Name="GST" ColumnName="GST" />
                 <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
                 <ScalarProperty Name="MRP" ColumnName="MRP" />
                 <ScalarProperty Name="SrNo" ColumnName="SrNo" />
@@ -417,6 +433,8 @@
           <EntitySetMapping Name="SalesInvoiceMasters">
             <EntityTypeMapping TypeName="DemoDbModel.SalesInvoiceMaster">
               <MappingFragment StoreEntitySet="SalesInvoiceMaster">
+                <ScalarProperty Name="GstAmount" ColumnName="GstAmount" />
+                <ScalarProperty Name="NetBillAmount" ColumnName="NetBillAmount" />
                 <ScalarProperty Name="CustState" ColumnName="CustState" />
                 <ScalarProperty Name="ApplyGst" ColumnName="ApplyGst" />
                 <ScalarProperty Name="Duedate" ColumnName="Duedate" />

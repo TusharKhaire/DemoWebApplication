@@ -25,6 +25,9 @@ namespace DemoWebApplication.Models
         public System.DateTime Duedate { get; set; }
         public bool ApplyGst { get; set; }
         public string CustState { get; set; }
+        public Nullable<double> NetBillAmount { get; set; }
+        public Nullable<double> GstAmount { get; set; }
+        public bool DontApplyGst { get; set; }
 
         // Sales Details Data
         public int SalesDetailId { get; set; }
@@ -50,11 +53,14 @@ namespace DemoWebApplication.Models
         public Nullable<int> SrNo { get; set; }
         public Nullable<int> MRP { get; set; }
         public Nullable<int> PurchasePrice { get; set; }
+        public Nullable<int> GST { get; set; }
+        public Nullable<int> IGSTAmt { get; set; }
+        public Nullable<int> IGSTTaxableAmt { get; set; }
+        public Nullable<double> NetAmount { get; set; }
+        public Nullable<decimal> totalamount { get; set; }
 
         //new Added 
         public string ItemName { get; set; }
-        public Double NetAmout { get; set; }
-        public Double GstAmount { get; set; }
         public IList<SelectListItem> lst_CustomerNameList { get; set; }
         public IList<SelectListItem> lst_ItemName { get; set; }
         public IList<SelectListItem> lst_State { get; set; }

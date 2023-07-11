@@ -41,5 +41,6 @@ namespace DemoWebApplication
         public Nullable<int> IGSTAmt { get; set; }
         public Nullable<int> IGSTTaxableAmt { get; set; }
         public Nullable<double> NetAmount { get; set; }
+        public Nullable<decimal> totalamount { get; set; }
     }
 }

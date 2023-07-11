@@ -32,5 +32,6 @@ namespace DemoWebApplication
         public string CustState { get; set; }
         public Nullable<double> NetBillAmount { get; set; }
         public Nullable<double> GstAmount { get; set; }
+        public bool DontApplyGst { get; set; }
     }
 }

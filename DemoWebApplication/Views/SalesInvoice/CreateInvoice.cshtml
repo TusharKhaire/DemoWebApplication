@@ -454,7 +454,7 @@
                 <div class="form-group">
                     @Html.LabelFor(x => x.CustState, "State", htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.DropDownListFor(x => x.CustState, Model.lst_State, Model.CustState, new { @class = "form-control", @value = Model.CustState })
+                        @Html.DropDownListFor(x => x.lst_State, Model.lst_State, new { @class = "form-control" })
                         @Html.ValidationMessageFor(x => x.CustState, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -600,9 +600,9 @@
         </div>
         <div class="form-horizontal">
             <div class="col-md-offset-5">
-                <form action="CreateInvoice" method="post">*
+                <form action="CreateInvoice" method="post">
                     <input type="button" id="btn_save" value="Save" class="btn btn-default" typeof="post" onclick='return  Validation()' />
-                </form>*
+                </form>
             </div>
         </div>
 

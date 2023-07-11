@@ -22,6 +22,20 @@ namespace DemoWebApplication.Controllers
             billno = billno.HasValue ? billno + 1 : 1;
             return billno ?? 1;
         }
+        //NonAction method can not used as like ActionMethod.   
+        //This is used for processing and functionalities purpose.  
+        [NonAction]
+        public SelectList ToSelectList(List<SelectList> lstState)
+        {
+            List<SelectListItem> stateList = new List<SelectListItem>();
+
+            stateList.Add(new SelectListItem { Text = "Maharashtra", Value = "1" });
+            stateList.Add(new SelectListItem { Text = "MP", Value = "2" });
+            stateList.Add(new SelectListItem { Text = "AP", Value = "3" });
+            stateList.Add(new SelectListItem { Text = "UP", Value = "4" });
+            stateList.Add(new SelectListItem { Text = "Goa", Value = "5" });
+            return new SelectList(stateList, "Value", "Text");
+        }
         public ActionResult CreateInvoice()
         {
             ViewBag.Message = null;
@@ -40,13 +54,9 @@ namespace DemoWebApplication.Controllers
                 lst_Item.Add(new SelectListItem { Text = x.ItemMaster.ItemName, Value = x.ItemDetail.ItemdetailId.ToString() });
             });
             viewmodel.lst_ItemName = lst_Item;
-            List<SelectListItem> stateList = new List<SelectListItem>();
-            stateList.Add(new SelectListItem { Text = "Maharashtra", Value = "1" });
-            stateList.Add(new SelectListItem { Text = "MP", Value = "2" });
-            stateList.Add(new SelectListItem { Text = "AP", Value = "3" });
-            stateList.Add(new SelectListItem { Text = "UP", Value = "4" });
-            stateList.Add(new SelectListItem { Text = "Goa", Value = "5" });
-            viewmodel.lst_State = stateList;
+            List<SelectList> lstState = new List<SelectList>();
+            SelectList result = ToSelectList(lstState);
+            viewmodel.lst_State = result.ToList();
             viewmodel.Billno = BillNumber();
             viewmodel.Invoicedate = System.DateTime.Now;
             viewmodel.Duedate = DateTime.Now;

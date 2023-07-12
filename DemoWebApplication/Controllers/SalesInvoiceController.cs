@@ -66,8 +66,9 @@ namespace DemoWebApplication.Controllers
         [HttpPost]
 
         //
-        public ActionResult CreateInvoice(int Accountnumber, String Accountname, String CAddress, long Phoneno, String Billno, DateTime Invoicedate, DateTime Duedate, int Manualno, String CustState, String Paymentmode, bool ApplyGst, String PaidAmount, String BalanceAmount, String NetBillAmount, String GstAmount, String TotalbillAmount, SalesInvoiceDetail[] order)
-        {
+        public ActionResult CreateInvoice(int Accountnumber, String Accountname, String CAddress, long Phoneno, String Billno, DateTime Invoicedate, DateTime Duedate, int Manualno, String CustState, String Paymentmode, bool DontApplyGst, String BillDiscount, String PaidAmount, String BalanceAmount, String NetBillAmount, String GstAmount, String TotalbillAmount, SalesInvoiceDetail[] order)
+         {
+            ViewBag.Message = null;
             if (Accountname != null && order != null)
             {
                 SalesInvoiceMaster data = new SalesInvoiceMaster();
@@ -93,14 +94,13 @@ namespace DemoWebApplication.Controllers
                     data.PaymentmodeCash = Convert.ToString(1);
                 else
                     data.PaymentmodeCash = Convert.ToString(0);
-                data.ApplyGst = ApplyGst;
-                data.NetBillAmount = Convert.ToDouble(NetBillAmount);
-                data.GstAmount = Convert.ToDouble(GstAmount);
-                //data.Totalbillamount = Convert.ToDouble(TotalbillAmount);
-                data.Totalbillamount = Convert.ToInt32(Convert.ToDouble(TotalbillAmount)); // Rounding
-                data.Paidamount = Convert.ToInt32(PaidAmount);
-                //data.Balanceamount = Convert.ToInt32(BalanceAmount);
-                data.Balanceamount = Convert.ToInt32(Convert.ToDouble(BalanceAmount)); // Rounding
+                data.DontApplyGst = DontApplyGst;
+                data.BillDiscount =Convert.ToDecimal(BillDiscount);
+                data.NetBillAmount =Convert.ToDecimal(NetBillAmount);
+                data.GstAmount = Convert.ToDecimal(GstAmount);
+                data.Totalbillamount = Convert.ToDecimal(TotalbillAmount);
+                data.Paidamount = Convert.ToDecimal(PaidAmount);
+                data.Balanceamount = Convert.ToDecimal(BalanceAmount); 
                 dbcon.SalesInvoiceMasters.Add(data);
                 dbcon.SaveChanges();
 
@@ -113,6 +113,7 @@ namespace DemoWebApplication.Controllers
                     var godown = dbcon.GodownMasters.Where(x => x.GodownName == item.Godown).FirstOrDefault();
                     var itemdetail = dbcon.ItemDetails.Where(x => x.ItemdetailId == item.Itemdetailid).FirstOrDefault();
                     var itemmaster = dbcon.ItemMasters.Where(x => x.ItemCode == itemdetail.ItemMasterId).FirstOrDefault();
+                    id.SrNo = item.SrNo;
                     id.Itemdetailid = item.Itemdetailid;
                     id.Batchno = Convert.ToString(batch.BatchId);
                     id.Godown = Convert.ToString(godown.GodownId);
@@ -122,6 +123,7 @@ namespace DemoWebApplication.Controllers
                     id.disc = item.disc;
                     id.discamt = item.discamt;
                     id.NetAmount = item.NetAmount;
+                    id.totalamount = item.totalamount;
                     id.HSNCode = itemmaster.HSNCODE;
                     id.MRP = itemdetail.MRP;
                     id.PurchasePrice = itemdetail.PurchasePrice;
@@ -147,6 +149,8 @@ namespace DemoWebApplication.Controllers
                     dbcon.SaveChanges();
                 }
             }
+            ModelState.Clear();
+            ViewBag.Message = "Invoice Saved";
             return RedirectToAction("CreateInvoice");
         }
 

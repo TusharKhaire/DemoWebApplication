@@ -255,31 +255,30 @@
           <Property Name="SalesDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Accountnumber" Type="Int32" />
           <Property Name="Billno" Type="Int32" />
+          <Property Name="SrNo" Type="Int32" />
           <Property Name="Itemdetailid" Type="Int32" />
           <Property Name="Batchno" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Godown" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Expirydate" Type="DateTime" Precision="3" />
           <Property Name="qty" Type="Int32" />
-          <Property Name="salesprice" Type="Int32" />
-          <Property Name="disc" Type="Int32" />
-          <Property Name="discamt" Type="Int32" />
-          <Property Name="total" Type="Int32" />
-          <Property Name="SGST" Type="Int32" />
-          <Property Name="CGST" Type="Int32" />
-          <Property Name="IGST" Type="Int32" />
-          <Property Name="HSNCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="SGSTAmt" Type="Int32" />
-          <Property Name="SGSTTaxableAmt" Type="Int32" />
-          <Property Name="CGSTAmt" Type="Int32" />
-          <Property Name="CGSTTaxableAmt" Type="Int32" />
-          <Property Name="SrNo" Type="Int32" />
-          <Property Name="MRP" Type="Int32" />
-          <Property Name="PurchasePrice" Type="Int32" />
-          <Property Name="GST" Type="Int32" />
-          <Property Name="IGSTAmt" Type="Int32" />
-          <Property Name="IGSTTaxableAmt" Type="Int32" />
-          <Property Name="NetAmount" Type="Double" />
+          <Property Name="salesprice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="disc" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="discamt" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="totalamount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NetAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HSNCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="GST" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SGST" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CGST" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IGST" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SGSTAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SGSTTaxableAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CGSTAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CGSTTaxableAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IGSTAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IGSTTaxableAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MRP" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PurchasePrice" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="SalesInvoiceMaster">
           <Key>
@@ -291,19 +290,18 @@
           <Property Name="Billno" Type="Int32" Nullable="false" />
           <Property Name="Invoicedate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="PaymentmodeCash" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Totalbillamount" Type="Int32" />
-          <Property Name="Paidamount" Type="Int32" />
-          <Property Name="Balanceamount" Type="Int32" />
           <Property Name="CAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Phoneno" Type="Int64" />
           <Property Name="Manualno" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="BillDiscount" Type="Int32" />
           <Property Name="Duedate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ApplyGst" Type="Boolean" Nullable="false" />
-          <Property Name="CustState" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="NetBillAmount" Type="Double" />
-          <Property Name="GstAmount" Type="Double" />
           <Property Name="DontApplyGst" Type="Boolean" Nullable="false" />
+          <Property Name="CustState" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NetBillAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="GstAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Totalbillamount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BillDiscount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Paidamount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Balanceamount" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -402,22 +400,21 @@
           <EntitySetMapping Name="SalesInvoiceDetails">
             <EntityTypeMapping TypeName="DemoDbModel.SalesInvoiceDetail">
               <MappingFragment StoreEntitySet="SalesInvoiceDetails">
-                <ScalarProperty Name="totalamount" ColumnName="totalamount" />
-                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
-                <ScalarProperty Name="IGSTTaxableAmt" ColumnName="IGSTTaxableAmt" />
-                <ScalarProperty Name="IGSTAmt" ColumnName="IGSTAmt" />
-                <ScalarProperty Name="GST" ColumnName="GST" />
                 <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
                 <ScalarProperty Name="MRP" ColumnName="MRP" />
-                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+                <ScalarProperty Name="IGSTTaxableAmt" ColumnName="IGSTTaxableAmt" />
+                <ScalarProperty Name="IGSTAmt" ColumnName="IGSTAmt" />
                 <ScalarProperty Name="CGSTTaxableAmt" ColumnName="CGSTTaxableAmt" />
                 <ScalarProperty Name="CGSTAmt" ColumnName="CGSTAmt" />
                 <ScalarProperty Name="SGSTTaxableAmt" ColumnName="SGSTTaxableAmt" />
                 <ScalarProperty Name="SGSTAmt" ColumnName="SGSTAmt" />
-                <ScalarProperty Name="HSNCode" ColumnName="HSNCode" />
                 <ScalarProperty Name="IGST" ColumnName="IGST" />
                 <ScalarProperty Name="CGST" ColumnName="CGST" />
                 <ScalarProperty Name="SGST" ColumnName="SGST" />
+                <ScalarProperty Name="GST" ColumnName="GST" />
+                <ScalarProperty Name="HSNCode" ColumnName="HSNCode" />
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="totalamount" ColumnName="totalamount" />
                 <ScalarProperty Name="discamt" ColumnName="discamt" />
                 <ScalarProperty Name="disc" ColumnName="disc" />
                 <ScalarProperty Name="salesprice" ColumnName="salesprice" />
@@ -426,6 +423,7 @@
                 <ScalarProperty Name="Godown" ColumnName="Godown" />
                 <ScalarProperty Name="Batchno" ColumnName="Batchno" />
                 <ScalarProperty Name="Itemdetailid" ColumnName="Itemdetailid" />
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
                 <ScalarProperty Name="Billno" ColumnName="Billno" />
                 <ScalarProperty Name="Accountnumber" ColumnName="Accountnumber" />
                 <ScalarProperty Name="SalesDetailId" ColumnName="SalesDetailId" />
@@ -435,18 +433,18 @@
           <EntitySetMapping Name="SalesInvoiceMasters">
             <EntityTypeMapping TypeName="DemoDbModel.SalesInvoiceMaster">
               <MappingFragment StoreEntitySet="SalesInvoiceMaster">
-                <ScalarProperty Name="DontApplyGst" ColumnName="DontApplyGst" />
+                <ScalarProperty Name="Balanceamount" ColumnName="Balanceamount" />
+                <ScalarProperty Name="Paidamount" ColumnName="Paidamount" />
+                <ScalarProperty Name="BillDiscount" ColumnName="BillDiscount" />
+                <ScalarProperty Name="Totalbillamount" ColumnName="Totalbillamount" />
                 <ScalarProperty Name="GstAmount" ColumnName="GstAmount" />
                 <ScalarProperty Name="NetBillAmount" ColumnName="NetBillAmount" />
                 <ScalarProperty Name="CustState" ColumnName="CustState" />
+                <ScalarProperty Name="DontApplyGst" ColumnName="DontApplyGst" />
                 <ScalarProperty Name="Duedate" ColumnName="Duedate" />
-                <ScalarProperty Name="BillDiscount" ColumnName="BillDiscount" />
                 <ScalarProperty Name="Manualno" ColumnName="Manualno" />
                 <ScalarProperty Name="Phoneno" ColumnName="Phoneno" />
                 <ScalarProperty Name="CAddress" ColumnName="CAddress" />
-                <ScalarProperty Name="Balanceamount" ColumnName="Balanceamount" />
-                <ScalarProperty Name="Paidamount" ColumnName="Paidamount" />
-                <ScalarProperty Name="Totalbillamount" ColumnName="Totalbillamount" />
                 <ScalarProperty Name="PaymentmodeCash" ColumnName="PaymentmodeCash" />
                 <ScalarProperty Name="Invoicedate" ColumnName="Invoicedate" />
                 <ScalarProperty Name="Billno" ColumnName="Billno" />

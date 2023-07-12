@@ -216,7 +216,7 @@
                 Sgst = Gst / 2;
                 NetAmt = qty * salesprice;
                 DiscAmount = NetAmt * disc / 100;
-                var applygst = $("#ApplyGst").prop("checked");
+                var applygst = $("#DontApplyGst").prop("checked");
                 if (applygst) {
                     SGSTAmt = 0; IGSTAMT = 0;
                 }
@@ -243,7 +243,7 @@
             function GetTotal() {
                 debugger;
                 //alert("Get Total Called");
-                let count, i, NetAmount = 0, GstAmount = 0, TotalAmount = 0, paidamount = 0, BalanceAmt = 0;
+                let count, i, NetAmount = 0, GstAmount = 0, TotalAmount = 0, paidamount = 0, BalanceAmt = 0, BillDiscount=0;
                 count = document.getElementsByName("Qty");
                 for (i = 0; i <= count.length - 1; i++) {
                     NetAmount = NetAmount + parseFloat(document.getElementsByName("netamt")[i].innerText);
@@ -251,6 +251,7 @@
                     GstAmount = GstAmount + parseFloat(document.getElementsByName("CGstAmt")[i].innerText);
                     GstAmount = GstAmount + parseFloat(document.getElementsByName("IGstAmt")[i].innerText);
                     TotalAmount = TotalAmount + parseFloat(document.getElementsByName("TotalAmt")[i].innerText);
+                    BillDiscount = BillDiscount + parseFloat(document.getElementsByName("DiscAmt")[i].innerText);
                       
                 }
                 paidamount = $("#Paidamount").val();
@@ -258,10 +259,12 @@
                 NetAmount = parseFloat(NetAmount.toFixed(2));
                 GstAmount = parseFloat(GstAmount.toFixed(2));
                 TotalAmount = parseFloat(TotalAmount.toFixed(2));
-                $("#NetAmout").val(NetAmount);
+                BillDiscount = parseFloat(BillDiscount.toFixed(2));
+                $("#NetBillAmount").val(NetAmount);
                 $("#GstAmount").val(GstAmount);
                 $("#Totalbillamount").val(TotalAmount);
                 $("#Balanceamount").val(BalanceAmt);
+                $("#BillDiscount").val(BillDiscount);
             }
             $("#Paidamount").change(function () {
                 Calculate_BalanceAmt();
@@ -277,7 +280,7 @@
                 BalanceAmt = parseFloat((TotalAmount - paidamount).toFixed(2));
                 $("#Balanceamount").val(BalanceAmt);
             }
-            $("#CustState").change(function () {
+            $("#lst_State").change(function () {
                 let i, count = 0;
                 count = document.getElementsByName("Qty");
                 for (i = 0; i <= count.length - 1; i++) {
@@ -285,7 +288,7 @@
                 }
                 GetTotal();
             });
-            $("#ApplyGst").change(function () {
+            $("#DontApplyGst").change(function () {
                 let i, count = 0;
                 count = document.getElementsByName("Qty");
                 for (i = 0; i <= count.length - 1; i++) {
@@ -474,7 +477,7 @@
                 <div class="form-group">
                     <label class="col-md-4"></label>
                     <div class="col-md-8">
-                        @Html.CheckBoxFor(x => x.ApplyGst)
+                        @Html.CheckBoxFor(x => x.DontApplyGst)
                         @Html.Label("Don't Apply Gst")
                     </div>
                 </div>
@@ -557,8 +560,14 @@
             @* Footer *@
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <div class="form-group" style="height:35px">
-
+                <div class="form-group">
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.BillDiscount, "Bill Discount", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(x => x.BillDiscount, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(x => x.BillDiscount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.Paidamount, "Paid Amount", htmlAttributes: new { @class = "control-label col-md-4" })
@@ -578,10 +587,10 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.NetAmout, "Net Amount", htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.LabelFor(x => x.NetBillAmount, "Net Amount", htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.EditorFor(x => x.NetAmout, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(x => x.NetAmout, "", new { @class = "text-danger" })
+                        @Html.EditorFor(x => x.NetBillAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(x => x.NetBillAmount, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -656,18 +665,16 @@
                 Batchno: $(this).find('td:eq(3)').html(),
                 Godown: $(this).find('td:eq(4)').html(),
                 Expirydate: $(this).find('td:eq(5)').html(),
-                //qty: $(this).find('.Qty').val(),
                 qty: document.getElementsByName("Qty")[i].value,
-                //salesprice: $(this).find('.salesprice').val(),
                 salesprice: document.getElementsByName("salesprice")[i].value,
-                //disc: $(this).find('#Disc').val(),
                 disc: document.getElementsByName("Disc")[i].value,
                 discamt: document.getElementsByName("DiscAmt")[i].innerText,
                 GST: document.getElementsByName("GstPer")[i].innerText,
                 SGSTAmt: document.getElementsByName("SGstAmt")[i].innerText,
                 CGSTAmt: document.getElementsByName("CGstAmt")[i].innerText,
                 IGSTAmt: document.getElementsByName("IGstAmt")[i].innerText,
-                total: document.getElementsByName("TotalAmt")[i].innerText,
+                totalamount: document.getElementsByName("TotalAmt")[i].innerText,
+                NetAmount: document.getElementsByName("netamt")[i].innerText,
                 MRP: $(this).find('td:eq(16)').html(),
                 PurchasePrice: $(this).find('td:eq(17)').html()
             });
@@ -682,12 +689,13 @@
             Invoicedate: $("#Invoicedate").val(),
             Duedate: $('#Duedate').val(),
             Manualno: $("#Manualno").val() || 0,
-            CustState: $("#CustState option:selected").text(),
+            CustState: $("#lst_State option:selected").text(),
             Paymentmode: $("#PaymentmodeCash").val(),
-            ApplyGst: $("#ApplyGst").prop("checked"),
+            DontApplyGst: $("#DontApplyGst").prop("checked"),
+            BillDiscount: $("#BillDiscount").val() || 0,
             Paidamount: $("#Paidamount").val() || 0,
             Balanceamount: $("#Balanceamount").val(),
-            NetAmout: $("#NetAmout").val(),
+            NetAmout: $("#NetBillAmount").val(),
             GstAmount: $("#GstAmount").val() || 0,
             Totalbillamount: $("#Totalbillamount").val(),
             order: salesdetails

@@ -17,30 +17,29 @@ namespace DemoWebApplication
         public int SalesDetailId { get; set; }
         public Nullable<int> Accountnumber { get; set; }
         public Nullable<int> Billno { get; set; }
+        public Nullable<int> SrNo { get; set; }
         public Nullable<int> Itemdetailid { get; set; }
         public string Batchno { get; set; }
         public string Godown { get; set; }
         public Nullable<System.DateTime> Expirydate { get; set; }
         public Nullable<int> qty { get; set; }
-        public Nullable<int> salesprice { get; set; }
-        public Nullable<int> disc { get; set; }
-        public Nullable<int> discamt { get; set; }
-        public Nullable<int> total { get; set; }
-        public Nullable<int> SGST { get; set; }
-        public Nullable<int> CGST { get; set; }
-        public Nullable<int> IGST { get; set; }
-        public string HSNCode { get; set; }
-        public Nullable<int> SGSTAmt { get; set; }
-        public Nullable<int> SGSTTaxableAmt { get; set; }
-        public Nullable<int> CGSTAmt { get; set; }
-        public Nullable<int> CGSTTaxableAmt { get; set; }
-        public Nullable<int> SrNo { get; set; }
-        public Nullable<int> MRP { get; set; }
-        public Nullable<int> PurchasePrice { get; set; }
-        public Nullable<int> GST { get; set; }
-        public Nullable<int> IGSTAmt { get; set; }
-        public Nullable<int> IGSTTaxableAmt { get; set; }
-        public Nullable<double> NetAmount { get; set; }
+        public Nullable<decimal> salesprice { get; set; }
+        public Nullable<decimal> disc { get; set; }
+        public Nullable<decimal> discamt { get; set; }
         public Nullable<decimal> totalamount { get; set; }
+        public Nullable<decimal> NetAmount { get; set; }
+        public string HSNCode { get; set; }
+        public Nullable<decimal> GST { get; set; }
+        public Nullable<decimal> SGST { get; set; }
+        public Nullable<decimal> CGST { get; set; }
+        public Nullable<decimal> IGST { get; set; }
+        public Nullable<decimal> SGSTAmt { get; set; }
+        public Nullable<decimal> SGSTTaxableAmt { get; set; }
+        public Nullable<decimal> CGSTAmt { get; set; }
+        public Nullable<decimal> CGSTTaxableAmt { get; set; }
+        public Nullable<decimal> IGSTAmt { get; set; }
+        public Nullable<decimal> IGSTTaxableAmt { get; set; }
+        public Nullable<decimal> MRP { get; set; }
+        public Nullable<decimal> PurchasePrice { get; set; }
     }
 }

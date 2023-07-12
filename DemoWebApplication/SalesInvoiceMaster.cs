@@ -20,18 +20,17 @@ namespace DemoWebApplication
         public int Billno { get; set; }
         public System.DateTime Invoicedate { get; set; }
         public string PaymentmodeCash { get; set; }
-        public Nullable<int> Totalbillamount { get; set; }
-        public Nullable<int> Paidamount { get; set; }
-        public Nullable<int> Balanceamount { get; set; }
         public string CAddress { get; set; }
         public Nullable<long> Phoneno { get; set; }
         public string Manualno { get; set; }
-        public Nullable<int> BillDiscount { get; set; }
         public System.DateTime Duedate { get; set; }
-        public bool ApplyGst { get; set; }
-        public string CustState { get; set; }
-        public Nullable<double> NetBillAmount { get; set; }
-        public Nullable<double> GstAmount { get; set; }
         public bool DontApplyGst { get; set; }
+        public string CustState { get; set; }
+        public Nullable<decimal> NetBillAmount { get; set; }
+        public Nullable<decimal> GstAmount { get; set; }
+        public Nullable<decimal> Totalbillamount { get; set; }
+        public Nullable<decimal> BillDiscount { get; set; }
+        public Nullable<decimal> Paidamount { get; set; }
+        public Nullable<decimal> Balanceamount { get; set; }
     }
 }

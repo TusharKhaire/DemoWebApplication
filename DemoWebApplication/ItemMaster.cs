@@ -20,7 +20,6 @@ namespace DemoWebApplication
         public int ItemType { get; set; }
         public string HSNCODE { get; set; }
         public string GstPer { get; set; }
-
         public string TypeName { get; set; }
         public IList<SelectListItem> itemtypes { get; set; }
     }

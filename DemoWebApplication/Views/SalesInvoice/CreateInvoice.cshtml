@@ -112,7 +112,7 @@
                             disc = $("#disc").val();
 
                             debugger;
-                            var state = $('#CustState option:selected').text();
+                            var state = $('#lst_State option:selected').text();
                             var qty, salesprice, disc, DiscAmount, Gst, Sgst, SGSTAmt, IGSTAMT, NetAmt, TotalAmount = 0;
                             qty = parseFloat(qty) || 0;
                             salesprice = parseFloat(salesprice) || 0;
@@ -121,7 +121,7 @@
                             Sgst = Gst / 2;
                             NetAmt = parseFloat((qty * salesprice).toFixed(2));;
                             DiscAmount = parseFloat((NetAmt * disc / 100).toFixed(2));
-                            var applygst = $("#ApplyGst").prop("checked");
+                            var applygst = $("#DontApplyGst").prop("checked");
                             if (applygst) {
                                 SGSTAmt = 0; IGSTAMT = 0;
                             }
@@ -207,7 +207,7 @@
             }
             function PriceF(index) {
                 //debugger;
-                var state = $('#CustState option:selected').text();
+                var state = $('#lst_State option:selected').text();
                 var qty, salesprice, disc, DiscAmount, Gst, Sgst, SGSTAmt, IGSTAMT, NetAmt, TotalAmount = 0;
                 qty = document.getElementsByName("Qty")[index].value;
                 salesprice = document.getElementsByName("salesprice")[index].value;
@@ -243,7 +243,7 @@
             function GetTotal() {
                 debugger;
                 //alert("Get Total Called");
-                let count, i, NetAmount = 0, GstAmount = 0, TotalAmount = 0, paidamount = 0, BalanceAmt = 0, BillDiscount=0;
+                let count, i, NetAmount = 0, GstAmount = 0, TotalAmount = 0, paidamount = 0, BalanceAmt = 0, BillDiscount = 0;
                 count = document.getElementsByName("Qty");
                 for (i = 0; i <= count.length - 1; i++) {
                     NetAmount = NetAmount + parseFloat(document.getElementsByName("netamt")[i].innerText);
@@ -252,7 +252,7 @@
                     GstAmount = GstAmount + parseFloat(document.getElementsByName("IGstAmt")[i].innerText);
                     TotalAmount = TotalAmount + parseFloat(document.getElementsByName("TotalAmt")[i].innerText);
                     BillDiscount = BillDiscount + parseFloat(document.getElementsByName("DiscAmt")[i].innerText);
-                      
+
                 }
                 paidamount = $("#Paidamount").val();
                 BalanceAmt = parseFloat((TotalAmount - paidamount).toFixed(2));
@@ -297,7 +297,7 @@
                 GetTotal();
             });
 
-            
+
         });
     </script>
     <script type="text/javascript">
@@ -399,6 +399,14 @@
 
     @using (Html.BeginForm())
     {
+
+        if (ViewBag.Message != null)
+        {
+            <script type="text/javascript">
+                alert(@Html.Raw(Json.Encode(ViewBag.Message)));
+            </script>
+        }
+
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-horizontal col-md-12">
@@ -430,7 +438,7 @@
                 <div class="form-group">
                     @Html.LabelFor(x => x.Billno, "Bill No", htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(x => x.Billno, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(x => x.Billno, new { htmlAttributes = new { @class = "form-control", ReadOnly = "True" } })
                         @Html.ValidationMessageFor(x => x.Billno, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -470,7 +478,7 @@
                         @Html.RadioButtonFor(x => x.PaymentmodeCash, "Cash", new { @checked = "checked" })
                         @Html.Label("Cash")
                         @*<label class="btn btn-outline-primary">Cash</label>*@
-                        @Html.RadioButtonFor(x => x.PaymentmodeCash, "Credit")
+                        @Html.RadioButtonFor(x => x.PaymentmodeCash, "Credit", new { })
                         @Html.Label("Credit")
                     </div>
                 </div>
@@ -561,12 +569,10 @@
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <div class="form-group">
-                        @Html.LabelFor(x => x.BillDiscount, "Bill Discount", htmlAttributes: new { @class = "control-label col-md-4" })
-                        <div class="col-md-8">
-                            @Html.EditorFor(x => x.BillDiscount, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(x => x.BillDiscount, "", new { @class = "text-danger" })
-                        </div>
+                    @Html.LabelFor(x => x.BillDiscount, "Bill Discount", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.BillDiscount, new { htmlAttributes = new { @class = "form-control", ReadOnly = "True" } })
+                        @Html.ValidationMessageFor(x => x.BillDiscount, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -579,7 +585,7 @@
                 <div class="form-group">
                     @Html.LabelFor(x => x.Balanceamount, "Balance Amount", htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.EditorFor(x => x.Balanceamount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(x => x.Balanceamount, new { htmlAttributes = new { @class = "form-control", ReadOnly = "True" } })
                         @Html.ValidationMessageFor(x => x.Balanceamount, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -589,21 +595,21 @@
                 <div class="form-group">
                     @Html.LabelFor(x => x.NetBillAmount, "Net Amount", htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.EditorFor(x => x.NetBillAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(x => x.NetBillAmount, new { htmlAttributes = new { @class = "form-control", ReadOnly = "True" } })
                         @Html.ValidationMessageFor(x => x.NetBillAmount, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.GstAmount, "GST Amount", htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.EditorFor(x => x.GstAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(x => x.GstAmount, new { htmlAttributes = new { @class = "form-control", ReadOnly = "True" } })
                         @Html.ValidationMessageFor(x => x.GstAmount, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.Totalbillamount, "Total Amount", htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.EditorFor(x => x.Totalbillamount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(x => x.Totalbillamount, new { htmlAttributes = new { @class = "form-control", ReadOnly = "True" } })
                         @Html.ValidationMessageFor(x => x.Totalbillamount, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -613,7 +619,7 @@
         <div class="form-horizontal">
             <div class="col-md-offset-5">
                 <form action="CreateInvoice" method="post">
-                    <input type="button" id="btn_save" value="Save" class="btn btn-default" typeof="post"  />
+                    <input type="button" id="btn_save" value="Save" class="btn btn-default" typeof="post" />
                 </form>
             </div>
         </div>
@@ -719,7 +725,7 @@
 
         //saveOrder(formData);
 
-        
+
 
         $.when(saveOrder(formData)).then(function (response) {
             console.log(response);

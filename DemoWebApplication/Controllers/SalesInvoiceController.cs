@@ -129,8 +129,17 @@ namespace DemoWebApplication.Controllers
                     id.PurchasePrice = itemdetail.PurchasePrice;
                     id.GST = item.GST;
                     id.IGST = item.GST;
-                    id.SGST = item.GST / 2;
-                    id.CGST = item.GST / 2;
+                    if (DontApplyGst)
+                    {
+                        id.SrNo = 0;id.CGST = 0;
+                        id.IGST = 0;
+                    }
+                    else
+                    {
+                        id.SGST = item.GST / 2;
+                        id.CGST = item.GST / 2;
+                    }
+                    
                     id.SGSTAmt = item.SGSTAmt;
                     id.CGSTAmt = item.CGSTAmt;
                     id.IGSTAmt = item.IGSTAmt;

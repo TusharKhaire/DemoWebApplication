@@ -701,7 +701,7 @@
             BillDiscount: $("#BillDiscount").val() || 0,
             Paidamount: $("#Paidamount").val() || 0,
             Balanceamount: $("#Balanceamount").val(),
-            NetAmout: $("#NetBillAmount").val(),
+            NetBillAmount: $("#NetBillAmount").val(),
             GstAmount: $("#GstAmount").val() || 0,
             Totalbillamount: $("#Totalbillamount").val(),
             order: salesdetails
@@ -746,10 +746,12 @@
             url: "/SalesInvoice/CreateInvoice",
             data: data,
             success: function (result) {
+                debugger;
                 alert("Success");
                 location.reload();
             },
-            error: function () {
+            error: function (err) {
+                debugger;
                 alert("Error!");
             }
         });

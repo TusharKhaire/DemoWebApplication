@@ -1,0 +1,77 @@
+﻿@*@model IEnumerable<DemoWebApplication.SalesInvoiceMaster>*@
+@model IPagedList<DemoWebApplication.SalesInvoiceMaster>
+
+@using PagedList;
+@using PagedList.Mvc;
+<h2>sales Data</h2>
+@{
+    if (ViewBag.Message != null)
+    {
+        <script>
+            alert(@Html.Raw(Json.Encode(ViewBag.Message)));
+        </script>
+    }
+    int srno =1+ Model.PageSize*(Model.PageNumber-1);
+}
+@Html.AntiForgeryToken()
+<p>
+    @Html.ActionLink("Create Invoice", "CreateInvoice")
+</p>
+
+<table class="table" style="border:0.5px">
+    <thead>
+        <tr>
+            <th>@Html.DisplayName("SrNo") </th>
+            <th>@Html.DisplayNameFor(x => x.First().Billno)</th>
+            <th>@Html.DisplayName("Date")</th>
+            <th>@Html.DisplayName("Name")</th>
+            <th>@Html.DisplayName("Payment Mode")</th>
+            <th>@Html.DisplayName("Net Amount")</th>
+            <th>@Html.DisplayNameFor(x => x.First().BillDiscount)</th>
+            <th>@Html.DisplayNameFor(x => x.First().GstAmount)</th>
+            <th>@Html.DisplayNameFor(x => x.First().Totalbillamount)</th>
+            <th>@Html.DisplayNameFor(x => x.First().Paidamount)</th>
+            <th>@Html.DisplayNameFor(x => x.First().Balanceamount)</th>
+            <th>@Html.DisplayName("  Action  ") </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var bill in Model)
+        {
+            <tr>
+                <td>@srno</td>
+                <td>@Html.DisplayFor(x => bill.Billno)</td>
+                <td>@Html.DisplayFor(x => bill.Invoicedate, "{0:dd/MMM/yyyy}")</td>
+                <td>@Html.DisplayFor(x => bill.Accountname)</td>
+                <td>
+                    @{ if (bill.PaymentmodeCash == "1")
+                        {
+                            @Html.DisplayName("Cash")
+                        }
+                        else
+                        { @Html.DisplayName("Credit")}
+                    }
+                </td>
+                <td>@Html.DisplayFor(x => bill.NetBillAmount)</td>
+                <td>@Html.DisplayFor(x => bill.BillDiscount)</td>
+                <td>@Html.DisplayFor(x => bill.GstAmount)</td>
+                <td>@Html.DisplayFor(x => bill.Totalbillamount)</td>
+                <td>@Html.DisplayFor(x => bill.Paidamount)</td>
+                <td>@Html.DisplayFor(x => bill.Balanceamount)</td>
+                <td>
+                    <input type="button" id="btn_Edit" value="Edit" class="btn btn-default"  />
+                    <input type="button" value="Delete" id="btn_Delete" class="btn btn-default" onclick="window.location.href='@Url.Action("ShowAllInvoice","SalesInvoice")'" />
+                </td>
+            </tr>
+            srno += 1;
+        }
+    </tbody>
+
+</table>
+@Html.PagedListPager(Model, i => Url.Action("ShowAllInvoice", "SalesInvoice", new { i }))
+@*@Html.PagedListPager(Model, i => Url.Action("Index", "ItemDetail", new { i, search = Request.QueryString["search"] }))*@
+
+<script>
+
+</script>

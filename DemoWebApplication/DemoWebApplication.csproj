@@ -280,6 +280,7 @@
     <Content Include="Views\ItemDetail\Index.cshtml" />
     <Content Include="Views\ItemDetail\Create.cshtml" />
     <Content Include="Views\SalesInvoice\CreateInvoice.cshtml" />
+    <Content Include="Views\SalesInvoice\ShowAllInvoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

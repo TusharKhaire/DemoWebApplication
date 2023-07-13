@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,6 +14,7 @@ namespace DemoWebApplication.Models
         public int Accountnumber { get; set; }
         public string Accountname { get; set; }
         public int Billno { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public System.DateTime Invoicedate { get; set; }
         public string PaymentmodeCash { get; set; }
         public Nullable<int> Totalbillamount { get; set; }

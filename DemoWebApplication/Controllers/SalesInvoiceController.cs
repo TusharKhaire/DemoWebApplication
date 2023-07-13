@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DemoWebApplication.Models;
+using PagedList;
+using PagedList.Mvc;
 
 namespace DemoWebApplication.Controllers
 {
@@ -64,8 +66,6 @@ namespace DemoWebApplication.Controllers
             return View(viewmodel);
         }
         [HttpPost]
-
-        //
         public ActionResult CreateInvoice(int Accountnumber, String Accountname, String CAddress, long Phoneno, String Billno, DateTime Invoicedate, DateTime Duedate, int Manualno, String CustState, String Paymentmode, bool DontApplyGst, String BillDiscount, String PaidAmount, String BalanceAmount, String NetBillAmount, String GstAmount, String TotalbillAmount, SalesInvoiceDetail[] order)
          {
             ViewBag.Message = null;
@@ -160,7 +160,13 @@ namespace DemoWebApplication.Controllers
             }
             ModelState.Clear();
             ViewBag.Message = "Invoice Saved";
-            return RedirectToAction("CreateInvoice");
+            return Json(new { success = true, message = "Invoice created successfully" });
+           // return RedirectToAction("CreateInvoice");
+        }
+        public ActionResult ShowAllInvoice(int?i)
+        {
+            var SalesData = dbcon.SalesInvoiceMasters.ToList();
+            return View(SalesData.ToPagedList(i??1,5));
         }
 
         public JsonResult GetCustomerName(string searchText)

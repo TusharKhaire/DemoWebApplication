@@ -618,9 +618,9 @@
         </div>
         <div class="form-horizontal">
             <div class="col-md-offset-5">
-                <form action="CreateInvoice" method="post">
-                    <input type="button" id="btn_save" value="Save" class="btn btn-default" typeof="post" />
-                </form>
+                <input type="button" id="btn_save" value="Save" class="btn btn-default" typeof="post" />
+                <input type="button" value="Show All" id="btn_ShowAll" class="btn btn-default" onclick="window.location.href='@Url.Action("ShowAllInvoice","SalesInvoice")'" />
+
             </div>
         </div>
 
@@ -714,16 +714,10 @@
         //    })
         //    .fail(function (xhr, status, error) {
         //        // Handle any error that occurred during the request
-        //        alert("Error");
+        //        debugger;
+        //        Console.log(error);
+        //        alert("Error in post request");
         //    });
-
-        //$.when(saveOrder(data)).then(function (response) {
-        //    console.log(response);
-        //}).fail(function (err) {
-        //    console.log(err);
-        //    });
-
-        //saveOrder(formData);
 
 
 
@@ -747,7 +741,7 @@
             data: data,
             success: function (result) {
                 debugger;
-                alert("Success");
+                alert(result.message);
                 location.reload();
             },
             error: function (err) {

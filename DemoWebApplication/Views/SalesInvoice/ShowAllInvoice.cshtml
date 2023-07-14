@@ -60,7 +60,7 @@
                 <td>@Html.DisplayFor(x => bill.Paidamount)</td>
                 <td>@Html.DisplayFor(x => bill.Balanceamount)</td>
                 <td>
-                    <input type="button" id="btn_Edit" value="Edit" class="btn btn-default" />
+                    <input type="button" id="btn_Edit" value="Edit" class="btn btn-default" onclick='return Edit(@bill.Billno)' />
                     <input type="button" value="Delete" id="btn_Delete" class="btn btn-default" onclick='return Validation(@bill.Billno)' />
                 </td>
             </tr>
@@ -94,6 +94,30 @@
         }
         else {
             return false;
+        }
+    }
+
+    function Edit(billno) {
+        debugger;
+        if (confirm("Do you want to Modify invoice no " + billno) == true) {
+            var url = '/SalesInvoice/Edit?id=' + encodeURIComponent(billno);
+            // Redirect to the specified URL
+            window.location.href = url;
+
+            //$.post("Edit", { id: billno })
+            //.done(function (response) {
+            //    // Handle the successful response from the server
+            //    alert("POST request successful");
+            //})
+            //.fail(function (xhr, status, error) {
+            //    // Handle any error that occurred during the request
+            //    debugger;
+            //    Console.log(error);
+            //    alert("Error in post request");
+            //});
+        }
+        else {
+
         }
     }
 </script>

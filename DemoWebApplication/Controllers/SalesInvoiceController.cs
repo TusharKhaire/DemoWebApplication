@@ -186,6 +186,61 @@ namespace DemoWebApplication.Controllers
                 msg = "Invoice Not Found";
             }
             return Json(new {success=true, message = msg },JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Edit(int id)
+        {
+            string msg = string.Empty;
+            var salesmaster = dbcon.SalesInvoiceMasters.SingleOrDefault(x => x.Billno == id);
+            var salesDetails = dbcon.SalesInvoiceDetails.Where(x => x.Billno == id).ToList();
+            if (salesmaster != null && salesDetails != null)
+            {
+                ViewBag.Message = null;
+                SalesInvoice viewmodel = new SalesInvoice();
+                List<SelectListItem> lst_Cust = new List<SelectListItem>();
+                List<AccountMaster> custNamelist = dbcon.AccountMasters.ToList();
+                custNamelist.ForEach(x =>
+                {
+                    lst_Cust.Add(new SelectListItem { Text = x.AccountName, Value = x.AccountCode.ToString() });
+                });
+                viewmodel.lst_CustomerNameList = lst_Cust;
+                List<SelectListItem> lst_Item = new List<SelectListItem>();
+                var itemnames = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId, (a, b) => new { ItemMaster = a, ItemDetail = b }).ToList();
+                itemnames.ForEach(x =>
+                {
+                    lst_Item.Add(new SelectListItem { Text = x.ItemMaster.ItemName, Value = x.ItemDetail.ItemdetailId.ToString() });
+                });
+                viewmodel.lst_ItemName = lst_Item;
+                List<SelectList> lstState = new List<SelectList>();
+                SelectList result = ToSelectList(lstState);
+                viewmodel.lst_State = result.ToList();
+                viewmodel.Accountname = salesmaster.Accountname;
+                viewmodel.Accountnumber = salesmaster.Accountnumber;
+                viewmodel.CAddress = salesmaster.CAddress;
+                viewmodel.Phoneno = salesmaster.Phoneno;
+                viewmodel.Billno =salesmaster.Billno;
+                viewmodel.Invoicedate =salesmaster.Invoicedate;
+                viewmodel.Duedate = salesmaster.Duedate;
+                viewmodel.Manualno = salesmaster.Manualno;
+                viewmodel.CustState = salesmaster.CustState;
+                viewmodel.PaymentmodeCash = salesmaster.PaymentmodeCash;
+                viewmodel.DontApplyGst = salesmaster.DontApplyGst;
+
+                viewmodel.BillDiscount = salesmaster.BillDiscount;
+                viewmodel.Paidamount = salesmaster.Paidamount;
+                viewmodel.Balanceamount = salesmaster.Balanceamount;
+                viewmodel.NetBillAmount = salesmaster.NetBillAmount;
+                viewmodel.GstAmount = salesmaster.GstAmount;
+                viewmodel.Totalbillamount = viewmodel.Totalbillamount;
+
+                //viewmodel.Salesdetails = salesDetails;
+                return View("CreateInvoice", viewmodel);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+            //return RedirectToAction("CreateInvoice");
+            //return Json("Called",JsonRequestBehavior.AllowGet);
 
         }
 

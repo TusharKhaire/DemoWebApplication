@@ -11,7 +11,7 @@
             alert(@Html.Raw(Json.Encode(ViewBag.Message)));
         </script>
     }
-    int srno =1+ Model.PageSize*(Model.PageNumber-1);
+    int srno = 1 + Model.PageSize * (Model.PageNumber - 1);
 }
 @Html.AntiForgeryToken()
 <p>
@@ -60,8 +60,8 @@
                 <td>@Html.DisplayFor(x => bill.Paidamount)</td>
                 <td>@Html.DisplayFor(x => bill.Balanceamount)</td>
                 <td>
-                    <input type="button" id="btn_Edit" value="Edit" class="btn btn-default"  />
-                    <input type="button" value="Delete" id="btn_Delete" class="btn btn-default" onclick="window.location.href='@Url.Action("ShowAllInvoice","SalesInvoice")'" />
+                    <input type="button" id="btn_Edit" value="Edit" class="btn btn-default" />
+                    <input type="button" value="Delete" id="btn_Delete" class="btn btn-default" onclick='return Validation(@bill.Billno)' />
                 </td>
             </tr>
             srno += 1;
@@ -73,5 +73,27 @@
 @*@Html.PagedListPager(Model, i => Url.Action("Index", "ItemDetail", new { i, search = Request.QueryString["search"] }))*@
 
 <script>
-
+    function Validation(billno) {
+        if (confirm("Do you want to delete invoice no " + billno) == true) {
+            //return true;
+            $.ajax({
+                url: "/SalesInvoice/DeleteInvoice",
+                type: "post",
+                dataType: "json",
+                data: { id: billno },
+                success: function (result) {
+                    debugger;
+                    alert(result.message);
+                    location.reload();
+                },
+                error: function (err) {
+                    debugger;
+                    alert("Error occur in delete ");
+                }
+            });
+        }
+        else {
+            return false;
+        }
+    }
 </script>

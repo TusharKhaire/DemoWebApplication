@@ -158,8 +158,8 @@ namespace DemoWebApplication.Controllers
                     dbcon.SaveChanges();
                 }
             }
-            ModelState.Clear();
-            ViewBag.Message = "Invoice Saved";
+            //ModelState.Clear();
+            //ViewBag.Message = "Invoice Saved";
             return Json(new { success = true, message = "Invoice created successfully" });
            // return RedirectToAction("CreateInvoice");
         }
@@ -167,6 +167,26 @@ namespace DemoWebApplication.Controllers
         {
             var SalesData = dbcon.SalesInvoiceMasters.ToList();
             return View(SalesData.ToPagedList(i??1,5));
+        }
+        [HttpPost]
+        public JsonResult DeleteInvoice(int id)
+        {
+            string msg=string.Empty;
+            var salesmaster = dbcon.SalesInvoiceMasters.SingleOrDefault(x => x.Billno == id);
+            var salesDetails = dbcon.SalesInvoiceDetails.SingleOrDefault(x => x.Billno == id);
+            if(salesmaster !=null && salesDetails != null)
+            {
+                dbcon.SalesInvoiceMasters.Remove(salesmaster);
+                dbcon.SalesInvoiceDetails.Remove(salesDetails);
+                dbcon.SaveChanges();
+                msg = "Invoice Delete successfully";
+            }
+            else
+            {
+                msg = "Invoice Not Found";
+            }
+            return Json(new {success=true, message = msg },JsonRequestBehavior.AllowGet);
+
         }
 
         public JsonResult GetCustomerName(string searchText)

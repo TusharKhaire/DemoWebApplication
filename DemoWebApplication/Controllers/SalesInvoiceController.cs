@@ -63,6 +63,9 @@ namespace DemoWebApplication.Controllers
             viewmodel.Invoicedate = System.DateTime.Now;
             viewmodel.Duedate = DateTime.Now;
             viewmodel.CustState = "Maharashtra";
+            viewmodel.SalesMasterId = 0;
+            List<string[]> salesDetailsArray = new List<string[]>();
+            viewmodel.Salesdetails = salesDetailsArray;
             return View(viewmodel);
         }
         [HttpPost]
@@ -231,8 +234,23 @@ namespace DemoWebApplication.Controllers
                 viewmodel.NetBillAmount = salesmaster.NetBillAmount;
                 viewmodel.GstAmount = salesmaster.GstAmount;
                 viewmodel.Totalbillamount = viewmodel.Totalbillamount;
+                viewmodel.SalesMasterId = salesmaster.SalesMasterId;
+                //viewmodel.Salesdetails = salesDetails.ToArray();
+                List<string[]> salesDetailsArray = new List<string[]>();
+                foreach (var details in salesDetails)
+                {
+                    var itemData = dbcon.ItemMasters.Join(dbcon.ItemDetails, a => a.ItemCode, b => b.ItemMasterId, (a, b) => new { ItemMaster = a, ItemDetail = b }).Where(x => x.ItemDetail.ItemdetailId==details.Itemdetailid).SingleOrDefault();
+                    int godownid = Convert.ToInt32(details.Godown);
+                    var godowndata = dbcon.GodownMasters.Where(x => x.GodownId == godownid).FirstOrDefault();
+                    DateTime? expiryDate = details.Expirydate;
+                        string[] detailsArray = new string[] {details.SrNo.ToString(), Convert.ToString(details.Itemdetailid), itemData.ItemMaster.ItemName, itemData.ItemDetail.BatchName, godowndata.GodownName, expiryDate.ToString(),details.qty.ToString(),details.salesprice.ToString(),
+                        details.disc.ToString(),details.discamt.ToString(),details.NetAmount.ToString(),details.GST.ToString(),details.IGSTAmt.ToString(),details.SGSTAmt.ToString(),details.CGSTAmt.ToString(),details.totalamount.ToString(),details.MRP.ToString(),details.PurchasePrice.ToString()};
+                    salesDetailsArray.Add(detailsArray);
+                }
 
-                //viewmodel.Salesdetails = salesDetails;
+                viewmodel.Salesdetails = salesDetailsArray;
+
+
                 return View("CreateInvoice", viewmodel);
             }
             else

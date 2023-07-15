@@ -66,6 +66,6 @@ namespace DemoWebApplication.Models
         public IList<SelectListItem> lst_CustomerNameList { get; set; }
         public IList<SelectListItem> lst_ItemName { get; set; }
         public IList<SelectListItem> lst_State { get; set; }
-        public List<SelectList> Salesdetails { get; set; }  // 14-07-2023  add bt not in use
+        public List<string[]> Salesdetails { get; set; }  
     }
 }

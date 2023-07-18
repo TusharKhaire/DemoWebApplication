@@ -58,14 +58,6 @@
         });
 
         $(document).ready(function () {
-            alert("hi 1");
-            let i, count = 0;
-            debugger;
-            count = document.getElementsByName("Qty");
-            for (i = 0; i <= count.length - 1; i++) {
-                PriceF(i)
-            }
-            GetTotal();
 
             var itemname, batch, godown, expdate, HSNCode, Itemtype = ""
             var Gst, MRP, disc, PurPrice, salesprice, qty, DiscAmt = 0
@@ -171,6 +163,7 @@
                             row.append("<td>" + '<label  name="TotalAmt">' + TotalAmount + '</label>' + "</td>");
                             row.append("<td>" + MRP + "</td>");
                             row.append("<td>" + PurPrice + "</td>");
+                            row.append("<td>" + '<input type="button" class="btnDeleteRow" name="btn_ClrRow" value=X size="2">' + "</td>");
                             $("#tbl_body").append(row);
 
                             $("#qty").val('');
@@ -305,7 +298,12 @@
                 }
                 GetTotal();
             });
-
+           
+            $("#tbl_sales").on('click', '.btnDeleteRow', function () {
+                $(this).closest('tr').remove();
+                GetTotal();
+                //debugger;
+            });
 
         });
     </script>
@@ -545,6 +543,7 @@
                         <th>Total Amt</th>
                         <th>MRP</th>
                         <th>Pur.Prise</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="tbl_body">
@@ -559,17 +558,18 @@
                             <td>@item[4]</td>
                             <td>@item[5]</td>
                             <td><input type=text name=Qty value=@item[6] size=2></td>
-                            <td><input type="text" name="salesprice" value=@item[7] size=2></td>
-                            <td><input type="text" name="Disc" value=@item[8] size=2></td>
-                            <td><label name="DiscAmt">@item[9]</label></td>
-                            <td><label name="netamt">@item[10]</label></td>
-                            <td><label name="GstPer">@item[11]</label></td>
-                            <td><label name="IGstAmt">@item[12]</label></td>
-                            <td><label name="SGstAmt">@item[13]</label></td>
-                            <td><label name="CGstAmt">@item[14]</label></td>
-                            <td><label name="TotalAmt">@item[15]</label></td>
+                            <td><input type=text name=salesprice value=@item[7] size=2></td>
+                            <td><input type=text name=Disc value=@item[8] size=2></td>
+                            <td><label name=DiscAmt>@item[9]</label></td>
+                            <td><label name=netamt>@item[10]</label></td>
+                            <td><label name=GstPer>@item[11]</label></td>
+                            <td><label name=IGstAmt>@item[12]</label></td>
+                            <td><label name=SGstAmt>@item[13]</label></td>
+                            <td><label name=CGstAmt>@item[14]</label></td>
+                            <td><label name=TotalAmt>@item[15]</label></td>
                             <td>@item[16]</td>
                             <td>@item[17]</td>
+                            <td><input type=button class=btnDeleteRow name=btn_ClrRow value=X size=2></td>
                         </tr>
                     }
                 </tbody>

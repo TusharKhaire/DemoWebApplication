@@ -148,9 +148,9 @@
                             row.append("<td>" + godown + "</td>");
                             row.append("<td>" + expdate + "</td>");
                             //row.append("<td>" + HSNCode + "</td>");
-                            row.append("<td>" + '<input type="text"  name="Qty"  value=' + qty + ' size="2" onchange="calculate(this);">' + "</td>");
-                            row.append("<td>" + '<input type="text"  name="salesprice"  value=' + salesprice + ' size="2">' + "</td>");
-                            row.append("<td>" + '<input type="text"  name="Disc"  value=' + disc + ' size="2">' + "</td>");
+                            row.append("<td>" + '<input type="text" class="Qty" name="Qty"  value=' + qty + ' size="2" onchange="calculate(this);">' + "</td>");
+                            row.append("<td>" + '<input type="text" class="salesprice" name="salesprice"  value=' + salesprice + ' size="2">' + "</td>");
+                            row.append("<td>" + '<input type="text" class="Disc" name="Disc"  value=' + disc + ' size="2">' + "</td>");
                             //row.append("<td>" + salesprice + "</td>");
                             //row.append("<td>" + Disc + "</td>");
                             row.append("<td>" + '<label  name="DiscAmt" >' + DiscAmount + '</label>' + "</td>");
@@ -301,6 +301,25 @@
            
             $("#tbl_sales").on('click', '.btnDeleteRow', function () {
                 $(this).closest('tr').remove();
+                GetTotal();
+                //debugger;
+            });
+            $("#tbl_sales").on('keyup', '.Qty', function () {
+                var index = $(this).parent().parent().index();
+                PriceF(index)
+                GetTotal();
+            });
+            $("#tbl_sales").on('keyup', '.salesprice', function () {
+                //$(this).closest('tr').remove();
+                var index = $(this).parent().parent().index();
+                PriceF(index)
+                GetTotal();
+                //debugger;
+            });
+            $("#tbl_sales").on('keyup', '.Disc', function () {
+                //$(this).closest('tr').remove();
+                var index = $(this).parent().parent().index();
+                PriceF(index)
                 GetTotal();
                 //debugger;
             });
@@ -557,9 +576,9 @@
                             <td>@item[3]</td>
                             <td>@item[4]</td>
                             <td>@item[5]</td>
-                            <td><input type=text name=Qty value=@item[6] size=2></td>
-                            <td><input type=text name=salesprice value=@item[7] size=2></td>
-                            <td><input type=text name=Disc value=@item[8] size=2></td>
+                            <td><input type=text class=Qty name=Qty value=@item[6] size=2></td>
+                            <td><input type=text class=salesprice name=salesprice value=@item[7] size=2></td>
+                            <td><input type=text class=Disc name=Disc value=@item[8] size=2></td>
                             <td><label name=DiscAmt>@item[9]</label></td>
                             <td><label name=netamt>@item[10]</label></td>
                             <td><label name=GstPer>@item[11]</label></td>
@@ -717,6 +736,7 @@
             NetBillAmount: $("#NetBillAmount").val(),
             GstAmount: $("#GstAmount").val() || 0,
             Totalbillamount: $("#Totalbillamount").val(),
+            SalesMasterId: $("#SalesMasterId").val(),
             order: salesdetails
         });
 
@@ -751,11 +771,20 @@
             success: function (result) {
                 debugger;
                 alert(result.message);
-                location.reload();
+                if (result.message == "Invoice created successfully") {
+                    location.reload();
+                }
+                else if (result.message == "Invoice Modify successfully") {
+                    var link = '@Url.Action("ShowAllInvoice", "SalesInvoice")';  // url should be enclosed by single quotes.
+                    //return JavaScript(window.location.href = link.redirecturl); // your action should return an object having [redirecturl] property
+                    return JavaScript("window.location = '" + Url.Action("ShowAllInvoice", "SalesInvoice") + "'");
+                    //return Json(new { result = "Redirect", url = Url.Action("ShowAllInvoice", "SalesInvoice") });
+                }
+                
             },
-            error: function (err) {
+            error: function (httpRequest, textStatus, errorThrown) {
                 debugger;
-                alert("Error!");
+                alert("Error!" + textStatus + " " + errorThrown + " " + httpRequest);
             }
         });
     }

@@ -69,9 +69,11 @@ namespace DemoWebApplication.Controllers
             return View(viewmodel);
         }
         [HttpPost]
-        public ActionResult CreateInvoice(int Accountnumber, String Accountname, String CAddress, long Phoneno, String Billno, DateTime Invoicedate, DateTime Duedate, int Manualno, String CustState, String Paymentmode, bool DontApplyGst, String BillDiscount, String PaidAmount, String BalanceAmount, String NetBillAmount, String GstAmount, String TotalbillAmount, SalesInvoiceDetail[] order)
+        public ActionResult CreateInvoice(int Accountnumber, String Accountname, String CAddress, long Phoneno, String Billno, DateTime Invoicedate, DateTime Duedate, int Manualno, String CustState, String Paymentmode, bool DontApplyGst, String BillDiscount, String PaidAmount, String BalanceAmount, String NetBillAmount, String GstAmount, String TotalbillAmount, int SalesMasterId, SalesInvoiceDetail[] order)
          {
             ViewBag.Message = null;
+            if(SalesMasterId == 0)
+            {
             if (Accountname != null && order != null)
             {
                 SalesInvoiceMaster data = new SalesInvoiceMaster();
@@ -164,7 +166,112 @@ namespace DemoWebApplication.Controllers
             //ModelState.Clear();
             //ViewBag.Message = "Invoice Saved";
             return Json(new { success = true, message = "Invoice created successfully" });
-           // return RedirectToAction("CreateInvoice");
+                // return RedirectToAction("CreateInvoice");
+            }
+            else
+            {
+                int billno = Convert.ToInt32(Billno);
+                var salesmaster = dbcon.SalesInvoiceMasters.SingleOrDefault(x => x.Billno == billno);
+                var salesitemDetails = dbcon.SalesInvoiceDetails.Where(x => x.Billno == billno).FirstOrDefault();
+                if (salesmaster != null && salesitemDetails != null)
+                {
+                    dbcon.SalesInvoiceMasters.Remove(salesmaster);
+                    dbcon.SalesInvoiceDetails.Remove(salesitemDetails);
+                    dbcon.SaveChanges();
+
+                    SalesInvoiceMaster data = new SalesInvoiceMaster();
+                    data.Accountnumber = Accountnumber;
+                    data.Accountname = Accountname;
+                    data.CAddress = CAddress;
+                    if (Phoneno == 0)
+                        data.Phoneno = null;
+                    else
+                        data.Phoneno = Phoneno;
+                    data.Billno = Convert.ToInt32(Billno);
+                    data.Invoicedate = Invoicedate;
+                    data.Duedate = Duedate;
+                    if (Manualno == 0)
+                        data.Manualno = null;
+                    else
+                        data.Manualno = Convert.ToString(Manualno);
+                    if (CustState == "")
+                        data.CustState = "Maharashtra";
+                    else
+                        data.CustState = CustState;
+                    if (Paymentmode == "Cash")
+                        data.PaymentmodeCash = Convert.ToString(1);
+                    else
+                        data.PaymentmodeCash = Convert.ToString(0);
+                    data.DontApplyGst = DontApplyGst;
+                    data.BillDiscount = Convert.ToDecimal(BillDiscount);
+                    data.NetBillAmount = Convert.ToDecimal(NetBillAmount);
+                    data.GstAmount = Convert.ToDecimal(GstAmount);
+                    data.Totalbillamount = Convert.ToDecimal(TotalbillAmount);
+                    data.Paidamount = Convert.ToDecimal(PaidAmount);
+                    data.Balanceamount = Convert.ToDecimal(BalanceAmount);
+                    dbcon.SalesInvoiceMasters.Add(data);
+                    dbcon.SaveChanges();
+
+                    foreach (var item in order)
+                    {
+                        SalesInvoiceDetail id = new SalesInvoiceDetail();
+                        id.Accountnumber = Accountnumber;
+                        id.Billno = Convert.ToInt32(Billno);
+                        var batch = dbcon.BatchMasters.Where(x => x.BatchName == item.Batchno).FirstOrDefault();
+                        var godown = dbcon.GodownMasters.Where(x => x.GodownName == item.Godown).FirstOrDefault();
+                        var itemdetail = dbcon.ItemDetails.Where(x => x.ItemdetailId == item.Itemdetailid).FirstOrDefault();
+                        var itemmaster = dbcon.ItemMasters.Where(x => x.ItemCode == itemdetail.ItemMasterId).FirstOrDefault();
+                        id.SrNo = item.SrNo;
+                        id.Itemdetailid = item.Itemdetailid;
+                        id.Batchno = Convert.ToString(batch.BatchId);
+                        id.Godown = Convert.ToString(godown.GodownId);
+                        id.Expirydate = item.Expirydate;
+                        id.qty = item.qty;
+                        id.salesprice = item.salesprice;
+                        id.disc = item.disc;
+                        id.discamt = item.discamt;
+                        id.NetAmount = item.NetAmount;
+                        id.totalamount = item.totalamount;
+                        id.HSNCode = itemmaster.HSNCODE;
+                        id.MRP = itemdetail.MRP;
+                        id.PurchasePrice = itemdetail.PurchasePrice;
+                        id.GST = item.GST;
+                        id.IGST = item.GST;
+                        if (DontApplyGst)
+                        {
+                            id.SrNo = 0; id.CGST = 0;
+                            id.IGST = 0;
+                        }
+                        else
+                        {
+                            id.SGST = item.GST / 2;
+                            id.CGST = item.GST / 2;
+                        }
+
+                        id.SGSTAmt = item.SGSTAmt;
+                        id.CGSTAmt = item.CGSTAmt;
+                        id.IGSTAmt = item.IGSTAmt;
+                        id.SGSTTaxableAmt = Convert.ToInt32(item.NetAmount - item.discamt);
+                        id.CGSTTaxableAmt = Convert.ToInt32(item.NetAmount - item.discamt);
+                        if (item.IGSTAmt == 0)
+                        {
+                            id.IGST = 0;
+                            id.IGSTTaxableAmt = 0;
+                        }
+                        else
+                        {
+                            id.IGSTTaxableAmt = Convert.ToInt32(item.NetAmount - item.discamt);
+                        }
+                        dbcon.SalesInvoiceDetails.Add(id);
+                        dbcon.SaveChanges();
+                    }
+                    //return RedirectToAction("ShowAllInvoice");
+                    return Json(new { success = true, message = "Invoice Modify successfully" });
+
+                }
+                else
+                    return RedirectToAction("ShowAllInvoice");
+            }
         }
         public ActionResult ShowAllInvoice(int?i)
         {

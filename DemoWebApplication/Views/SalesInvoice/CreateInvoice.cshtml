@@ -332,7 +332,7 @@
 
 
         $(document).ready(function () {
-        AccountName = $("#Accountname").select2({
+            AccountName = $("#Accountname").select2({
 
                             ajax:
                                 {
@@ -359,7 +359,6 @@
                         templateResult: function(data) {
                                     var $result = $("<span></span>");
                                         $result.text(data.text);
-                                    // tabindex: 3;
                                     if (data.newOption)
                                     {
                                 $result.append(" <em>(new)</em>");
@@ -441,7 +440,7 @@
                     @Html.HiddenFor(x => x.Accountnumber)
                     @Html.LabelFor(x => x.Accountname, "Cust. Name", htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.DropDownListFor(x => x.Accountname, Model.lst_CustomerNameList, "", new { @class = "form-control" })
+                        @Html.DropDownListFor(x => x.Accountname, Model.lst_CustomerNameList, "", new { @class = "form-control"})
                         @Html.ValidationMessageFor(x => x.Accountname, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -775,10 +774,8 @@
                     location.reload();
                 }
                 else if (result.message == "Invoice Modify successfully") {
-                    var link = '@Url.Action("ShowAllInvoice", "SalesInvoice")';  // url should be enclosed by single quotes.
-                    //return JavaScript(window.location.href = link.redirecturl); // your action should return an object having [redirecturl] property
-                    return JavaScript("window.location = '" + Url.Action("ShowAllInvoice", "SalesInvoice") + "'");
-                    //return Json(new { result = "Redirect", url = Url.Action("ShowAllInvoice", "SalesInvoice") });
+                    var newUrl = '@Url.Action("ShowAllInvoice", "SalesInvoice")';  // url should be enclosed by single quotes.
+                    window.location.href = newUrl;
                 }
                 
             },

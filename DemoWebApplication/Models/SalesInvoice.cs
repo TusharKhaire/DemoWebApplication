@@ -66,6 +66,7 @@ namespace DemoWebApplication.Models
         public IList<SelectListItem> lst_CustomerNameList { get; set; }
         public IList<SelectListItem> lst_ItemName { get; set; }
         public IList<SelectListItem> lst_State { get; set; }
-        public List<string[]> Salesdetails { get; set; }  
+        public List<string[]> Salesdetails { get; set; }
+
     }
 }

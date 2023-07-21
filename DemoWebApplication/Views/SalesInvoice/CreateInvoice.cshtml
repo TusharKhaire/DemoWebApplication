@@ -499,13 +499,28 @@
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.PaymentmodeCash, "Payment Mode", htmlAttributes: new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.RadioButtonFor(x => x.PaymentmodeCash, "Cash", new { @checked = "checked" })
-                        @Html.Label("Cash")
-                        @*<label class="btn btn-outline-primary">Cash</label>*@
-                        @Html.RadioButtonFor(x => x.PaymentmodeCash, "Credit", new { })
-                        @Html.Label("Credit")
-                    </div>
+
+                    @if (Model.PaymentmodeCash == "1")
+                    {
+                        <div class="col-md-8">
+                            @Html.RadioButtonFor(x => x.PaymentmodeCash, "Cash", new { @checked = "checked" })
+                            @Html.Label("Cash")
+                            @*<label class="btn btn-outline-primary">Cash</label>*@
+                            @Html.RadioButtonFor(x => x.PaymentmodeCash, "Credit", new {  })
+                            @Html.Label("Credit")
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-8">
+                            @Html.RadioButtonFor(x => x.PaymentmodeCash, "Cash", new { })
+                            @Html.Label("Cash")
+                            @*<label class="btn btn-outline-primary">Cash</label>*@
+                            @Html.RadioButtonFor(x => x.PaymentmodeCash, "Credit", new { @checked = "checked" })
+                            @Html.Label("Credit")
+                        </div>
+                    }
+
                 </div>
                 <div class="form-group">
                     <label class="col-md-4"></label>
@@ -694,6 +709,13 @@
         i = 0;
         var salesdetails = [];
         salesdetails.length = 0;
+        const radioButton = document.querySelectorAll('input[id="PaymentmodeCash"]');
+        let PaymentMode = "Cash";
+        if (radioButton.checked) {
+            PaymentMode = "Cash";
+        } else {
+            PaymentMode = "Credit";
+        }
         $.each($("#tbl_sales tbody tr"), function () {
             salesdetails.push({
                 SrNo: $(this).find('td:eq(0)').html(),
@@ -727,7 +749,8 @@
             Duedate: $('#Duedate').val(),
             Manualno: $("#Manualno").val() || 0,
             CustState: $("#lst_State option:selected").text(),
-            Paymentmode: $("#PaymentmodeCash").val(),
+            //Paymentmode: $("#PaymentmodeCash").val(),
+            Paymentmode: PaymentMode,
             DontApplyGst: $("#DontApplyGst").prop("checked"),
             BillDiscount: $("#BillDiscount").val() || 0,
             Paidamount: $("#Paidamount").val() || 0,
